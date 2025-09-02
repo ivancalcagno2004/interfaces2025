@@ -1,2 +1,5 @@
-# interfaces2025
-Trabajo de interfaces
+# Participantes
+
+- Lujan, Lucas Gabriel
+- Daoud, Lukas
+- Calcagno, Iván Andrés
