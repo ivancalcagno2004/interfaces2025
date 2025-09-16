@@ -1,10 +1,43 @@
 :root {
     --color-primario: #123C99;
     --color-secundario: #182632;
+    --titulo: 'Russo One', 'Alexandria', sans-serif;
 }
 
 body {
     margin: 0;
     padding: 0;
     background-color: var(--color-secundario);
+}
+
+h1 {
+    font-family: var(--titulo);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    padding: 10px 0;
+}
+
+a {
+    background-color: var(--color-primario);
+    text-decoration: none;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
+a:hover {
+    box-shadow:
+        0 4px 4px 0 rgba(0, 0, 0, 0.25),
+        /* sombra proyectada */
+        inset 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    /* sombra interna */
 }
