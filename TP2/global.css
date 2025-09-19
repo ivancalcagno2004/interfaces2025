@@ -1,8 +1,26 @@
 :root {
+    /** Colores */
     --color-primario: #123C99;
     --color-secundario: #182632;
+    --luz-primaria1: #1E47A7;
+    --luz-primaria2: #336BEB;
+    --luz-primaria3: #577EDB;
+    --sombra-primaria1: #061C4D;
+    --sombra-primaria2: #103385;
+    --sombra-primaria3: #20407D;
+    --luz-secundaria1: #1D2932;
+    --luz-secundaria2: #2D3338;
+    --luz-secundaria3: #424649;
+    --sombra-secundaria1: #070F16;
+    --sombra-secundaria2: #101A23;
     --sombra-secundaria3: #151F27;
+    --acento: #1100FF;
+    --color-icon: #6155F5;
+
+    /** Fuentes */
     --titulo: 'Russo One', 'Alexandria', sans-serif;
+    --subtitulo: 'Alexandria', 'Scada', sans-serif;
+    --texto: 'Scada', 'Alexandria', sans-serif;
 }
 
 body {
