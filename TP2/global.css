@@ -10,6 +10,7 @@
     --sombra-primaria3: #20407D;
     --luz-secundaria1: #1D2932;
     --luz-secundaria2: #2D3338;
+    /* header */
     --luz-secundaria3: #424649;
     --sombra-secundaria1: #070F16;
     --sombra-secundaria2: #101A23;
@@ -20,11 +21,181 @@
     /** Fuentes */
     --titulo: 'Russo One', 'Alexandria', sans-serif;
     --subtitulo: 'Alexandria', 'Scada', sans-serif;
-    --texto: 'Scada', 'Alexandria', sans-serif;
+    --texto: 'Scada', ' Alexandria', sans-serif;
+
+    /* colores redes sociales */
+    --youtube: #c4302b;
+    --instagram: #F538B6;
+    --twitter: #00acee;
 }
 
 body {
     margin: 0;
     padding: 0;
     background-color: var(--color-secundario);
+    color: white;
+    font-family: var(--texto);
+}
+
+/** Estilos de HEADER */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    /* Asegura que esté por encima de otros elementos */
+}
+
+.header_content {
+    background-color: var(--luz-secundaria2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.90;
+    width: 100vw;
+    height: 8vh;
+    border-radius: 0rem 0rem 1rem 1rem;
+}
+
+#logo_perfil {
+
+    border-radius: 50%;
+}
+
+.logo {
+    width: 3.875rem;
+    height: 4.1875rem;
+
+}
+
+#titulo_header {
+    font-family: var(--titulo);
+    font-size: 20px;
+    text-align: center;
+}
+
+#hamburguesa {
+    background: var(--sombra-secundaria1);
+    font-size: 35px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    opacity: 0.7;
+    position: absolute;
+    left: 10px;
+}
+
+.header_busqueda {
+    display: none;
+}
+
+#logo_perfil {
+    display: none;
+}
+
+.titulo_y_logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/** Estilos de FOOTER */
+.footer-content {
+    background-color: var(--luz-secundaria2);
+    position: absolute;
+    bottom: 0;
+    align-items: center;
+    opacity: 0.90;
+    width: 100vw;
+    height: 10vh;
+    border-radius: 1rem 1rem 0rem 0rem;
+}
+
+.footer-topics,
+.topics {
+    background-color: var(--luz-secundaria2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-topics {
+    gap: 40px;
+}
+
+.topics {
+    gap: 10px;
+}
+
+.topics h3 {
+    font-size: 1rem;
+    font-family: var(--subtitulo);
+    font-weight: bold;
+}
+
+.topics a,
+.topics p {
+    text-decoration: none;
+    color: #D9D9D9;
+}
+
+hr {
+    width: 90%;
+    border: 1.5px solid var(--color-secundario);
+}
+
+.footer-top h2 {
+    font-family: var(--titulo);
+    font-size: 20px;
+    margin-left: 20px;
+}
+
+.footer-bottom {
+    background-color: var(--luz-secundaria2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.icons i {
+    font-size: 30px;
+    color: white;
+}
+
+.icons .bi-youtube {
+    color: var(--youtube);
+}
+
+.icons .bi-instagram {
+    color: var(--instagram);
+}
+
+.icons .bi-twitter {
+    color: var(--twitter);
+}
+
+
+@media only screen and (min-width: 768px) {
+
+    /*DESKTOP*/
+    /** Estilos de HEADER */
+    .header_content {
+        flex-direction: row;
+        justify-content: start;
+        height: auto;
+        padding: 10px 0;
+        gap: 10px;
+    }
+
+
+
+    /** Estilos de FOOTER */
 }
