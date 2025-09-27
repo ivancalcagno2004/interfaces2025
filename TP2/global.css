@@ -182,34 +182,6 @@ hr {
     color: var(--twitter);
 }
 
-form {
-    background-color: var(--luz-secundaria3);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    width: 200px;
-    border-radius: 30px;
-    margin: 0 auto;
-}
-
-
-input {
-    background-color: var(--sombra-secundaria1);
-    width: 80%;
-    border-radius: 40px;
-    font-family: var(--texto);
-    color: white;
-}
-
-label {
-    color: white;
-    padding-top: 15px;
-    font-weight: bold;
-
-}
-
-
 @media only screen and (min-width: 768px) {
 
     /*DESKTOP*/
