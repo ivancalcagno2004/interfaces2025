@@ -32,4 +32,21 @@ label {
     font-weight: bold;
       margin-left: 10px;
 
+
+}
+button {
+    background-color: var(--luz-secundaria1);
+    width: 50%;
+    border-radius: 40px;
+    font-family: var(--texto);
+    color: white;
+    font-weight: bold;
+    margin: 0 auto;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: var(--luz-secundaria2);
+    transition: 0.3s;
 }

@@ -48,7 +48,7 @@ header {
 .header_content {
     background-color: var(--luz-secundaria2);
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     opacity: 0.90;
     width: 100vw;
@@ -56,8 +56,9 @@ header {
     border-radius: 0rem 0rem 1rem 1rem;
 }
 
-#logo_perfil {
 
+
+#logo_perfil {
     border-radius: 50%;
 }
 
@@ -73,7 +74,7 @@ header {
     text-align: center;
 }
 
-#hamburguesa {
+.hamburguer {
     background: var(--sombra-secundaria1);
     font-size: 35px;
     padding: 5px 10px;
@@ -93,10 +94,10 @@ header {
 
 .titulo_y_logo {
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    margin: 0 auto;
 }
 
 /** Estilos de FOOTER */
@@ -186,13 +187,18 @@ hr {
 
     /*DESKTOP*/
     /** Estilos de HEADER */
-    .header_content {
-        flex-direction: row;
-        justify-content: start;
-        height: auto;
-        padding: 10px 0;
-        gap: 10px;
-    }
+   .header_content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.header_busqueda {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
 
 
 
