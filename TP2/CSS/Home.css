@@ -1,1 +1,18 @@
 @import url('../global.css');
+.loading{
+height: 50px;
+width: 50px;
+border-radius: 50%;
+ border: 8px solid #fff;
+border-top: 8px solid var(--color-primario);
+animation : girar 1.5s linear infinite;
+justify-content: center;
+}
+@keyframes girar{
+    0%{
+        transform: rotate(0deg)
+    }
+    100%{
+        transform: rotate(360deg)
+    }
+}
