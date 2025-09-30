@@ -1,52 +1,121 @@
 @import url('../global.css');
-form {
-
-    background-color: var(--luz-secundaria3);
+.form_registro {
+    background-color: var(--sombra-secundaria3);
     display: flex;
-   flex-direction: column; 
+    flex-direction: column; 
     justify-content: center;
     gap: 10px;
     width: 400px;
-    height: 500px;
     border-radius: 30px;
     margin: 0 auto;
     margin-top: 30px;
+    align-items: center;
+    border: 1px solid var(--luz-secundaria3);
 }
+
 h1 {
     text-align: center;
+    margin-top: 20px;
+    font-family: var(--titulo);
+    font-size: 28px;
 }
 
-
-input {
-    background-color: var(--sombra-secundaria1);
+.input-form {
     width: 80%;
-    border-radius: 40px;
-    font-family: var(--texto);
-    color: white;
-  margin-left: 10px;
+}
+
+.input-form:focus {
+    outline: none;
+    border: 3px solid var(--sombra-secundaria1);
+}
+
+.g-recaptcha{
+    scale: 0.80;
+}
+
+.divisor{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 80%;
+    margin: 10px 10px;
+    font-weight: bold;
 }
 
 label {
     color: white;
     padding-top: 15px;
     font-weight: bold;
-      margin-left: 10px;
-
-
+    font-family: var(--subtitulo);
+    align-self: flex-start;
+    margin-left: 40px;
 }
-button {
-    background-color: var(--luz-secundaria1);
-    width: 50%;
-    border-radius: 40px;
-    font-family: var(--texto);
-    color: white;
+
+.submit-form {
+    width: 60%;
+}
+
+.continuar-con {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    width: 60%;
+    margin-bottom: 20px;
+}
+
+.btn-con-icono{
+    background-color: var(--sombra-secundaria1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--titulo);
     font-weight: bold;
-    margin: 0 auto;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
+    width: 100%;
+    height: 40px; /* Altura fija para evitar deformación */
+    font-size: 14px;
 }
-button:hover {
-    background-color: var(--luz-secundaria2);
-    transition: 0.3s;
+
+.icon-google, .bi-facebook{
+    position: relative;
+    left: -20px;
+    font-size: 30px;
+}
+
+.icon-google{
+    z-index: 1;
+    display: flex;
+}
+
+.icon-google::before{
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: -4px;
+    background-color: white;
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.bi-facebook{
+    color: #1877F2;
+    top: 3.3px;
+    font-size: 36px;
+}
+
+.bi-facebook::before{
+    content: '';
+    position: relative;
+    bottom: 2px;
+    background-color: white;
+    height: 35.5px;
+    width: 35.5px;
+    border-radius: 50%;
+}
+
+.required {
+    color: red;
 }

@@ -10,11 +10,12 @@
     --sombra-primaria3: #20407D;
     --luz-secundaria1: #1D2932;
     --luz-secundaria2: #2D3338;
-    /* header */
+
     --luz-secundaria3: #424649;
     --sombra-secundaria1: #070F16;
     --sombra-secundaria2: #101A23;
     --sombra-secundaria3: #151F27;
+    --fondo-iconos: rgba(7, 15, 22, 0.5);
     --acento: #1100FF;
     --color-icon: #6155F5;
 
@@ -56,8 +57,6 @@ header {
     border-radius: 0rem 0rem 1rem 1rem;
 }
 
-
-
 #logo_perfil {
     border-radius: 50%;
 }
@@ -74,14 +73,22 @@ header {
     text-align: center;
 }
 
-.hamburguer {
-    background: var(--sombra-secundaria1);
-    font-size: 35px;
+.icono {
+    background: var(--fondo-iconos);
+    font-size: 40px;
     padding: 5px 10px;
     border-radius: 50%;
-    opacity: 0.7;
+}
+
+.bi-list{
     position: absolute;
     left: 10px;
+    font-weight: bold;
+}
+
+.bi-list:hover {
+    opacity: 0.8;
+    cursor: pointer;
 }
 
 .header_busqueda {
@@ -98,6 +105,36 @@ header {
     justify-content: center;
     gap: 10px;
     margin: 0 auto;
+}
+/** Estilos GENERALES */
+
+input{
+    background-color: var(--luz-secundaria3);
+    height: 27px;
+    border-radius: 10px;
+    font-family: var(--texto);
+    color: white;
+    border: 1px solid var(--sombra-secundaria1);
+}
+
+button{
+    font-family: var(--texto);
+    background-color: var(--color-primario);
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+button:hover {
+    transition: 0.3s;
+    box-shadow:
+        0 4px 4px 0 rgba(0, 0, 0, 0.25),
+        /* sombra proyectada */
+        inset 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    /* sombra interna */
 }
 
 /** Estilos de FOOTER */
