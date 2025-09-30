@@ -16,3 +16,28 @@ justify-content: center;
         transform: rotate(360deg)
     }
 }
+.barra_carga{
+    width: 200px;
+   height: 30px;
+    background: linear-gradient(90deg, var(--color-primario), var(--color-secundario));
+    border-radius: 20px 20px 20px 20px;
+    border:  solid 3px white;
+   animation: cargar 5s linear forwards;
+}
+@keyframes cargar{
+    0%{
+  
+    }
+    25%{
+        
+    }
+    50%{
+        
+    }
+    75%{
+       
+    }
+    100%{
+        
+    }
+}
