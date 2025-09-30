@@ -46,7 +46,7 @@ body{
 /** Estilos de HEADER */
 header {
     position: sticky;
-    top: 0;
+    top: -1px;
     z-index: 1000;
     /* Asegura que esté por encima de otros elementos */
 }
@@ -74,8 +74,7 @@ header {
 
 #titulo_header {
     font-family: var(--titulo);
-    font-size: 20px;
-    text-align: center;
+    font-size: 26px;
 }
 
 .icono {
@@ -154,7 +153,7 @@ button:hover {
 /** Estilos de FOOTER */
 
 footer{
-    margin-top: auto;
+    margin-top: 20px;
     position: relative;
     bottom: 0;
 }
@@ -186,28 +185,33 @@ footer{
 }
 
 .topics {
-    gap: 10px;
+    gap: 13px;
 }
 
 .topics h3 {
-    font-size: 1rem;
+    font-size: 22px;
     font-family: var(--subtitulo);
     font-weight: bold;
+    margin: 0px;
 }
 
 .topics a,
 .topics p {
     text-decoration: none;
     color: #D9D9D9;
+    font-size: 16px;
 }
 
-
+.footer-top {
+    display: flex;
+    align-items: end;
+    justify-content: start;
+}
 
 .footer-top h2 {
     font-family: var(--titulo);
-    font-size: 24px;
-    margin-left: 20px;
-    align-self: center;
+    font-size: 26px;
+    margin: 20px 0px 0px 20px;
 }
 
 .footer-bottom {
@@ -253,6 +257,11 @@ footer{
 
     /*DESKTOP*/
     /** Estilos de HEADER */
+
+    header{
+        top: 0px;
+    }
+
    .header_content {
     display: grid;
     grid-template-columns: auto 1fr 2fr auto;
@@ -268,7 +277,7 @@ footer{
     .header_busqueda input {
         background-color: whitesmoke;
         width: 500px;
-        height: 40px;
+        height: 35px;
         border-radius: 50px;
         font-size: 16px
     }
@@ -317,5 +326,20 @@ footer{
     .footer-topics{
         display: grid;
         grid-template-columns: repeat(4, 1fr);
+        align-items: start;
+    }
+
+    .footer-bottom {
+        display: grid;
+        padding: 0px 50px;
+        grid-template-columns: 1fr 2fr 1fr;
+    }
+
+    .copyright{
+        justify-self: center;
+    }
+
+    .icons {
+        justify-self: start;
     }
 }

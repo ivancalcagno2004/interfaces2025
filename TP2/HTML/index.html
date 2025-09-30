@@ -12,6 +12,23 @@
 </head>
 
 <body>
+    <header>
+        <div class="header_content">
+            <i class="bi bi-list icono"></i>
+
+            <div class="titulo_y_logo">
+                <img src="../images/logo.png" alt="" class="logo">
+                <h1 id="titulo_header">GameAR</h1>
+            </div>
+
+            <div class="header_busqueda">
+                <input type="text" placeholder="Buscar juego...">
+                <i class="bi bi-search"></i>
+            </div>
+            <i id="logo_perfil" class="bi bi-person-circle"></i>
+        </div>
+    </header>
+
     <form class="form_registro">
         <h1>Registro</h1>
         <label for="nombre">Nombre y apellido <span class="required">*</span></label>
@@ -36,10 +53,10 @@
         
         <button type="submit" class="submit-form">Registarse</button>
 
-        <div class="divisor">
-            <hr>
-            <span>o</span>
-            <hr>
+        <div class="separador">
+            <div class="divisor"></div>
+                <span>o</span>
+            <div class="divisor"></div>
         </div>
         <div class="continuar-con">
             <button class="btn-con-icono">
@@ -62,6 +79,55 @@
         </div>
     </form>
 
+    <footer>
+        <div class="footer-content">
+            <div class="footer-top">
+                <h2>GameAR</h2>
+            </div>
+            <div class="divisor"></div>
+            <div class="footer-topics">
+                <div class="topics">
+                    <h3>About</h3>
+                    <a href="#">Companía</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contacto</a>
+                    <a href="#">Términos y Condiciones</a>
+                </div>
+                <div class="topics">
+                    <h3>Soporte</h3>
+                    <a href="#">Centro de Ayuda</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Asistencia</a>
+                    <a href="#">Contacto</a>
+                </div>
+                <div class="topics">
+                    <h3>Privacidad</h3>
+                    <a href="#">Condiciones de Uso</a>
+                    <a href="#">Cookies</a>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Consentimiento de Cookies</a>
+                </div>
+                <div class="topics">
+                    <h3>Newsletter</h3>
+                    <a>Suscribite a nuestro email informativo
+                        para recibir ofertas y noticias de juegos nuevos</a>
+                    <input type="email" placeholder="Ingresa tu email...">
+                    <button>Suscribirse</button>
+                </div>
+            </div>
+            <div class="divisor"></div>
+            <div class="footer-bottom">
+                <div class="icons">
+                    <i class="bi bi-twitter icono"></i>
+                    <i class="bi bi-instagram icono"></i>
+                    <i class="bi bi-youtube icono"></i>
+                </div>
+                <div class="copyright">
+                    <p>&copy;2025 GameAR. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
