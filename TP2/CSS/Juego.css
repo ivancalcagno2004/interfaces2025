@@ -1,1 +1,39 @@
 @import url('../global.css');
+.layout {
+  display: flex;          /* Activa el modo flexbox */
+  gap: 20px;              /* Espacio entre el main y el aside */
+  align-items: flex-start; /* Alinea arriba, no al medio */
+}
+
+.contenido-principal {
+  flex: 3;   /* Ocupa más ancho */
+}
+
+.sidebar {
+  flex: 1;   /* Ocupa menos ancho */
+}
+.juego-clasificacion .valor {
+  color: #ffd700; /* ejemplo: dorado para la nota */
+  font-weight: 600;
+}
+
+.juego-clasificacion .votos {
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+.juego-publicacion .fecha,
+.juego-actualizacion .fecha {
+  color: #8ab4f8;
+}
+
+.texto-instruccion {
+  font-weight: 500;
+  margin-left: 8px;
+}
+.imagen-juego {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10px;
+  margin: 15px 0;
+}
