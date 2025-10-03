@@ -291,7 +291,12 @@ footer{
 
     /*DESKTOP*/
     /** Estilos de HEADER */
-
+.menu_hamburguesa{
+    width: 200px;
+    height: 1080px;
+    border-radius: 0px 20px 20px 0px;
+}
+    
     header{
         top: 0px;
     }
