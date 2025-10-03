@@ -294,7 +294,15 @@ footer{
 .menu_hamburguesa{
     width: 200px;
     height: 1080px;
-    border-radius: 0px 20px 20px 0px;
+    /* falta definir color menu hamb */
+    background-color: var(--color-secundario);
+    border-radius: 0px 20px 20px 0px; 
+}
+a{
+    text-decoration: none;
+    color : white;
+    font-size: 15px;
+    font-family: var(--texto);
 }
     
     header{
