@@ -1,22 +1,23 @@
 :root {
     /** Colores */
     --color-primario: #123C99;
-    --color-secundario: #182632;
+    --color-secundario: #AB08F3;
+    --fondo-degrade: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+    --color-terciario: #182632;
     --luz-primaria1: #1E47A7;
     --luz-primaria2: #336BEB;
     --luz-primaria3: #577EDB;
     --sombra-primaria1: #061C4D;
     --sombra-primaria2: #103385;
     --sombra-primaria3: #20407D;
-    --luz-secundaria1: #1D2932;
-    --luz-secundaria2: #2D3338;
-
-    --luz-secundaria3: #424649;
-    --sombra-secundaria1: #070F16;
-    --sombra-secundaria2: #101A23;
-    --sombra-secundaria3: #151F27;
+    --luz-terciaria1: #1D2932;
+    --luz-terciaria2: #2D3338;
+    --luz-terciaria3: #424649;
+    --sombra-terciaria1: #070F16;
+    --sombra-terciaria2: #101A23;
+    --sombra-terciaria3: #151F27;
     --fondo-iconos: rgba(7, 15, 22, 0.6);
-    --acento: #1100FF;
+    --acento: #FF914D;
     --color-icon: #6155F5;
 
     /** Fuentes */
@@ -37,7 +38,7 @@
 body{
     margin: 0;
     padding: 0;
-    background-color: var(--color-secundario);
+    background-color: var(--color-terciario);
     color: white;
     font-family: var(--texto);
     min-height: 100vh;
@@ -109,17 +110,17 @@ header {
 /** Estilos GENERALES */
 
 input{
-    background-color: var(--luz-secundaria3);
+    background-color: var(--luz-terciaria3);
     height: 27px;
     border-radius: 10px;
     font-family: var(--texto);
     color: white;
-    border: 1px solid var(--sombra-secundaria1);
+    border: 1px solid var(--sombra-terciaria1);
 }
 
 input:focus {
     outline: none;
-    border: 3px solid var(--sombra-secundaria1);
+    border: 3px solid var(--sombra-terciaria1);
 }
 
 button{
@@ -131,10 +132,35 @@ button{
     padding: 10px 20px;
     border-radius: 50px;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
 }
 
+button::before{
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 120%;
+    background-color: var(--acento);
+    top: 50%;
+    transform: skewX(30deg) translate(-180%, -50%);
+    transition: all 0.5s;
+}
+
+button:hover::before{
+    transform: skewX(30deg) translate(250%, -50%);
+    transition-delay: 0.1s;
+}
+
+button:active{
+    transform: scale(0.9);
+}
+
+
 button:hover {
-    transition: 0.3s;
+    transition-delay: 0.3s;
+    background: var(--color-secundario);
     box-shadow:
         0 4px 4px 0 rgba(0, 0, 0, 0.25),
         /* sombra proyectada */
@@ -146,8 +172,16 @@ button:hover {
     margin: auto;
     margin: 15px;
     width: 90%;
-    border: 1.5px solid var(--color-secundario);
+    border: 1.5px solid var(--color-terciario);
     justify-self: center;
+}
+
+.ocultar{
+    display: none;
+}
+
+.mostrar{
+    display: flex;
 }
 
 /** Estilos de FOOTER */
@@ -159,7 +193,7 @@ footer{
 }
 
 .footer-content {
-    background-color: var(--luz-secundaria2);
+    background-color: var(--luz-terciaria2);
     align-items: center;
     opacity: 0.90;
     width: 100vw;
@@ -169,7 +203,7 @@ footer{
 
 .footer-topics,
 .topics {
-    background-color: var(--luz-secundaria2);
+    background-color: var(--luz-terciaria2);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -215,7 +249,7 @@ footer{
 }
 
 .footer-bottom {
-    background-color: var(--luz-secundaria2);
+    background-color: var(--luz-terciaria2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -296,7 +330,7 @@ footer{
         width: 30px;
         height: 30px;
         border-radius: 50%;
-        background-color: var(--sombra-secundaria1);
+        background-color: var(--sombra-terciaria1);
         top: -6px;
         left: -7px;
         z-index: -1;

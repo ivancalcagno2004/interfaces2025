@@ -1,7 +1,6 @@
 @import url('../global.css');
-.form_registro {
-    background-color: var(--sombra-secundaria3);
-    display: flex;
+.form_registro, .form_login {
+    background-color: var(--sombra-terciaria3);
     flex-direction: column; 
     justify-content: center;
     gap: 10px;
@@ -10,7 +9,7 @@
     margin: 0 auto;
     margin-top: 30px;
     align-items: center;
-    border: 1px solid var(--luz-secundaria3);
+    border: 1px solid var(--luz-terciaria3);
 }
 
 h1 {
@@ -26,7 +25,7 @@ h1 {
 
 .input-form:focus {
     outline: none;
-    border: 3px solid var(--sombra-secundaria1);
+    border: 3px solid var(--sombra-terciaria1);
 }
 
 .g-recaptcha{
@@ -66,7 +65,7 @@ label {
 }
 
 .btn-con-icono{
-    background-color: var(--sombra-secundaria1);
+    background-color: var(--sombra-terciaria1);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -85,6 +84,7 @@ label {
 
 .icon-google{
     z-index: 1;
+    left: -17px;
     display: flex;
 }
 
@@ -118,4 +118,9 @@ label {
 
 .required {
     color: red;
+}
+
+.sign-in{
+    color: var(--color-secundario);
+    cursor: pointer;
 }
