@@ -177,7 +177,7 @@ button:hover {
 }
 
 .ocultar{
-    display: none;
+    display: none !important;
 }
 
 .mostrar{

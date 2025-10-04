@@ -18,7 +18,7 @@ justify-content: center;
 }
 .barra_carga{
     width: 200px;
-   height: 30px;
+    height: 30px;
     background: linear-gradient(90deg, var(--color-primario), var(--color-secundario));
     border-radius: 20px 20px 20px 20px;
     border: solid 3px white;
@@ -28,8 +28,70 @@ justify-content: center;
     width: 0px;
     background-color: white;
     border-radius: 20px 20px 20px 20px;
-    animation: cargar 5s linear backwards;
+    animation: cargar 5s ease-in backwards;
 }
+
+.load-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.carrouseles{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    margin: 20px;
+    width: 80%;
+}
+
+.carrousel {
+  overflow-x: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.carrousel-track {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+}
+
+.card {
+  flex: 0 0 80vw; /* Cada card ocupa el 80% del viewport en mobile */
+  max-width: 300px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 16px 16px 0 0;
+  object-fit: cover;
+  height: 180px;
+}
+
+.card h3 {
+  margin: 12px 0;
+  font-size: 1.1rem;
+}
+
+/* Responsive para tablets y desktop */
+@media only screen and (min-width: 768px) {
+  .card {
+    flex: 0 0 250px;
+  }
+}
+
 @keyframes cargar{
     0%{
         width: 0px;
