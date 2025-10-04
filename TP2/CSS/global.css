@@ -48,7 +48,7 @@ body{
 header {
     position: sticky;
     top: -1px;
-    z-index: 1000;
+    z-index: 2000;
     /* Asegura que esté por encima de otros elementos */
 }
 
@@ -287,26 +287,28 @@ footer{
     font-family: var(--texto);
 }
 .menu_hamburguesa{
-    width: 140px;
-    height: 600px;
-    background-color: var(--color-secundario);
+    width: 50%;
+    max-height: 90%;
+    background-color: var(--luz-terciaria2);
     border-radius: 0px 20px 20px 0px; 
-    
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    height: 100vh;
+    padding-left: 5px;
+    padding-top: 30px;
+    gap: 15px;
 }
+
 a{
     text-decoration: none;
     color : white;
     font-size: 15px;
     font-family: var(--texto);
 }
-.menu_hamburguesa,a{
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-    gap: 10px;
-    padding-left: 5px;
-    padding-top: 10px;
-}
+
 .menu_hamburguesa_icons{
      display: flex;
     flex-direction: row;
@@ -316,32 +318,46 @@ a{
 .menu_hamburguesa_icons i{
     font-size: 25px;
 }
-
+.elementos_hamb{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap:15px;
+    }
 @media only screen and (min-width: 768px) {
 
-    /*DESKTOP*/
-    /** Estilos de HEADER */
-.menu_hamburguesa{
-    width: 200px;
-    height: 1080px;
-    background-color: var(--color-secundario);
-    border-radius: 0px 20px 20px 0px; 
-}
-a{
-    text-decoration: none;
-    color : white;
-    font-size: 15px;
-    font-family: var(--texto);
-}
-}
-.menu_hamburguesa,a{
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-    gap: 10px;
-    padding-left: 5px;
-    padding-top: 10px;
-}
+        /*DESKTOP*/
+        /** Estilos de HEADER */
+    .menu_hamburguesa{
+        width: 200px;
+        height: 1080px;
+        background-color: var(--luz-terciaria2);
+        border-radius: 0px 20px 20px 0px; 
+    }
+
+    a{
+        text-decoration: none;
+        color : white;
+        font-size: 15px;
+        font-family: var(--texto);
+    }
+    .menu_hamburguesa,a{
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+        gap: 10px;
+        padding-left: 5px;
+        padding-top: 10px;
+        
+    }
+    .elementos_hamb{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap:10px;
+    }
 
     
     header{
@@ -428,3 +444,4 @@ a{
     .icons {
         justify-self: start;
     }
+}
