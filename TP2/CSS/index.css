@@ -1,4 +1,4 @@
-@import url('../global.css');
+@import url('global.css');
 .form_registro, .form_login {
     background-color: var(--sombra-terciaria3);
     flex-direction: column; 
