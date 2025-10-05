@@ -196,6 +196,10 @@ button:hover {
     display: flex;
 }
 
+.opacar{
+    opacity: 0.3;
+}
+
 /** Estilos de FOOTER */
 
 footer{
@@ -373,6 +377,10 @@ a{
 
     
     header{
+        top: 0px;
+    }
+
+    .bi-list{
         top: 0px;
     }
 

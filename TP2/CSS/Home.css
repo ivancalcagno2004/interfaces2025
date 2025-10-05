@@ -69,7 +69,7 @@ justify-content: center;
 }
 
 .carrousel {
-  overflow-x: hidden;
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   width: 100%;
@@ -101,11 +101,11 @@ justify-content: center;
 }
 
 .girar-izq{
-  animation: girar-izq ease 1s backwards;
+  animation: girar-izq linear 1s forwards;
 }
 
 .girar-dere{
-  animation: girar-dere ease 1s backwards;
+  animation: girar-dere linear 1s forwards;
 }
 
 .card h3 {
@@ -113,35 +113,38 @@ justify-content: center;
   font-size: 1.1rem;
 }
 
+@keyframes girar-izq {
+  0% {
+    transform: skewX(0);
+  }
+  50% {
+    transform: skewX(-5deg);
+  }
+  100% {
+    transform: skewX(0);
+  }
+}
+
+@keyframes girar-dere {
+  0% {
+    transform: skewX(0);
+  }
+  50% {
+    transform: skewX(5deg);
+  }
+  100% {
+    transform: skewX(0);
+  }
+}
 /* Responsive para tablets y desktop */
 @media only screen and (min-width: 768px) {
   .card {
     flex: 0 0 250px;
   }
-}
 
-@keyframes girar-izq {
-  0%{
-    transform: translateX(0) skewX(0);
+  .carrousel{
+    overflow-x: hidden;
   }
-  50%{
-      transform: translateX(0) skewX(-5deg);
-    }
-  100%{
-      transform: translateX(0) skewX(0);
-    }
-}
-
-@keyframes girar-dere {
-  0%{
-    transform: translateX(0) skewX(0);
-  }
-  50%{
-      transform: translateX(0) skewX(5deg);
-    }
-  100%{
-      transform: translateX(0) skewX(0);
-    }
 }
 
 @keyframes cargar{
