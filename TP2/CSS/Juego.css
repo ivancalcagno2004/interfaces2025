@@ -14,9 +14,9 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  align-items: center;
-  position: sticky;
-  top: 100px; /* 🔹 se mantiene visible al hacer scroll */
+  position: absolute;
+  right: 20px;
+  align-items: end;
 }
 
 /* Imágenes dentro del aside */
@@ -50,22 +50,29 @@
   font-weight: 500;
   margin-left: 8px;
 }
-.imagen-juego {
-  width: 100%;
-  max-width: 600px;
-  border-radius: 10px;
-  margin: 15px 0;
-}
+
 .imagen-juego-contenedor {
-  position: relative;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .imagen-juego {
-  width: 100%;
-  max-width: 700px;
+  max-height: 500px;
+  width: 75vw;
+  max-width: 100%;
   border-radius: 15px;
-  display: block;
+}
+
+.demo{
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+  margin: 30px;
+}
+
+.demo img{
+  width: 300px;
 }
 
 .btn-jugar {
@@ -96,14 +103,14 @@ h3 {
 
 /* Contenedor de comentarios */
 .comment {
-  background-color: #2b2f3a;  
+  background-color: var(--sombra-terciaria3);  
   color: #e4e6eb;            
   border-radius: 10px;        /* esquinas redondeadas */
   padding: 15px;
   margin-bottom: 15px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* sombra suave */
   width: 320px;               
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: var(--texto);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 

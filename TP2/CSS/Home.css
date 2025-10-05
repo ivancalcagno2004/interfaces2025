@@ -45,8 +45,15 @@ justify-content: center;
     align-items: center;
     justify-content: center;
     justify-self: center;
-    margin: 20px;
+    margin: 25px;
     width: 80%;
+    position: relative;
+}
+
+.categoria{
+  position: absolute;
+  top: -30px;
+  /* left: 0; */
 }
 
 .carrousel-arrow {
@@ -64,13 +71,17 @@ justify-content: center;
   justify-content: center;
 }
 
+.flechas-top{
+  display: none;
+}
+
 .carrousel-arrow:hover {
   background: var(--color-secundario);
 }
 
 .carrousel {
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x mandatory; /* El navegador obliga a que el scroll se detenga exactamente en una card */
   -webkit-overflow-scrolling: touch;
   width: 80%;
 }
@@ -82,8 +93,7 @@ justify-content: center;
 }
 
 .card {
-  flex: 0 0 80vw; /* Cada card ocupa el 80% del viewport en mobile */
-  max-width: 300px;
+  flex: 0 0 90vw; /* Cada card ocupa el 80% del viewport en mobile */
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.7);
   background-color: var(--sombra-terciaria3);
@@ -91,19 +101,30 @@ justify-content: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .container-presentacion{
   width: 100%;
   margin: 0;
   max-width: 100%;
+  position: relative;
 }
 
 .presentacion{
-  padding: 16px;
-  text-align: center;
   color: white;
   box-shadow: none;
+  max-width: 325px;
+}
+
+.presentacion p{
+  padding: 10px;
+}
+
+.card:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+  scale: 1.02;
 }
 
 .card img {
@@ -152,12 +173,47 @@ justify-content: center;
 }
 /* Responsive para tablets y desktop */
 @media only screen and (min-width: 768px) {
+  .card.presentacion{
+    flex: 0 0 79vw; /* Cada card ocupa el 45% del viewport en tablets */
+    flex-direction: row;
+    max-width: none;
+    border-radius: 16px 16px 16px 16px;
+    height: auto;
+  }
+
+  .card.presentacion:hover{
+    scale: 1;
+  }
+
+  .carrousel-container{
+    width: 100%;
+  }
+  
+  .card.presentacion img{
+    border-radius: 16px 0 0 16px;
+  }
+  
+  .card.presentacion p{
+    text-align: justify;
+    padding: 20px;
+  }
+
   .card {
     flex: 0 0 250px;
   }
 
   .carrousel{
     overflow-x: hidden;
+  }
+
+  .flechas-top{
+    display: flex;
+  }
+
+  .categoria{
+    font-size: 20px;
+    top: -2.5rem;
+    left: 6.5rem;
   }
 }
 
