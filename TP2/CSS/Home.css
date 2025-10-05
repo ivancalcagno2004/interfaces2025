@@ -39,13 +39,33 @@ justify-content: center;
     margin-top: 20px;
 }
 
-.carrouseles{
+.carrousel-container{
     display: flex;
     align-items: center;
     justify-content: center;
     justify-self: center;
     margin: 20px;
     width: 80%;
+}
+
+.carrousel-arrow {
+  background: var(--color-primario);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin: 0 8px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carrousel-arrow:hover {
+  background: var(--color-secundario);
 }
 
 .carrousel {
@@ -80,6 +100,14 @@ justify-content: center;
   height: 180px;
 }
 
+.girar-izq{
+  animation: girar-izq ease 1s backwards;
+}
+
+.girar-dere{
+  animation: girar-dere ease 1s backwards;
+}
+
 .card h3 {
   margin: 12px 0;
   font-size: 1.1rem;
@@ -90,6 +118,30 @@ justify-content: center;
   .card {
     flex: 0 0 250px;
   }
+}
+
+@keyframes girar-izq {
+  0%{
+    transform: translateX(0) skewX(0);
+  }
+  50%{
+      transform: translateX(0) skewX(-5deg);
+    }
+  100%{
+      transform: translateX(0) skewX(0);
+    }
+}
+
+@keyframes girar-dere {
+  0%{
+    transform: translateX(0) skewX(0);
+  }
+  50%{
+      transform: translateX(0) skewX(5deg);
+    }
+  100%{
+      transform: translateX(0) skewX(0);
+    }
 }
 
 @keyframes cargar{

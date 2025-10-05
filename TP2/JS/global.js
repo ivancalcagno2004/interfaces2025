@@ -1,5 +1,5 @@
 "use strict";
-
+const body = document.querySelector("body");
 const menuHamburguesa = document.querySelector(".hamburguesa");
 menuHamburguesa.addEventListener("click", function(){
     const menu = document.querySelector(".menu_hamburguesa");

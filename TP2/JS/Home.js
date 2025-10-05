@@ -45,3 +45,39 @@ body.forEach((seccion) => {
     seccion.classList.add("mostrar");
   }, tiempo);
 });
+
+const leftArrow = document.querySelector('.carrousel-arrow.left');
+const rightArrow = document.querySelector('.carrousel-arrow.right');
+const cards = document.querySelectorAll('.card');
+
+
+const carrousel = document.querySelector('.carrousel');
+const gap = 16;
+
+if (carrousel && leftArrow && rightArrow) {
+    function getScrollAmount() {
+        const card = carrousel.querySelector('.card');
+        if (!card) return 0;
+        return card.offsetWidth + gap;
+    }
+
+    leftArrow.addEventListener('click', () => {
+      cards.forEach(card => {
+        card.classList.remove('girar-dere');
+        card.classList.remove('girar-izq');
+        void card.offsetWidth; // Forzar reflow
+        card.classList.add('girar-dere');
+      });
+        carrousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+
+    rightArrow.addEventListener('click', () => {
+      cards.forEach(card => {
+        card.classList.remove('girar-izq');
+        card.classList.remove('girar-dere');
+        void card.offsetWidth;
+        card.classList.add('girar-izq');
+        });
+        carrousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+}
