@@ -36,7 +36,8 @@ justify-content: center;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 25vh;
+    margin-bottom: 25vh;
 }
 
 .carrousel-container{
@@ -58,7 +59,6 @@ justify-content: center;
   font-size: 1.5rem;
   cursor: pointer;
   margin: 0 8px;
-  transition: background 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -72,7 +72,7 @@ justify-content: center;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  width: 100%;
+  width: 80%;
 }
 
 .carrousel-track {
@@ -84,16 +84,30 @@ justify-content: center;
 .card {
   flex: 0 0 80vw; /* Cada card ocupa el 80% del viewport en mobile */
   max-width: 300px;
-  background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  background-color: var(--sombra-terciaria3);
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.container-presentacion{
+  width: 100%;
+  margin: 0;
+  max-width: 100%;
+}
+
+.presentacion{
+  padding: 16px;
+  text-align: center;
+  color: white;
+  box-shadow: none;
+}
+
 .card img {
+  background: #fff;
   width: 100%;
   border-radius: 16px 16px 0 0;
   object-fit: cover;
