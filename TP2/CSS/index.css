@@ -124,3 +124,12 @@ label {
     color: var(--color-secundario);
     cursor: pointer;
 }
+
+.input-error{
+    border: 2px solid red;
+    transition: all 0.3s;
+}
+
+.label-error{
+    color: red;
+}
