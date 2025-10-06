@@ -203,6 +203,28 @@
     transform: skewX(0);
   }
 }
+.perfil_usuario{
+  display: flex;
+  flex-direction: row;
+  align-items: center;;
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  background-color: var(--color-primario);
+  border: 2px solid var(--color-primario);
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  padding: 10px;
+  gap: 10px; 
+}
+.perfil_usuario i{
+  font-size: 30px;
+}
+.perfil_usuario a{
+  font-family: var(--texto);
+    align-items: center;
+    font-weight: 600;
+}
 /* Responsive para tablets y desktop */
 @media only screen and (min-width: 768px) {
   .card.presentacion{

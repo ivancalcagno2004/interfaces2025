@@ -4,6 +4,8 @@ const loading = document.querySelector(".load-container"); // contenedor del loa
 const secciones = document.querySelectorAll("section"); // todas las secciones del body
 const porcentaje = document.querySelector(".porcentaje"); // duracion total 5 segundos
 const cards = document.querySelectorAll('.card');
+const perfil = document.querySelector('.bi-person-circle');
+const perfil_box = document.querySelector('.perfil_usuario');
 
  function mostrarSecciones() {
   // Ocultar el loading después de 5 segundos y mostrar el contenido del body
@@ -74,3 +76,8 @@ function scrollCarrousel(){
   });
 }
 scrollCarrousel();
+
+perfil.addEventListener('click', () => {
+  perfil_box.classList.toggle("ocultar");
+ perfil_box.classList.toggle("mostrar"); 
+});
