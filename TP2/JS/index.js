@@ -21,6 +21,32 @@ btnSubmit.forEach( boton => { // por cada boton
     boton.addEventListener("click", function(event){
         event.preventDefault(); // previene el comportamiento por defecto del botón (recargar la página)
         // Se registra o inicia sesión
-        window.location.href = "Home.html"; // redirige a Home.html
+        if(validarForms()){
+            window.location.href = "Home.html"; // redirige a Home.html
+        }else{
+            alert("Por favor, complete todos los campos.");
+        }
     });
 });
+
+// Validación de formularios
+const inputs = document.querySelectorAll("input.required-input"); // selecciona todos los inputs que tienen la clase 'required-input'
+
+
+function validarForms(){
+    let valid = true;
+    inputs.forEach(input => {
+        // busca label por for="{id}" o usa fallback
+        let label = document.querySelector(`label[for="${input.id}"]`);
+        
+        if (input.value.trim() === "") {
+            valid = false;
+            input.classList.add("input-error");
+            label.classList.add("label-error");
+        } else {
+            input.classList.remove("input-error");
+            label.classList.remove("label-error");
+        }
+    });
+    return valid;
+}

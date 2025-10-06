@@ -1,21 +1,4 @@
 @import url('global.css');
-.loading{
-height: 50px;
-width: 50px;
-border-radius: 50%;
- border: 7px solid #fff;
-border-top: 7.5px solid  var(--color-primario);
-animation : girar 1.5s linear infinite;
-justify-content: center;
-}
-@keyframes girar{
-    0%{
-        transform: rotate(0deg)
-    }
-    100%{
-        transform: rotate(360deg)
-    }
-}
 .barra_carga{
     width: 200px;
     height: 30px;
@@ -28,7 +11,7 @@ justify-content: center;
     width: 0px;
     background-color: white;
     border-radius: 20px 20px 20px 20px;
-    animation: cargar 5s linear backwards;
+    animation: cargar 5s ease-out backwards;
 }
 
 .load-container{
@@ -78,7 +61,6 @@ justify-content: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   transition:
     transform 0.25s cubic-bezier(.4,2,.6,1),
-    background 0.25s,
     color 0.25s,
     border 0.25s;
 }
@@ -116,7 +98,7 @@ justify-content: center;
 
 .carrousel-track {
   display: flex;
-  gap: 16px;
+  gap: 25px;
   padding: 16px;
 }
 
@@ -161,6 +143,28 @@ justify-content: center;
   border-radius: 16px 16px 0 0;
   object-fit: cover;
   height: 180px;
+  position: relative;
+}
+
+.card img:hover {
+  filter: blur(2px);
+  display: flex;
+  cursor: pointer;
+}
+
+.card img:hover::after{
+  align-self: center;
+  justify-self: center;
+  padding: 10px;
+  content: '▶';
+  position: absolute;
+  background-color: var(--fondo-iconos);
+  height: 50px;
+  width: 50px;
+  font-size: 3rem;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
 }
 
 .girar-izq{
@@ -227,7 +231,7 @@ justify-content: center;
   }
 
   .card {
-    flex: 0 0 250px;
+    flex: 0 0 200px;
   }
 
   .carrousel{
