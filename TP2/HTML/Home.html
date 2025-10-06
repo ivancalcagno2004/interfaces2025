@@ -5,23 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Principal</title>
-    <link rel="stylesheet" href="../global.css">
+    <link rel="stylesheet" href="../CSS/global.css">
     <link rel="stylesheet" href="../CSS/Home.css">
     <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 
 <body>
 
     <header>
         <div class="header_content">
-            <i class="bi bi-list icono"></i>
-
-            <div class="titulo_y_logo">
-                <img src="../images/logo.png" alt="" class="logo">
-                <h1 id="titulo_header">GameAR</h1>
+            <div class="hamburguesa">
+                <i class="bi bi-list icono"></i>
             </div>
 
+            <div class="titulo_y_logo">
+             <img src="../images/logo.png" alt="" class="logo">
+                <h1 id="titulo_header">GameAR</h1>
+            </div>
             <div class="header_busqueda">
                 <input type="text" placeholder="Buscar juego...">
                 <i class="bi bi-search"></i>
@@ -29,36 +31,188 @@
             <i id="logo_perfil" class="bi bi-person-circle"></i>
         </div>
     </header>
+    <div class="load-container">
+        <div class="barra_carga">
+            <div class="carga"></div>
+        </div>
+        <div class="porcentaje">0%</div>
+    </div>
+    <div class="menu_hamburguesa ocultar animate__animated">
+        <div class="elementos_hamb">
+            <a href=""> Menu Principal</a>
+            <a href=""> <i class="bi bi-heart-fill"> Favoritos</i></a>
+            <a href="">⚔️ Accion</a>
+            <a href="">🏎️ Carreras</a>
+            <a href="">🃏 Cartas</a>
+            <a href="">👨🏼‍🍳 Cocinar</a>
+            <a href="">♟️ Estrategia</a>
+            <a href="">⚽ Deportes</a>
+            <a href="">🔫 Disparos</a>
+            <a href="">😱 Terror</a>
+            <a href="">👗 Moda</a>
+            <a href="">Terminos & Condiciones</a>
+            <a href="">Ayuda</a>
+        </div>
+        <div class="menu_hamburguesa_icons icons">
+                    <i class="bi bi-twitter icono"></i>
+                    <i class="bi bi-instagram icono"></i>
+                    <i class="bi bi-youtube icono"></i>
+        </div>
+    </div>
+    <section class="top">
+        <div class="carrousel-container container-presentacion">
+            <button class="carrousel-arrow left flechas-top">&#8592;</button>
+            <div class="carrousel">
+                <div class="carrousel-track">
+                    <div class="card presentacion">
+                        <img src="" alt="">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus eligendi molestiae aut praesentium placeat ad reiciendis voluptates repellat doloribus quam minus, quia eaque, neque nihil ea rerum tempora a sapiente.</p>
+                    </div>
+                    <div class="card presentacion">
+                        <img src="" alt="">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus eligendi molestiae aut praesentium placeat ad reiciendis voluptates repellat doloribus quam minus, quia eaque, neque nihil ea rerum tempora a sapiente.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carrousel-arrow right flechas-top">&#8594;</button>
+        </div>
+    </section>
+    <section class="carrousel-container">
+        <h3 class="categoria">Categoría</h3>
+        <button class="carrousel-arrow left">&#8592;</button>
+        <div class="carrousel">
+            <div class="carrousel-track">
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <button class="carrousel-arrow right">&#8594;</button>
+    </section>
 
-     <div class="barra_carga"></div>
-     <div class="loading"></div>
-    
-     <section>
-        <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe laborum deserunt, alias odit officiis velit eum consequatur optio consequuntur fugit deleniti ullam cupiditate dolore laboriosam eaque odio minus reiciendis quibusdam!
-        </p>
-        <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis ipsa accusantium nisi perferendis repellat repellendus ipsam nulla, distinctio eum ut. Animi tenetur incidunt ea. Mollitia natus dolores libero facilis quam?
-        </p>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae tenetur eaque voluptates, id minus nostrum est quaerat non incidunt, provident, quisquam sint placeat unde. Laboriosam magnam dolores eos? Iure, beatae?
-        </p>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque eveniet, laboriosam nulla sint quam dolor aperiam quasi magni laborum voluptatibus pariatur eaque esse natus consequuntur facilis sequi repellendus quis nesciunt.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, tempora! Cumque labore excepturi qui itaque debitis fugit dignissimos quidem sit temporibus odit et quas eligendi rerum aspernatur, ad quaerat unde.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum consequatur consequuntur quam qui laborum, sint fuga nobis veniam iusto corporis quasi, iste impedit facilis ut, obcaecati placeat inventore voluptatem sapiente.
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam veritatis totam nihil necessitatibus! Nesciunt facere dolorem doloribus ratione necessitatibus laudantium odio assumenda illo eos ipsa est, nam fuga exercitationem obcaecati!
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit tempora sequi molestias eos amet maxime fugit rem vel ut. Explicabo libero non sunt eius est ipsum cupiditate eos rerum soluta.
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit, maiores molestias! Vel sint totam sequi voluptates quasi ratione cum maiores, laborum odit ab consequuntur reiciendis consectetur ad vitae suscipit deleniti!
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam facilis excepturi, natus est accusamus vitae consequatur velit rerum unde possimus quod quasi aspernatur iusto hic quo? Vero distinctio praesentium deserunt?
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam ratione, qui cupiditate laboriosam quam earum voluptates perferendis labore, accusantium, omnis eaque! Asperiores rem ab blanditiis enim esse modi dolorem. Beatae.
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat voluptate quis explicabo, ipsa quasi qui perspiciatis animi omnis quae ea quibusdam. Ducimus, voluptates! Modi sed est odit explicabo quam ut?
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea nam aperiam suscipit perferendis vitae nostrum voluptatem animi tempora, nesciunt dicta iste quam! Quia repudiandae voluptates neque aperiam eligendi earum at!
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non, inventore molestiae unde aspernatur minus tempore eligendi fuga cum. Consequatur porro vero explicabo tempora laboriosam praesentium laudantium qui debitis sequi quibusdam.
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Provident eligendi culpa deleniti voluptatibus recusandae ad sint, ipsa dolore architecto neque tempora ab est adipisci laborum at quod perspiciatis ipsum? Dolor!
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repudiandae ullam velit maxime odit quibusdam, veniam dolor atque modi optio libero ipsum eum labore quasi, saepe id nostrum neque perspiciatis sed!
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Distinctio nisi blanditiis dignissimos dolor repellat, maxime, deleniti doloribus fuga impedit neque labore quidem praesentium quod. In sed animi eius! Maxime, ex.
-        </p>
+    <section class="carrousel-container ">
+        <h3 class="categoria">Categoría</h3>
+        <button class="carrousel-arrow left">&#8592;</button>
+        <div class="carrousel ">
+            <div class="carrousel-track ">
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <button class="carrousel-arrow right">&#8594;</button>
+    </section>
+
+    <section class="carrousel-container ">
+        <h3 class="categoria">Categoría</h3>
+        <button class="carrousel-arrow left">&#8592;</button>
+        <div class="carrousel ">
+            <div class="carrousel-track ">
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card  ">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+                <div class="card">
+                    <img src="" alt="">
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <button class="carrousel-arrow right">&#8594;</button>
     </section>
 
     <footer>
@@ -94,7 +248,7 @@
                     <a>Suscribite a nuestro email informativo
                         para recibir ofertas y noticias de juegos nuevos</a>
                     <input type="email" placeholder="Ingresa tu email...">
-                    <button>Suscribirse</button>
+                    <button class="button-anim1">Suscribirse</button>
                 </div>
             </div>
             <div class="divisor"></div>
@@ -110,6 +264,9 @@
             </div>
         </div>
     </footer>
+
+    <script src="../JS/Home.js"></script>
+    <script src="../JS/global.js"></script>
 </body>
 
 </html>
