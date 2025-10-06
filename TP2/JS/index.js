@@ -16,26 +16,52 @@ function toggleForm(){ // función que alterna entre los formularios de registro
     formLogin.classList.toggle("mostrar");
 }
 
-const btnSubmit = document.querySelectorAll(".submit-form"); // tomo los botones de enviar de ambos formularios
-btnSubmit.forEach( boton => { // por cada boton
-    boton.addEventListener("click", function(event){
-        event.preventDefault(); // previene el comportamiento por defecto del botón (recargar la página)
-        // Se registra o inicia sesión
-        if(validarForms()){
-            window.location.href = "Home.html"; // redirige a Home.html
-        }else{
-            alert("Por favor, complete todos los campos.");
-        }
-    });
+const btnSubmitRegistro = document.querySelector(".submit-form-register"); // tomo los botones de enviar de ambos formularios
+const btnSubmitLogin = document.querySelector(".submit-form-login"); // tomo los botones de enviar de ambos formularios
+
+btnSubmitRegistro.addEventListener("click", function(event){
+    event.preventDefault(); // previene el comportamiento por defecto del botón (recargar la página)
+    if(validarFormRegistro()){ // si el formulario es válido
+        window.location.href = "Home.html"; // redirige a Home.html
+    }else{
+        alert("Por favor, complete todos los campos obligatorios.");
+    }
+});
+
+btnSubmitLogin.addEventListener("click", function(event){
+    event.preventDefault(); // previene el comportamiento por defecto del botón (recargar la página)
+    if(validarFormLogin()){ // si el formulario es válido
+        window.location.href = "Home.html"; // redirige a Home.html
+    }else{
+        alert("Por favor, complete todos los campos obligatorios.");
+    }
 });
 
 // Validación de formularios
-const inputs = document.querySelectorAll("input.required-input"); // selecciona todos los inputs que tienen la clase 'required-input'
+const inputsRegistro = document.querySelectorAll("input.required-input-register"); // selecciona todos los inputs que tienen la clase 'required-input'
+const inputsLogin = document.querySelectorAll("input.required-input-login"); 
 
-
-function validarForms(){
+function validarFormRegistro(){
     let valid = true;
-    inputs.forEach(input => {
+    inputsRegistro.forEach(input => {
+        // busca label por for="{id}" o usa fallback
+        let label = document.querySelector(`label[for="${input.id}"]`);
+        
+        if (input.value.trim() === "") {
+            valid = false;
+            input.classList.add("input-error");
+            label.classList.add("label-error");
+        } else {
+            input.classList.remove("input-error");
+            label.classList.remove("label-error");
+        }
+    });
+    return valid;
+}
+
+function validarFormLogin(){
+    let valid = true;
+    inputsLogin.forEach(input => {
         // busca label por for="{id}" o usa fallback
         let label = document.querySelector(`label[for="${input.id}"]`);
         
