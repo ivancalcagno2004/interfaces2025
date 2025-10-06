@@ -135,7 +135,7 @@ input:focus {
     border: 3px solid var(--sombra-terciaria1);
 }
 
-button{
+.button-anim1{
     font-family: var(--texto);
     background-color: var(--color-primario);
     color: white;
@@ -149,7 +149,7 @@ button{
     transition: all 0.3s;
 }
 
-button::before{
+.button-anim1::before{
     content: '';
     position: absolute;
     width: 100px;
@@ -160,17 +160,17 @@ button::before{
     transition: all 0.5s;
 }
 
-button:hover::before{
+.button-anim1:hover::before{
     transform: skewX(30deg) translate(250%, -50%);
     transition-delay: 0.1s;
 }
 
-button:active{
+.button-anim1:active{
     transform: scale(0.9);
 }
 
 
-button:hover {
+.button-anim1:hover {
     transition-delay: 0.3s;
     background: var(--color-secundario);
     box-shadow:
@@ -228,7 +228,7 @@ footer{
     gap: 40px;
 }
 
-.topics:nth-child(4), .topics:nth-child(4) input, .topics:nth-child(4) button {
+.topics:nth-child(4), .topics:nth-child(4) input, .topics:nth-child(4) .button-anim1 {
     width: 80%;
     text-align: center;
 }
