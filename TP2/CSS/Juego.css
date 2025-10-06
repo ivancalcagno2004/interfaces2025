@@ -131,4 +131,55 @@ h3 {
   margin: 5px 0;
   line-height: 1.4;
 }
+.comentario{
+  background-color: var(--sombra-terciaria3);
+  width: 26%;
+  padding: 3%;
+}
+.formComentario{
+  display: flex;
+  flex-direction: column;
+}
+.formComentario button{
+  margin-left: 40%;
+  margin-top: 5px;
+  width: 20%;
+  background-color: var(--color-primario);
+  border-radius: 20px;
+  color: white;
+  height: 34px
+  
+}
+.formComentario textarea{
+  height: 130px;
+  border-radius: 5px;
+  background-color: var(--sombra-terciaria2);
+}
+.descripcion_juego{
+  background-color: var(--sombra-terciaria2);
+}
+.descrip{
+  display: flex;
+  margin: 20px;
+  padding: 20px;
+  background-color: var(--sombra-terciaria3);
+  border-radius: 30px;
+  margin-right: 30px;
+}
 
+.contenidoClasificacionYeso{
+  display: flex;
+  flex-direction: column;
+}
+.contenedorDeContenido {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* la primera columna ocupa el doble */
+  align-items: center;
+  gap: 10px;
+}
+.detalle-descripcion{
+  margin-top: 25px;
+}
+.instrucciones{
+  margin-top: 150px;
+}
