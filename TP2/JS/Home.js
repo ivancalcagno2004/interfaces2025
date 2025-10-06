@@ -5,7 +5,7 @@ const secciones = document.querySelectorAll("section"); // todas las secciones d
 const porcentaje = document.querySelector(".porcentaje"); // duracion total 5 segundos
 const cards = document.querySelectorAll('.card');
 
-/* function mostrarSecciones() {
+ function mostrarSecciones() {
   // Ocultar el loading después de 5 segundos y mostrar el contenido del body
   setTimeout(() => {
     // después de 5 segundos oculto el loading
@@ -23,7 +23,7 @@ const cards = document.querySelectorAll('.card');
     }, tiempo);   
   });
 }
-mostrarSecciones(); */
+mostrarSecciones();
 
 function actualizarPorcentaje() {
   let carga = 0; 
