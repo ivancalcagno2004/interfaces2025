@@ -111,6 +111,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -217,6 +218,26 @@
     align-items: center;
     font-weight: 600;
 }
+
+.icon-jugar{
+  position: absolute;
+  top: 50%;
+  font-size: 40px;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none; /* evita clicks cuando está oculto */
+}
+
+/* mostrar icono al pasar el mouse sobre la card */
+.card:hover .icon-jugar,
+.card:focus-within .icon-jugar {
+  opacity: 1;
+}
+
 /* Responsive para tablets y desktop */
 @media only screen and (min-width: 768px) {
   .card.presentacion{
