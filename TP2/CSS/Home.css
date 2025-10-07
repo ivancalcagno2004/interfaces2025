@@ -180,6 +180,13 @@
   font-size: 1.1rem;
 }
 
+.container-info-presentacion{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
 @keyframes girar-izq {
   0% {
     transform: skewX(0);

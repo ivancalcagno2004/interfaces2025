@@ -103,17 +103,24 @@ h3 {
 
 /* Contenedor de comentarios */
 .comment {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   background-color: var(--sombra-terciaria3);  
   color: #e4e6eb;            
   border-radius: 10px;        /* esquinas redondeadas */
   padding: 15px;
   margin-bottom: 15px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* sombra suave */
-  width: 320px;               
+  width: 90%;               
   font-family: var(--texto);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.comment span{
+  position: absolute;
+  right: 20px;
+}
 
 .comment:hover {
   transform: translateY(-3px);
@@ -133,7 +140,7 @@ h3 {
 }
 .comentario{
   background-color: var(--sombra-terciaria3);
-  width: 26%;
+  width: 40%;
   padding: 3%;
   margin-left: 30px;
   border-radius: 10px;
@@ -162,11 +169,11 @@ h3 {
 }
 .descrip{
   display: flex;
+  justify-content: space-around;
   margin: 20px;
   padding: 20px;
   background-color: var(--sombra-terciaria3);
   border-radius: 30px;
-  margin-right: 30px;
 }
 
 .contenidoClasificacionYeso{
@@ -180,8 +187,12 @@ h3 {
   gap: 10px;
 }
 .detalle-descripcion{
+  width: 100%;
   margin-top: 25px;
+  text-align: justify;
 }
 .instrucciones{
-  margin-top: 150px;
+  font-size: 20px;
+  font-weight: bolder;
+  margin-top: 40px;
 }
