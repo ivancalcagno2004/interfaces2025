@@ -282,3 +282,14 @@ h3 {
   font-size: 1rem;
   vertical-align: middle;
 }
+.btn-jugar:hover{
+  color: var(--color-primario);
+  background-color: white;
+  transform: translate(-50%, -50%) scale(1.2);
+  border: 5px blue solid;
+}
+.btn-jugar:hover::after {
+  content: "🎮";
+  opacity: 1;
+   transition-delay: 0.5s;
+}
