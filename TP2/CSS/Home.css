@@ -152,21 +152,6 @@
   cursor: pointer;
 }
 
-.card img:hover::after{
-  align-self: center;
-  justify-self: center;
-  padding: 10px;
-  content: '▶';
-  position: absolute;
-  background-color: var(--fondo-iconos);
-  height: 50px;
-  width: 50px;
-  font-size: 3rem;
-  top: 50%;
-  left: 50%;
-  border-radius: 50%;
-}
-
 .girar-izq{
   animation: girar-izq linear 1s forwards;
 }
