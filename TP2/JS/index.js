@@ -18,22 +18,51 @@ function toggleForm(){ // función que alterna entre los formularios de registro
 
 const btnSubmitRegistro = document.querySelector(".submit-form-register"); // tomo los botones de enviar de ambos formularios
 const btnSubmitLogin = document.querySelector(".submit-form-login"); // tomo los botones de enviar de ambos formularios
+const alertBox = document.querySelector(".alert");
+const contenedorMensaje = alertBox.querySelector("p");
+let mensaje= "";
 
 btnSubmitRegistro.addEventListener("click", function(event){
     event.preventDefault(); // previene el comportamiento por defecto del botón (recargar la página)
     if(validarFormRegistro()){ // si el formulario es válido
-        window.location.href = "Home.html"; // redirige a Home.html
+        mensaje = "Registro exitoso. Redirigiendo a la página de inicio...";
+        contenedorMensaje.innerHTML = mensaje;
+        alertBox.classList.remove("ocultar");
+        alertBox.classList.add("mostrar", "animate__fadeInDown");
+        setTimeout(() => {
+            window.location.href = "Home.html"; // redirige a Home.html
+        }, 3000);
     }else{
-        alert("Por favor, complete todos los campos obligatorios.");
+        mensaje = "Por favor, complete todos los campos obligatorios.";
+        contenedorMensaje.innerHTML = mensaje;
+        alertBox.classList.remove("ocultar");
+        alertBox.classList.add("mostrar", "animate__shakeX");
+        setTimeout(() => {
+            alertBox.classList.add("ocultar");
+            alertBox.classList.remove("mostrar", "animate__shakeX");
+        }, 5000); // oculta la alerta después de 5 segundos
     }
 });
 
 btnSubmitLogin.addEventListener("click", function(event){
     event.preventDefault(); // previene el comportamiento por defecto del botón (recargar la página)
     if(validarFormLogin()){ // si el formulario es válido
-        window.location.href = "Home.html"; // redirige a Home.html
+        mensaje = "Logueado correctamente. Redirigiendo a la página de inicio...";
+        contenedorMensaje.innerHTML = mensaje;
+        alertBox.classList.remove("ocultar");
+        alertBox.classList.add("mostrar", "animate__fadeInDown");
+        setTimeout(() => {
+            window.location.href = "Home.html"; // redirige a Home.html
+        }, 3000);
     }else{
-        alert("Por favor, complete todos los campos obligatorios.");
+        mensaje = "Por favor, complete todos los campos obligatorios.";
+        contenedorMensaje.innerHTML = mensaje;
+        alertBox.classList.remove("ocultar");
+        alertBox.classList.add("mostrar", "animate__shakeX");
+        setTimeout(() => {
+            alertBox.classList.add("ocultar");
+            alertBox.classList.remove("mostrar", "animate__shakeX");
+        }, 5000); // oculta la alerta después de 5 segundos
     }
 });
 

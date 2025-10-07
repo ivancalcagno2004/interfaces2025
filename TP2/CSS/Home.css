@@ -224,7 +224,7 @@
     flex-direction: row;
     max-width: none;
     border-radius: 16px 16px 16px 16px;
-    height: auto;
+    height: 250px;
   }
 
   .card.presentacion:hover{
@@ -237,11 +237,11 @@
   
   .card.presentacion img{
     border-radius: 16px 0 0 16px;
+    height: 250px;
   }
   
   .card.presentacion p{
     text-align: justify;
-    padding: 20px;
   }
 
   .card {

@@ -133,3 +133,19 @@ label {
 .label-error{
     color: red;
 }
+
+.alert{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: fixed;
+    top: 75px;
+    right: 10px;
+    background-color: var(--sombra-primaria3);
+    border: 1px solid var(--acento);
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    padding: 10px;
+    gap: 10px; 
+    z-index: 1000;
+}
