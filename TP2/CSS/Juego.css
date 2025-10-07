@@ -53,15 +53,17 @@
 
 .imagen-juego-contenedor {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 
 .imagen-juego {
-  max-height: 500px;
+  margin: 0 0 30px 30px;
+  max-height: 600px;
   width: 75vw;
   max-width: 100%;
   border-radius: 15px;
+  filter: blur(5px);
 }
 
 .demo{
@@ -71,14 +73,18 @@
   margin: 30px;
 }
 
+.contenido-principal h3{
+  margin-left: 30px;
+}
+
 .demo img{
   width: 300px;
 }
 
 .btn-jugar {
-  position: absolute;
+  position: relative;
   top: 50%;
-  left: 50%;
+  right: 550px;
   transform: translate(-50%, -50%);
   background-color: #007bff;
   color: white;
@@ -140,7 +146,7 @@ h3 {
 }
 .comentario{
   background-color: var(--sombra-terciaria3);
-  width: 40%;
+  width: 52%;
   padding: 3%;
   margin-left: 30px;
   border-radius: 10px;
@@ -195,4 +201,83 @@ h3 {
   font-size: 20px;
   font-weight: bolder;
   margin-top: 40px;
+}
+
+.perfil_usuario{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  background-color: var(--color-primario);
+  border: 2px solid var(--color-primario);
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  padding: 10px;
+  gap: 10px; 
+}
+.perfil_usuario i{
+  font-size: 30px;
+}
+.perfil_usuario a{
+  font-family: var(--texto);
+    align-items: center;
+    font-weight: 600;
+}
+
+.breadcrumb {
+  margin: 5px 0 5px 30px;
+  font-size: 0.95rem;
+}
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 6px 10px;
+  margin: 0;
+  align-items: center;
+  background: transparent;
+  border-radius: 8px;
+}
+
+/* separador */
+.breadcrumb li + li::before {
+  content: "›";
+  color: whitesmoke;
+  margin: 0 5px;
+  font-size: 0.9rem;
+}
+
+/* enlaces */
+.breadcrumb a {
+  color: var(--color-primario);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all .15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--sombra-terciaria3);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(36,111,179,0.08);
+}
+
+/* hover / focus accesible */
+.breadcrumb a:hover,
+.breadcrumb a:focus,
+.actual-peg a {
+  background: var(--sombra-terciaria3);
+  color: var(--acento);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(36,111,179,0.08);
+}
+
+/* icon inside breadcrumb */
+.breadcrumb a i {
+  font-size: 1rem;
+  vertical-align: middle;
 }

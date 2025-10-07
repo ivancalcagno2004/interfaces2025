@@ -6,6 +6,7 @@ const porcentaje = document.querySelector(".porcentaje"); // duracion total 5 se
 const cards = document.querySelectorAll('.card');
 const perfil = document.querySelector('.bi-person-circle');
 const perfil_box = document.querySelector('.perfil_usuario');
+const card_peg = document.querySelector('.card.peg');
 
  function mostrarSecciones() {
   // Ocultar el loading después de 5 segundos y mostrar el contenido del body
@@ -80,4 +81,10 @@ scrollCarrousel();
 perfil.addEventListener('click', () => {
   perfil_box.classList.toggle("ocultar");
  perfil_box.classList.toggle("mostrar"); 
+ perfil_box.classList.add("animate__fadeInDown");
 });
+
+card_peg.addEventListener('click', () => {
+  window.location.href = "Juego.html"; // redirige a PegSolitaire.html
+}
+);
