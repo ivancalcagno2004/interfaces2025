@@ -157,7 +157,7 @@ input:focus {
     height: 120%;
     background-color: var(--acento);
     top: 50%;
-    transform: skewX(30deg) translate(-180%, -50%);
+    transform: skewX(30deg) translate(-250%, -50%);
     transition: all 0.5s;
 }
 
