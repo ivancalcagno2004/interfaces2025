@@ -293,3 +293,10 @@ h3 {
   opacity: 1;
    transition-delay: 0.5s;
 }
+
+#ejecucion-juego {
+  border: 5px solid var(--color-primario);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  margin-left: 30px;
+}
