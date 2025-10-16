@@ -91,12 +91,12 @@ function elegirSuperheroeRandom() {
         { x: 1025, y: 225 }
     ];
     const imagenes = [
-        '../images/blocka/spiderman.jpg',
-        '../images/blocka/superman.jpg',
-        '../images/blocka/capitan-america.png',
-        '../images/blocka/batman.png',
-        '../images/blocka/ironman.png',
-        '../images/blocka/thor.png'
+        '../images/blocka/spiderman.jpg', // 0
+        '../images/blocka/superman.jpg', // 1
+        '../images/blocka/capitan-america.png', // 2
+        '../images/blocka/batman.png',  // 3
+        '../images/blocka/ironman.png', // 4
+        '../images/blocka/thor.png' // 5
     ];
     const imagenWidth = 150;
     const imagenHeight = 150;
@@ -106,7 +106,6 @@ function elegirSuperheroeRandom() {
 
     // Dibuja fondo (reinicia el canvas)
     ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
-
     // Dibuja todas las imágenes
     imagenes.forEach((src, i) => {
         const img = new Image();
@@ -126,8 +125,66 @@ function elegirSuperheroeRandom() {
                 ctx.restore();
             }
         }
+
+        setTimeout(() => {
+            crearMenuJuego(imagenes[elegido]);
+        }, 2000); // espera a que se dibujen las imágenes
     });
 }
 
 // Llama a la función cuando el usuario presiona el botón elegir
 btnElegir.addEventListener('click', elegirSuperheroeRandom);
+
+
+function crearMenuJuego(juegoElegido) {
+    // Dibuja cuadrado gris y se reinicia el canvas (para que no queden los superhéroes seleccionados detrás)
+    ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
+    ctx.save();
+    ctx.fillStyle = '#182632';
+    ctx.beginPath();
+    ctx.roundRect(200, 50, 800, 500, 32);
+    ctx.fill();
+    ctx.restore();
+
+    // Oculta el botón elegir
+    btnElegir.classList.add("ocultar");
+
+    // Crea el contador regresivo
+    ctx.font = "48px Arial";
+    ctx.fillStyle = "#fff";
+    let carga = 59;
+    ctx.fillText("0 : " + carga, 750, 120);
+
+    // Dibuja la imagen del juego elegido
+    let imagenJuego = new Image();
+    imagenJuego.src = juegoElegido;
+    imagenJuego.onload = function() {
+        ctx.drawImage(imagenJuego, 500, 170, 250, 250);
+    }
+
+    // Inicia el contador
+    contador(carga, imagenJuego);
+}
+
+function contador(carga, imagenJuego) {
+    // Actualiza el contador cada segundo
+    const intervalo = setInterval(() => {
+        if (carga > 0) {
+            carga--;
+            // Redibuja fondo y cuadrado gris
+            ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
+            ctx.save();
+            ctx.fillStyle = '#182632';
+            ctx.beginPath();
+            ctx.roundRect(200, 50, 800, 500, 32);
+            ctx.fill();
+            ctx.restore();
+            ctx.font = "48px Arial";
+            ctx.fillStyle = "#fff";
+            ctx.fillText("0 : " + carga, 750, 120);
+            ctx.drawImage(imagenJuego, 500, 170, 250, 250);
+        } else {
+            clearInterval(intervalo);
+        }
+    }, 1000);
+}
