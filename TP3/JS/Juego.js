@@ -91,7 +91,9 @@ function cargarNivel(nivel) {
     // Lógica para cuando se pierde
 }
 
-btnJugar.addEventListener('click', () => {
+btnJugar.addEventListener('click', iniciarJuego);
+
+function iniciarJuego() {
     ctx.filter = 'none';
     btnElegir.classList.remove("ocultar");
     ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
@@ -100,7 +102,7 @@ btnJugar.addEventListener('click', () => {
     let imagenWidth = 150;
 
     cargarImagenes(imagenHeight, imagenWidth);
-});
+}
 
 function cargarImagenes(imagenHeight, imagenWidth) {
     let imagenSpidermanHTML = new Image();
@@ -188,7 +190,12 @@ function elegirSuperheroeRandom() {
     return elegido;
 }
 
-btnElegir.addEventListener('click', () => cargarNivel(nivel));
+btnElegir.addEventListener('click', () => {
+    if (btnElegir.textContent === "Siguiente Nivel") {
+        nivel++;
+    }
+    cargarNivel(nivel);
+});
 
 let rotacionesPiezas = []; // Array global para guardar los ángulos de rotación
 
@@ -209,9 +216,9 @@ function crearMenuJuego(juegoElegido, nivel) {
     // Crea el contador regresivo
     ctx.font = "28px Arial";
     ctx.fillStyle = "#fff";
-    let carga = 59;
-    ctx.fillText("0 : " + carga, 770, 120);
-
+    
+    let carga = 0;
+    
     // Configura el juego según el nivel
     if (nivel === 1) {
         carga = 59; // 60 segundos
@@ -220,7 +227,8 @@ function crearMenuJuego(juegoElegido, nivel) {
     } else if (nivel === 3) {
         carga = 20; // 20 segundos
     }
-
+    ctx.fillText("0 : " + carga, 770, 120);
+    
     // Dibuja la imagen del juego elegido
     let imagenJuego = new Image();
     imagenJuego.src = juegoElegido;
@@ -272,12 +280,12 @@ function contador(carga, imagenJuego, rotacionesPiezas) {
                 ctx.restore();
                 ctx.font = "28px Arial";
                 ctx.fillStyle = "#fff";
-                ctx.fillText("¡GANASTE CON UN TIEMPO DE: 0 : " + carga, 350, 300);
+                ctx.fillText("¡GANASTE CON UN TIEMPO DE 0 : " + carga + "!", 350, 300);
 
                 // Boton de siguiente nivel o menu principal
                 //llamar a cargarNivel con el siguiente nivel
                 if(nivel < 3){
-                    //nivel++;
+                    gano = false; // Reinicia la variable para el próximo nivel
                     btnElegir.classList.remove("ocultar");
                     btnElegir.textContent = "Siguiente Nivel";
                 }else{
@@ -305,7 +313,10 @@ function contador(carga, imagenJuego, rotacionesPiezas) {
             ctx.restore();
             ctx.font = "48px Arial";
             ctx.fillStyle = "#fff";
-            ctx.fillText("¡Tiempo terminado!", 450, 300);
+            ctx.fillText("¡Tiempo terminado! Perdiste", 350, 300);
+            btnElegir.classList.remove("ocultar");
+            btnElegir.textContent = "Volver al Menú Principal";
+            nivel = 1; // Reinicia el nivel para la próxima vez
         }
     }, 1000);
 }
