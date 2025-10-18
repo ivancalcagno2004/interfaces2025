@@ -82,6 +82,7 @@ function cargarImagenes(imagenHeight, imagenWidth) {
 }
 
 function elegirSuperheroeRandom() {
+    btnElegir.classList.add("ocultar");
     const posiciones = [
         { x: 25,   y: 225 },
         { x: 225,  y: 225 },
@@ -159,7 +160,8 @@ function crearMenuJuego(juegoElegido) {
     let imagenJuego = new Image();
     imagenJuego.src = juegoElegido;
     imagenJuego.onload = function() {
-        ctx.drawImage(imagenJuego, 500, 170, 250, 250);
+        //ctx.drawImage(imagenJuego, 500, 170, 250, 250);
+        partirImagen(imagenJuego, 450, 170);
     }
 
     // Inicia el contador
@@ -182,9 +184,31 @@ function contador(carga, imagenJuego) {
             ctx.font = "48px Arial";
             ctx.fillStyle = "#fff";
             ctx.fillText("0 : " + carga, 750, 120);
-            ctx.drawImage(imagenJuego, 500, 170, 250, 250);
+            //ctx.drawImage(imagenJuego, 500, 170, 250, 250);
+            partirImagen(imagenJuego, 450, 170);
         } else {
             clearInterval(intervalo);
+
         }
     }, 1000);
+}
+
+
+function partirImagen(imagenJuego, posX, posY) {
+    let height = 150;
+    let width = 150;
+    let gap = 15;
+
+    
+    // Dibuja el cuadrante superior izquierdo
+    ctx.drawImage(imagenJuego, 0, 0, imagenJuego.width / 2, imagenJuego.height / 2, posX, posY, width, height);
+    
+    // Dibuja el cuadrante superior derecho
+    ctx.drawImage(imagenJuego, imagenJuego.width / 2, 0, imagenJuego.width / 2, imagenJuego.height / 2, posX + width + gap, posY, width, height);
+
+    // Dibuja el cuadrante inferior izquierdo
+    ctx.drawImage(imagenJuego, 0, imagenJuego.height/2, imagenJuego.width/2,imagenJuego.height/2, posX ,posY+height+gap,width,height);
+
+    // Dibuja el cuadrante inferior derecho
+    ctx.drawImage(imagenJuego, imagenJuego.width/2 , imagenJuego.height / 2, imagenJuego.width/2 , imagenJuego.height / 2, posX + width + gap, posY + height +gap, width , height);
 }
