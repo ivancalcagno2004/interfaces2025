@@ -16,6 +16,56 @@ perfil.addEventListener('click', () => {
 const canvas = document.getElementById('ejecucion-juego');
 const ctx = canvas.getContext('2d');
 
+const imagenes = [
+        '../images/blocka/spiderman.jpg', // 0
+        '../images/blocka/superman.jpg', // 1
+        '../images/blocka/capitan-america.png', // 2
+        '../images/blocka/batman.png',  // 3
+        '../images/blocka/ironman.png', // 4
+        '../images/blocka/thor.png' // 5
+    ];
+
+// Evita el menú contextual por defecto en el canvas
+canvas.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+
+// Coordenadas y tamaño de las piezas del puzzle
+const piezasPuzzle = [
+    { x: 500, y: 170, w: 125, h: 125 }, // Arriba izquierda
+    { x: 500 + 125 + 10, y: 170, w: 125, h: 125 }, // Arriba derecha
+    { x: 500, y: 170 + 125 + 10, w: 125, h: 125 }, // Abajo izquierda
+    { x: 500 + 125 + 10, y: 170 + 125 + 10, w: 125, h: 125 } // Abajo derecha
+];
+
+// Maneja clicks en el canvas
+canvas.addEventListener('mousedown', function(e) {
+    // Solo si estamos en el juego
+    if (btnElegir.classList.contains("ocultar") && !perdio) {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // Busca sobre qué pieza hizo click
+        for (let i = 0; i < piezasPuzzle.length; i++) {
+            const p = piezasPuzzle[i];
+            if (
+                mouseX >= p.x && mouseX <= p.x + p.w &&
+                mouseY >= p.y && mouseY <= p.y + p.h
+            ) {
+                // Click izquierdo: rota a la izquierda
+                if (e.button === 0) { // e.button === 0 es click izquierdo
+                    rotacionesPiezas[i] += Math.PI / 2;
+                }
+                // Click derecho: rota a la derecha
+                if (e.button === 2) {
+                    rotacionesPiezas[i] -= Math.PI / 2;
+                }
+            }
+        }
+    }
+});
+
 // Dimensiones del canvas
 const width = canvas.width;
 const height = canvas.height;
@@ -28,6 +78,19 @@ imagenFondoHTML.onload = function() {
     ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
 };
 
+let nivel = 1;
+let perdio = false;
+
+function cargarNivel(nivel) {
+    if(!perdio) {
+        let elegido = elegirSuperheroeRandom();
+        setTimeout(() => {
+            crearMenuJuego(imagenes[elegido], nivel);
+        }, 2000); // espera a que se dibujen las imágenes
+    }
+    // Lógica para cuando se pierde
+}
+
 btnJugar.addEventListener('click', () => {
     ctx.filter = 'none';
     btnElegir.classList.remove("ocultar");
@@ -35,6 +98,7 @@ btnJugar.addEventListener('click', () => {
     btnJugar.classList.add("ocultar");
     let imagenHeight = 150;
     let imagenWidth = 150;
+
     cargarImagenes(imagenHeight, imagenWidth);
 });
 
@@ -91,14 +155,7 @@ function elegirSuperheroeRandom() {
         { x: 825,  y: 225 },
         { x: 1025, y: 225 }
     ];
-    const imagenes = [
-        '../images/blocka/spiderman.jpg', // 0
-        '../images/blocka/superman.jpg', // 1
-        '../images/blocka/capitan-america.png', // 2
-        '../images/blocka/batman.png',  // 3
-        '../images/blocka/ironman.png', // 4
-        '../images/blocka/thor.png' // 5
-    ];
+    
     const imagenWidth = 150;
     const imagenHeight = 150;
 
@@ -126,18 +183,17 @@ function elegirSuperheroeRandom() {
                 ctx.restore();
             }
         }
-
-        setTimeout(() => {
-            crearMenuJuego(imagenes[elegido]);
-        }, 2000); // espera a que se dibujen las imágenes
     });
+
+    return elegido;
 }
 
-// Llama a la función cuando el usuario presiona el botón elegir
-btnElegir.addEventListener('click', elegirSuperheroeRandom);
+btnElegir.addEventListener('click', () => cargarNivel(nivel));
+
+let rotacionesPiezas = []; // Array global para guardar los ángulos de rotación
 
 
-function crearMenuJuego(juegoElegido) {
+function crearMenuJuego(juegoElegido, nivel) {
     // Dibuja cuadrado gris y se reinicia el canvas (para que no queden los superhéroes seleccionados detrás)
     ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
     ctx.save();
@@ -151,27 +207,43 @@ function crearMenuJuego(juegoElegido) {
     btnElegir.classList.add("ocultar");
 
     // Crea el contador regresivo
-    ctx.font = "48px Arial";
+    ctx.font = "28px Arial";
     ctx.fillStyle = "#fff";
     let carga = 59;
-    ctx.fillText("0 : " + carga, 750, 120);
+    ctx.fillText("0 : " + carga, 770, 120);
+
+    // Configura el juego según el nivel
+    if (nivel === 1) {
+        carga = 59; // 60 segundos
+    } else if (nivel === 2) {
+        carga = 40; // 40 segundos
+    } else if (nivel === 3) {
+        carga = 20; // 20 segundos
+    }
 
     // Dibuja la imagen del juego elegido
     let imagenJuego = new Image();
     imagenJuego.src = juegoElegido;
-    imagenJuego.onload = function() {
-        //ctx.drawImage(imagenJuego, 500, 170, 250, 250);
-        partirImagen(imagenJuego, 450, 170);
-    }
+    //ctx.drawImage(imagenJuego, 500, 170, 250, 250);
 
+    // Genera ángulos aleatorios para cada pieza (en radianes)
+    rotacionesPiezas = [
+        Math.floor(Math.random() * 4) * (Math.PI / 2), // Arriba izquierda
+        Math.floor(Math.random() * 4) * (Math.PI / 2), // Arriba derecha
+        Math.floor(Math.random() * 4) * (Math.PI / 2), // Abajo izquierda
+        Math.floor(Math.random() * 4) * (Math.PI / 2) // Abajo derecha
+    ];
+
+    partirImagen(imagenJuego, 500, 170, 250, 250);
     // Inicia el contador
-    contador(carga, imagenJuego);
+    contador(carga, imagenJuego, rotacionesPiezas);
 }
-
-function contador(carga, imagenJuego) {
+let gano = false;
+let record = 0;
+function contador(carga, imagenJuego, rotacionesPiezas) {
     // Actualiza el contador cada segundo
     const intervalo = setInterval(() => {
-        if (carga > 0) {
+        if (carga > 0) { // Mientras haya tiempo
             carga--;
             // Redibuja fondo y cuadrado gris
             ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
@@ -181,34 +253,95 @@ function contador(carga, imagenJuego) {
             ctx.roundRect(200, 50, 800, 500, 32);
             ctx.fill();
             ctx.restore();
+            ctx.font = "28px Arial";
+            ctx.fillStyle = "#fff";
+            ctx.fillText("0 : " + carga, 770, 120);
+            partirImagen(imagenJuego, 500, 170, 250, 250);
+            if(!gano){ // Si no ganó aún
+                // Verifica si todas las piezas están en la posición correcta (sin rotación)
+                gano = rotacionesPiezas.every(angle => angle % (2 * Math.PI) === 0); // For each angle, comprueba si es múltiplo de 2π
+            }else{ // Si ya ganó
+                clearInterval(intervalo);
+                // Muestra mensaje de victoria
+                ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
+                ctx.save();
+                ctx.fillStyle = '#182632';
+                ctx.beginPath();
+                ctx.roundRect(200, 50, 800, 500, 32);
+                ctx.fill();
+                ctx.restore();
+                ctx.font = "28px Arial";
+                ctx.fillStyle = "#fff";
+                ctx.fillText("¡GANASTE CON UN TIEMPO DE: 0 : " + carga, 350, 300);
+
+                // Boton de siguiente nivel o menu principal
+                //llamar a cargarNivel con el siguiente nivel
+                if(nivel < 3){
+                    //nivel++;
+                    btnElegir.classList.remove("ocultar");
+                    btnElegir.textContent = "Siguiente Nivel";
+                }else{
+                    btnElegir.classList.remove("ocultar");
+                    btnElegir.textContent = "Volver al Menú Principal";
+                    nivel = 1; // Reinicia el nivel para la próxima vez
+                }
+            }
+
+            // texto de nivel
             ctx.font = "48px Arial";
             ctx.fillStyle = "#fff";
-            ctx.fillText("0 : " + carga, 750, 120);
-            //ctx.drawImage(imagenJuego, 500, 170, 250, 250);
-            partirImagen(imagenJuego, 450, 170);
-        } else {
-            clearInterval(intervalo);
+            ctx.fillText("Nivel " + nivel, 550, 120);
 
+        } else { // Se terminó el tiempo
+            clearInterval(intervalo);
+            perdio = true;
+            // Muestra mensaje de fin de juego
+            ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
+            ctx.save();
+            ctx.fillStyle = '#182632';
+            ctx.beginPath();
+            ctx.roundRect(200, 50, 800, 500, 32);
+            ctx.fill();
+            ctx.restore();
+            ctx.font = "48px Arial";
+            ctx.fillStyle = "#fff";
+            ctx.fillText("¡Tiempo terminado!", 450, 300);
         }
     }, 1000);
 }
 
+function partirImagen(imagenOriginal, posX, posY, height, width) {
+    let imagenPartida = new Image();
+    imagenPartida.src = imagenOriginal.src;
 
-function partirImagen(imagenJuego, posX, posY) {
-    let height = 150;
-    let width = 150;
-    let gap = 15;
+    let piezaWidth = imagenPartida.width / 2;
+    let piezaHeight = imagenPartida.height / 2;
 
-    
-    // Dibuja el cuadrante superior izquierdo
-    ctx.drawImage(imagenJuego, 0, 0, imagenJuego.width / 2, imagenJuego.height / 2, posX, posY, width, height);
-    
-    // Dibuja el cuadrante superior derecho
-    ctx.drawImage(imagenJuego, imagenJuego.width / 2, 0, imagenJuego.width / 2, imagenJuego.height / 2, posX + width + gap, posY, width, height);
+    // Coordenadas de destino de cada pieza
+    const destinos = [
+        { dx: posX, dy: posY },
+        { dx: posX + width / 2 + 10, dy: posY },
+        { dx: posX, dy: posY + height / 2 + 10 },
+        { dx: posX + width / 2 + 10, dy: posY + height / 2 + 10 }
+    ];
 
-    // Dibuja el cuadrante inferior izquierdo
-    ctx.drawImage(imagenJuego, 0, imagenJuego.height/2, imagenJuego.width/2,imagenJuego.height/2, posX ,posY+height+gap,width,height);
+    // Dibuja cada pieza rotada
+    for (let i = 0; i < 4; i++) {
+        ctx.save();
+        // Centro de la pieza destino
+        let centroX = destinos[i].dx + (width / 4);
+        let centroY = destinos[i].dy + (height / 4);
+        ctx.translate(centroX, centroY);
+        ctx.rotate(rotacionesPiezas[i]);
 
-    // Dibuja el cuadrante inferior derecho
-    ctx.drawImage(imagenJuego, imagenJuego.width/2 , imagenJuego.height / 2, imagenJuego.width/2 , imagenJuego.height / 2, posX + width + gap, posY + height +gap, width , height);
+        // Dibuja la pieza centrada en (0,0)
+        ctx.drawImage(imagenPartida, (i % 2) * piezaWidth, 
+            Math.floor(i / 2) * piezaHeight, 
+            piezaWidth, piezaHeight,
+            -width / 4, -height / 4, 
+            width / 2, height / 2
+        );
+        ctx.restore();
+    }
+
 }
