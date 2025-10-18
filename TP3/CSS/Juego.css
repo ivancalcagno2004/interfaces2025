@@ -304,3 +304,15 @@ h3 {
   bottom: 20%;
   left: 600px;
 }
+
+.btn-volver-menu{
+  position: absolute;
+  bottom: 20%;
+  left: 500px;
+}
+
+.btn-sig-nivel{
+  position: absolute;
+  bottom: 20%;
+  left: 700px;
+}

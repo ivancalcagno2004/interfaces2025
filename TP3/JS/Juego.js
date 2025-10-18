@@ -2,9 +2,6 @@
 
 const perfil = document.querySelector('.bi-person-circle');
 const perfil_box = document.querySelector('.perfil_usuario');
-const btnJugar = document.querySelector('.btn-jugar');
-const btnElegir = document.querySelector('.btn-elegir');
-btnElegir.classList.add("ocultar");
 
 perfil.addEventListener('click', () => {
     perfil_box.classList.toggle("ocultar");
@@ -12,9 +9,13 @@ perfil.addEventListener('click', () => {
     perfil_box.classList.add("animate__fadeInDown");
 });
 
+///////////////////////////// CONSTANTES Y VARIABLES DEL JUEGO /////////////////////////////
 // Configuración del canvas
 const canvas = document.getElementById('ejecucion-juego');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+// Dimensiones del canvas
+const width = canvas.width;
+const height = canvas.height;
 
 const imagenes = [
         '../images/blocka/spiderman.jpg', // 0
@@ -23,12 +24,7 @@ const imagenes = [
         '../images/blocka/batman.png',  // 3
         '../images/blocka/ironman.png', // 4
         '../images/blocka/thor.png' // 5
-    ];
-
-// Evita el menú contextual por defecto en el canvas
-canvas.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-});
+];
 
 // Coordenadas y tamaño de las piezas del puzzle
 const piezasPuzzle = [
@@ -38,7 +34,51 @@ const piezasPuzzle = [
     { x: 500 + 125 + 10, y: 170 + 125 + 10, w: 125, h: 125 } // Abajo derecha
 ];
 
-// Maneja clicks en el canvas
+let rotacionesPiezas = []; // Array global para guardar los ángulos de rotación
+let gap = 10; // Espacio entre piezas
+
+///////////////////////////////////// ESTADO DEL JUEGO /////////////////////////////////////
+
+// Variables del juego
+let nivel = 1;
+let perdio = false;
+let gano = false;
+let record = 0;
+
+// Botones del juego
+const btnJugar = document.querySelector('.btn-jugar');
+const btnElegir = document.querySelector('.btn-elegir');
+const btnVolverMenu = document.querySelector('.btn-volver-menu');
+const btnSigNivel = document.querySelector('.btn-sig-nivel');
+btnSigNivel.classList.add("ocultar");
+btnVolverMenu.classList.add("ocultar");
+btnElegir.classList.add("ocultar");
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Carga y dibuja la imagen de fondo
+
+let imagenFondoHTML = new Image();
+imagenFondoHTML.src = '../images/blocka/fondo-blocka.jpg';
+
+imagenFondoHTML.onload = function() {
+    ctx.filter = 'blur(5px)';
+    ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
+};
+
+/////////////////////////////////////// EVENTOS CLICK ///////////////////////////////////////
+
+btnJugar.addEventListener('click', iniciarJuego);
+btnVolverMenu.addEventListener('click', iniciarJuego);
+btnElegir.addEventListener('click', () => {
+    cargarNivel(nivel);
+});
+btnSigNivel.addEventListener('click', () => {
+    nivel++;
+    cargarNivel(nivel);
+});
+
+// Maneja clicks en el canvas para rotar piezas (obtiene coordenadas del mouse y verifica sobre qué pieza se hizo click)
 canvas.addEventListener('mousedown', function(e) {
     // Solo si estamos en el juego
     if (btnElegir.classList.contains("ocultar") && !perdio) {
@@ -66,38 +106,23 @@ canvas.addEventListener('mousedown', function(e) {
     }
 });
 
-// Dimensiones del canvas
-const width = canvas.width;
-const height = canvas.height;
+// Evita el menú contextual por defecto en el canvas
+canvas.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
 
-let imagenFondoHTML = new Image();
-imagenFondoHTML.src = '../images/blocka/fondo-blocka.jpg';
-
-imagenFondoHTML.onload = function() {
-    ctx.filter = 'blur(5px)';
-    ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
-};
-
-let nivel = 1;
-let perdio = false;
-
-function cargarNivel(nivel) {
-    if(!perdio) {
-        let elegido = elegirSuperheroeRandom();
-        setTimeout(() => {
-            crearMenuJuego(imagenes[elegido], nivel);
-        }, 2000); // espera a que se dibujen las imágenes
-    }
-    // Lógica para cuando se pierde
-}
-
-btnJugar.addEventListener('click', iniciarJuego);
+/////////////////////////////////////// FUNCIONES ///////////////////////////////////////
 
 function iniciarJuego() {
-    ctx.filter = 'none';
-    btnElegir.classList.remove("ocultar");
-    ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
+    btnVolverMenu.classList.add("ocultar");
+    btnSigNivel.classList.add("ocultar");
     btnJugar.classList.add("ocultar");
+    perdio = false;
+    gano = false;
+    btnElegir.classList.remove("ocultar");
+
+    ctx.filter = 'none';
+    ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
     let imagenHeight = 150;
     let imagenWidth = 150;
 
@@ -147,6 +172,20 @@ function cargarImagenes(imagenHeight, imagenWidth) {
     }
 }
 
+function cargarNivel(nivel) { // carga el nivel seleccionado (es irrelevante pasar el nivel acá ya que es una variable global, pero lo dejo para futuras mejoras)
+    // Oculta botones
+    btnSigNivel.classList.add("ocultar");
+    btnVolverMenu.classList.add("ocultar");
+
+    if(!perdio) {
+        let elegido = elegirSuperheroeRandom();
+        setTimeout(() => {
+            crearMenuJuego(imagenes[elegido], nivel); // carga el menú del juego con la imagen elegida (gris)
+        }, 4000); // espera a que se resalte en violeta la imagen elegida
+    }
+    // Lógica para cuando se pierde
+}
+
 function elegirSuperheroeRandom() {
     btnElegir.classList.add("ocultar");
     const posiciones = [
@@ -190,25 +229,9 @@ function elegirSuperheroeRandom() {
     return elegido;
 }
 
-btnElegir.addEventListener('click', () => {
-    if (btnElegir.textContent === "Siguiente Nivel") {
-        nivel++;
-    }
-    cargarNivel(nivel);
-});
-
-let rotacionesPiezas = []; // Array global para guardar los ángulos de rotación
-
-
 function crearMenuJuego(juegoElegido, nivel) {
     // Dibuja cuadrado gris y se reinicia el canvas (para que no queden los superhéroes seleccionados detrás)
-    ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
-    ctx.save();
-    ctx.fillStyle = '#182632';
-    ctx.beginPath();
-    ctx.roundRect(200, 50, 800, 500, 32);
-    ctx.fill();
-    ctx.restore();
+    cargarCanvasNivel();
 
     // Oculta el botón elegir
     btnElegir.classList.add("ocultar");
@@ -227,12 +250,12 @@ function crearMenuJuego(juegoElegido, nivel) {
     } else if (nivel === 3) {
         carga = 20; // 20 segundos
     }
+
     ctx.fillText("0 : " + carga, 770, 120);
     
     // Dibuja la imagen del juego elegido
     let imagenJuego = new Image();
-    imagenJuego.src = juegoElegido;
-    //ctx.drawImage(imagenJuego, 500, 170, 250, 250);
+    imagenJuego.src = juegoElegido; // <img src="juegoElegido">
 
     // Genera ángulos aleatorios para cada pieza (en radianes)
     rotacionesPiezas = [
@@ -246,95 +269,43 @@ function crearMenuJuego(juegoElegido, nivel) {
     // Inicia el contador
     contador(carga, imagenJuego, rotacionesPiezas);
 }
-let gano = false;
-let record = 0;
-function contador(carga, imagenJuego, rotacionesPiezas) {
-    // Actualiza el contador cada segundo
-    const intervalo = setInterval(() => {
-        if (carga > 0) { // Mientras haya tiempo
-            carga--;
-            // Redibuja fondo y cuadrado gris
-            ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
-            ctx.save();
-            ctx.fillStyle = '#182632';
-            ctx.beginPath();
-            ctx.roundRect(200, 50, 800, 500, 32);
-            ctx.fill();
-            ctx.restore();
-            ctx.font = "28px Arial";
-            ctx.fillStyle = "#fff";
-            ctx.fillText("0 : " + carga, 770, 120);
-            partirImagen(imagenJuego, 500, 170, 250, 250);
-            if(!gano){ // Si no ganó aún
-                // Verifica si todas las piezas están en la posición correcta (sin rotación)
-                gano = rotacionesPiezas.every(angle => angle % (2 * Math.PI) === 0); // For each angle, comprueba si es múltiplo de 2π
-            }else{ // Si ya ganó
-                clearInterval(intervalo);
-                // Muestra mensaje de victoria
-                ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
-                ctx.save();
-                ctx.fillStyle = '#182632';
-                ctx.beginPath();
-                ctx.roundRect(200, 50, 800, 500, 32);
-                ctx.fill();
-                ctx.restore();
-                ctx.font = "28px Arial";
-                ctx.fillStyle = "#fff";
-                ctx.fillText("¡GANASTE CON UN TIEMPO DE 0 : " + carga + "!", 350, 300);
-
-                // Boton de siguiente nivel o menu principal
-                //llamar a cargarNivel con el siguiente nivel
-                if(nivel < 3){
-                    gano = false; // Reinicia la variable para el próximo nivel
-                    btnElegir.classList.remove("ocultar");
-                    btnElegir.textContent = "Siguiente Nivel";
-                }else{
-                    btnElegir.classList.remove("ocultar");
-                    btnElegir.textContent = "Volver al Menú Principal";
-                    nivel = 1; // Reinicia el nivel para la próxima vez
-                }
-            }
-
-            // texto de nivel
-            ctx.font = "48px Arial";
-            ctx.fillStyle = "#fff";
-            ctx.fillText("Nivel " + nivel, 550, 120);
-
-        } else { // Se terminó el tiempo
-            clearInterval(intervalo);
-            perdio = true;
-            // Muestra mensaje de fin de juego
-            ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
-            ctx.save();
-            ctx.fillStyle = '#182632';
-            ctx.beginPath();
-            ctx.roundRect(200, 50, 800, 500, 32);
-            ctx.fill();
-            ctx.restore();
-            ctx.font = "48px Arial";
-            ctx.fillStyle = "#fff";
-            ctx.fillText("¡Tiempo terminado! Perdiste", 350, 300);
-            btnElegir.classList.remove("ocultar");
-            btnElegir.textContent = "Volver al Menú Principal";
-            nivel = 1; // Reinicia el nivel para la próxima vez
-        }
-    }, 1000);
-}
 
 function partirImagen(imagenOriginal, posX, posY, height, width) {
-    let imagenPartida = new Image();
-    imagenPartida.src = imagenOriginal.src;
+    let imagenTemporal = new Image(); // Imagen temporal para manipular (partir y rotar)
+    imagenTemporal.src = imagenOriginal.src;
 
-    let piezaWidth = imagenPartida.width / 2;
-    let piezaHeight = imagenPartida.height / 2;
+    let piezaWidth = imagenTemporal.width / 2;
+    let piezaHeight = imagenTemporal.height / 2;
 
-    // Coordenadas de destino de cada pieza
+    // Coordenadas de posiciones de cada pieza
     const destinos = [
         { dx: posX, dy: posY },
-        { dx: posX + width / 2 + 10, dy: posY },
-        { dx: posX, dy: posY + height / 2 + 10 },
-        { dx: posX + width / 2 + 10, dy: posY + height / 2 + 10 }
+        { dx: posX + width / 2 + gap, dy: posY },
+        { dx: posX, dy: posY + height / 2 + gap },
+        { dx: posX + width / 2 + gap, dy: posY + height / 2 + gap }
     ];
+
+    // // Aplico Filtro
+    // ctx.drawImage(imagenOriginal, posX, posY, width, height);
+
+    // let imageData = ctx.getImageData(posX, posY, width, height);
+    // let data = imageData.data;
+    // let w = imageData.width; // Ancho de la imagen
+    // let h = imageData.height; // Alto de la imagen
+    // let r,g,b,a; // Variables para los canales de color
+    // let index; // Índice del píxel en el array
+
+    // for(let x = 0; x < w; x++){
+    //     for(let y = 0; y < h; y++){
+    //         index = (x + y * w) * 4; // Calcular el índice del píxel en el array
+    //         r = data[index + 0]; // Canal rojo
+    //         g = data[index + 1]; // Canal verde
+    //         b = data[index + 2]; // Canal azul
+    //         a = data[index + 3]; // Canal alfa (opacidad)
+    //         filtroGris(r, g, b, a, data, index); // Aplicar el filtro de gris
+    //     }
+    // }
+    // ctx.putImageData(imageData, posX, posY); // Vuelvo a poner la imagen filtrada en el canvas
 
     // Dibuja cada pieza rotada
     for (let i = 0; i < 4; i++) {
@@ -346,7 +317,7 @@ function partirImagen(imagenOriginal, posX, posY, height, width) {
         ctx.rotate(rotacionesPiezas[i]);
 
         // Dibuja la pieza centrada en (0,0)
-        ctx.drawImage(imagenPartida, (i % 2) * piezaWidth, 
+        ctx.drawImage(imagenTemporal, (i % 2) * piezaWidth, 
             Math.floor(i / 2) * piezaHeight, 
             piezaWidth, piezaHeight,
             -width / 4, -height / 4, 
@@ -354,5 +325,98 @@ function partirImagen(imagenOriginal, posX, posY, height, width) {
         );
         ctx.restore();
     }
+}
 
+function contador(carga, imagenJuego, rotacionesPiezas) {
+    // Actualiza el contador cada segundo
+    const intervalo = setInterval(() => {
+        if (carga > 0) { // Mientras haya tiempo
+            carga--;
+            // Redibuja fondo y cuadrado gris
+            cargarCanvasNivel();
+            ctx.font = "28px Arial";
+            ctx.fillStyle = "#fff";
+            ctx.fillText("0 : " + carga, 770, 120);
+            partirImagen(imagenJuego, 500, 170, 250, 250);
+            if(!gano){ // Si no ganó aún
+                // Verifica si todas las piezas están en la posición correcta (sin rotación)
+                gano = rotacionesPiezas.every(angle => angle % (2 * Math.PI) === 0); // For each angle, comprueba si es múltiplo de 2π
+                cargarTextoNivel();
+            }else{ // Si ya ganó
+                clearInterval(intervalo);
+                // Muestra mensaje de victoria
+                cargarCanvasNivel();
+                ctx.font = "28px Arial";
+                ctx.fillStyle = "#fff";
+                ctx.fillText("¡GANASTE CON UN TIEMPO DE 0 : " + carga + "!", 350, 300);
+
+                cargarTextoNivel();
+                // Muestra boton de siguiente nivel o menu principal
+                if(nivel < 3){
+                    gano = false; // Reinicia la variable para el próximo nivel
+                    btnVolverMenu.classList.remove("ocultar");
+                    btnSigNivel.classList.remove("ocultar");
+                    cargarTextoNivel();
+                }else{
+                    btnVolverMenu.classList.remove("ocultar");
+                    cargarCanvasNivel();
+                    ctx.font = "28px Arial";
+                    ctx.fillStyle = "#fff";
+                    ctx.fillText("¡GANASTE TODO EL JUEGO!", 400, 300);
+                    nivel = 1;
+                }
+            }
+        } else { // Se terminó el tiempo
+            clearInterval(intervalo);
+            perdio = true;
+            // Muestra mensaje de fin de juego
+            cargarCanvasNivel();
+            ctx.font = "48px Arial";
+            ctx.fillStyle = "#fff";
+            ctx.fillText("¡Tiempo terminado! Perdiste", 350, 300);
+            btnVolverMenu.classList.remove("ocultar");
+            nivel = 1; // Reinicia el nivel para la próxima vez
+        }
+    }, 1000);
+}
+
+function cargarCanvasNivel(){
+    ctx.drawImage(imagenFondoHTML, 0, 0, width, height);
+    ctx.save();
+    ctx.fillStyle = '#182632';
+    ctx.beginPath();
+    ctx.roundRect(200, 50, 800, 500, 32);
+    ctx.fill();
+    ctx.restore();
+}
+
+function cargarTextoNivel(){
+    ctx.font = "48px Arial";
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Nivel " + nivel, 550, 120);
+}
+
+///////////////////////////////////// FILTROS /////////////////////////////////////
+
+function filtroGris(r, g, b, a, data, index){
+    var gris = 0.299 * r + 0.587 * g + 0.114 * b; // Calcular el valor de gris promedio
+    //var gris = (r + g + b) / 3; // Otra forma de calcular el gris (promedio simple)
+    data[index + 0] = gris;
+    data[index + 1] = gris;
+    data[index + 2] = gris;
+    data[index + 3] = a; // Mantener la opacidad original
+}
+
+function filtroBrillo30(r, g, b, a, data, index){
+    data[index + 0] = Math.min(r + 30, 255); // Incrementar el canal rojo
+    data[index + 1] = Math.min(g + 30, 255); // Incrementar el canal verde
+    data[index + 2] = Math.min(b + 30, 255); // Incrementar el canal azul
+    data[index + 3] = a; // Mantener la opacidad original
+}
+
+function filtroNegativo(r, g, b, a, data, index){
+    data[index + 0] = 255 - r; // Invertir el canal rojo
+    data[index + 1] = 255 - g; // Invertir el canal verde
+    data[index + 2] = 255 - b; // Invertir el canal azul
+    data[index + 3] = a; // Mantener la opacidad original
 }
