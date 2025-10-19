@@ -226,6 +226,13 @@ function elegirSuperheroeRandom() {
         }
     });
 
+    ctx.save();
+    ctx.font = "48px Arial";
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.fillText("Cargando nivel...", 610, 500);
+    ctx.restore();
+
     return elegido;
 }
 
@@ -302,22 +309,24 @@ function partirImagen(imagenOriginal, posX, posY, height, width, filtroActual) {
         );
 
         // Aplica el filtro SOLO a la pieza
-        let imageData = auxCtx.getImageData(0, 0, piezaWidth, piezaHeight);
-        let data = imageData.data;
-        let w = imageData.width;
-        let h = imageData.height;
-        let r, g, b, a, index;
-        for(let x = 0; x < w; x++){
-            for(let y = 0; y < h; y++){
-                index = (x + y * w) * 4;
-                r = data[index + 0];
-                g = data[index + 1];
-                b = data[index + 2];
-                a = data[index + 3];
-                filtroActual(r, g, b, a, data, index); // filtroActual es una función pasada como parámetro
+        if(!gano){
+            let imageData = auxCtx.getImageData(0, 0, piezaWidth, piezaHeight);
+            let data = imageData.data;
+            let w = imageData.width;
+            let h = imageData.height;
+            let r, g, b, a, index;
+            for(let x = 0; x < w; x++){
+                for(let y = 0; y < h; y++){
+                    index = (x + y * w) * 4;
+                    r = data[index + 0];
+                    g = data[index + 1];
+                    b = data[index + 2];
+                    a = data[index + 3];
+                    filtroActual(r, g, b, a, data, index); // filtroActual es una función pasada como parámetro
+                }
             }
+            auxCtx.putImageData(imageData, 0, 0);
         }
-        auxCtx.putImageData(imageData, 0, 0);
 
         // Dibuja la pieza filtrada y rotada en el canvas principal
         ctx.save();
@@ -348,26 +357,29 @@ function contador(carga, imagenJuego, rotacionesPiezas, filtroActual) {
             }else{ // Si ya ganó
                 clearInterval(intervalo);
                 // Muestra mensaje de victoria
-                cargarCanvasNivel();
-                ctx.font = "28px Arial";
-                ctx.fillStyle = "#fff";
-                ctx.fillText("¡GANASTE CON UN TIEMPO DE 0 : " + carga + "!", 350, 300);
-
                 cargarTextoNivel();
-                // Muestra boton de siguiente nivel o menu principal
-                if(nivel < 3){
-                    gano = false; // Reinicia la variable para el próximo nivel
-                    btnVolverMenu.classList.remove("ocultar");
-                    btnSigNivel.classList.remove("ocultar");
-                    cargarTextoNivel();
-                }else{
-                    btnVolverMenu.classList.remove("ocultar");
+                setTimeout(() => { // Espera 1 segundo antes de mostrar el mensaje (para que el jugador vea la imagen sin filtro)
                     cargarCanvasNivel();
                     ctx.font = "28px Arial";
                     ctx.fillStyle = "#fff";
-                    ctx.fillText("¡GANASTE TODO EL JUEGO!", 400, 300);
-                    nivel = 1;
-                }
+                    ctx.fillText("¡GANASTE CON UN TIEMPO DE 0 : " + carga + "!", 350, 300);
+    
+                    // Muestra boton de siguiente nivel o menu principal
+                    if(nivel < 3){
+                        gano = false; // Reinicia la variable para el próximo nivel
+                        btnVolverMenu.classList.remove("ocultar");
+                        btnSigNivel.classList.remove("ocultar");
+                        cargarTextoNivel();
+                    }else{
+                        btnVolverMenu.classList.remove("ocultar");
+                        cargarCanvasNivel();
+                        ctx.font = "28px Arial";
+                        ctx.fillStyle = "#fff";
+                        ctx.fillText("¡GANASTE TODO EL JUEGO!", 400, 300);
+                        ctx.fillText("Tu tiempo sobrante: 0 : " + carga, 420, 350);
+                        nivel = 1;
+                    }
+                }, 2000);
             }
         } else { // Se terminó el tiempo
             clearInterval(intervalo);
