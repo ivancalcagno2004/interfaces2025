@@ -241,14 +241,18 @@ function crearMenuJuego(juegoElegido, nivel) {
     ctx.fillStyle = "#fff";
     
     let carga = 0;
+    let filtroActual;
     
     // Configura el juego según el nivel
     if (nivel === 1) {
         carga = 59; // 60 segundos
+        filtroActual = filtroGris;
     } else if (nivel === 2) {
         carga = 40; // 40 segundos
+        filtroActual = filtroBrillo30;
     } else if (nivel === 3) {
         carga = 20; // 20 segundos
+        filtroActual = filtroNegativo;
     }
 
     ctx.fillText("0 : " + carga, 770, 120);
@@ -265,69 +269,68 @@ function crearMenuJuego(juegoElegido, nivel) {
         Math.floor(Math.random() * 4) * (Math.PI / 2) // Abajo derecha
     ];
 
-    partirImagen(imagenJuego, 500, 170, 250, 250);
+    partirImagen(imagenJuego, 500, 170, 250, 250, filtroActual);
     // Inicia el contador
-    contador(carga, imagenJuego, rotacionesPiezas);
+    contador(carga, imagenJuego, rotacionesPiezas, filtroActual);
 }
 
-function partirImagen(imagenOriginal, posX, posY, height, width) {
-    let imagenTemporal = new Image(); // Imagen temporal para manipular (partir y rotar)
-    imagenTemporal.src = imagenOriginal.src;
+function partirImagen(imagenOriginal, posX, posY, height, width, filtroActual) {
+    // Usá el tamaño destino de las piezas, NO el de la imagen original
+    let piezaWidth = width / 2;
+    let piezaHeight = height / 2;
 
-    let piezaWidth = imagenTemporal.width / 2;
-    let piezaHeight = imagenTemporal.height / 2;
-
-    // Coordenadas de posiciones de cada pieza
     const destinos = [
         { dx: posX, dy: posY },
-        { dx: posX + width / 2 + gap, dy: posY },
-        { dx: posX, dy: posY + height / 2 + gap },
-        { dx: posX + width / 2 + gap, dy: posY + height / 2 + gap }
+        { dx: posX + piezaWidth + gap, dy: posY },
+        { dx: posX, dy: posY + piezaHeight + gap },
+        { dx: posX + piezaWidth + gap, dy: posY + piezaHeight + gap }
     ];
 
-    // // Aplico Filtro
-    // ctx.drawImage(imagenOriginal, posX, posY, width, height);
-
-    // let imageData = ctx.getImageData(posX, posY, width, height);
-    // let data = imageData.data;
-    // let w = imageData.width; // Ancho de la imagen
-    // let h = imageData.height; // Alto de la imagen
-    // let r,g,b,a; // Variables para los canales de color
-    // let index; // Índice del píxel en el array
-
-    // for(let x = 0; x < w; x++){
-    //     for(let y = 0; y < h; y++){
-    //         index = (x + y * w) * 4; // Calcular el índice del píxel en el array
-    //         r = data[index + 0]; // Canal rojo
-    //         g = data[index + 1]; // Canal verde
-    //         b = data[index + 2]; // Canal azul
-    //         a = data[index + 3]; // Canal alfa (opacidad)
-    //         filtroGris(r, g, b, a, data, index); // Aplicar el filtro de gris
-    //     }
-    // }
-    // ctx.putImageData(imageData, posX, posY); // Vuelvo a poner la imagen filtrada en el canvas
-
-    // Dibuja cada pieza rotada
     for (let i = 0; i < 4; i++) {
+        // Canvas temporal para la pieza
+        const auxCanvas = document.createElement('canvas');
+        auxCanvas.width = piezaWidth;
+        auxCanvas.height = piezaHeight;
+        const auxCtx = auxCanvas.getContext('2d');
+
+        // Dibuja la pieza recortada en el canvas temporal
+        auxCtx.drawImage(
+            imagenOriginal,
+            (i % 2) * (imagenOriginal.width / 2), Math.floor(i / 2) * (imagenOriginal.height / 2),
+            imagenOriginal.width / 2, imagenOriginal.height / 2,
+            0, 0, piezaWidth, piezaHeight
+        );
+
+        // Aplica el filtro SOLO a la pieza
+        let imageData = auxCtx.getImageData(0, 0, piezaWidth, piezaHeight);
+        let data = imageData.data;
+        let w = imageData.width;
+        let h = imageData.height;
+        let r, g, b, a, index;
+        for(let x = 0; x < w; x++){
+            for(let y = 0; y < h; y++){
+                index = (x + y * w) * 4;
+                r = data[index + 0];
+                g = data[index + 1];
+                b = data[index + 2];
+                a = data[index + 3];
+                filtroActual(r, g, b, a, data, index); // filtroActual es una función pasada como parámetro
+            }
+        }
+        auxCtx.putImageData(imageData, 0, 0);
+
+        // Dibuja la pieza filtrada y rotada en el canvas principal
         ctx.save();
-        // Centro de la pieza destino
-        let centroX = destinos[i].dx + (width / 4);
-        let centroY = destinos[i].dy + (height / 4);
+        let centroX = destinos[i].dx + piezaWidth / 2;
+        let centroY = destinos[i].dy + piezaHeight / 2;
         ctx.translate(centroX, centroY);
         ctx.rotate(rotacionesPiezas[i]);
-
-        // Dibuja la pieza centrada en (0,0)
-        ctx.drawImage(imagenTemporal, (i % 2) * piezaWidth, 
-            Math.floor(i / 2) * piezaHeight, 
-            piezaWidth, piezaHeight,
-            -width / 4, -height / 4, 
-            width / 2, height / 2
-        );
+        ctx.drawImage(auxCanvas, -piezaWidth / 2, -piezaHeight / 2, piezaWidth, piezaHeight);
         ctx.restore();
     }
 }
 
-function contador(carga, imagenJuego, rotacionesPiezas) {
+function contador(carga, imagenJuego, rotacionesPiezas, filtroActual) {
     // Actualiza el contador cada segundo
     const intervalo = setInterval(() => {
         if (carga > 0) { // Mientras haya tiempo
@@ -337,7 +340,7 @@ function contador(carga, imagenJuego, rotacionesPiezas) {
             ctx.font = "28px Arial";
             ctx.fillStyle = "#fff";
             ctx.fillText("0 : " + carga, 770, 120);
-            partirImagen(imagenJuego, 500, 170, 250, 250);
+            partirImagen(imagenJuego, 500, 170, 250, 250, filtroActual);
             if(!gano){ // Si no ganó aún
                 // Verifica si todas las piezas están en la posición correcta (sin rotación)
                 gano = rotacionesPiezas.every(angle => angle % (2 * Math.PI) === 0); // For each angle, comprueba si es múltiplo de 2π
@@ -400,7 +403,6 @@ function cargarTextoNivel(){
 
 function filtroGris(r, g, b, a, data, index){
     var gris = 0.299 * r + 0.587 * g + 0.114 * b; // Calcular el valor de gris promedio
-    //var gris = (r + g + b) / 3; // Otra forma de calcular el gris (promedio simple)
     data[index + 0] = gris;
     data[index + 1] = gris;
     data[index + 2] = gris;
