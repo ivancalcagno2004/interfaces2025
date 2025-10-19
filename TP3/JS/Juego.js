@@ -95,11 +95,11 @@ canvas.addEventListener('mousedown', function(e) {
             ) {
                 // Click izquierdo: rota a la izquierda
                 if (e.button === 0) { // e.button === 0 es click izquierdo
-                    rotacionesPiezas[i] += Math.PI / 2;
+                    rotacionesPiezas[i] -= Math.PI / 2;
                 }
                 // Click derecho: rota a la derecha
                 if (e.button === 2) {
-                    rotacionesPiezas[i] -= Math.PI / 2;
+                    rotacionesPiezas[i] += Math.PI / 2;
                 }
             }
         }
@@ -119,6 +119,7 @@ function iniciarJuego() {
     btnJugar.classList.add("ocultar");
     perdio = false;
     gano = false;
+    nivel = 1;
     btnElegir.classList.remove("ocultar");
 
     ctx.filter = 'none';
