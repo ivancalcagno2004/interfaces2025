@@ -251,8 +251,8 @@ h3 {
 }
 
 /* enlaces */
-.breadcrumb a {
-  color: var(--color-primario);
+ .breadcrumb a {
+  color: white;
   text-decoration: none;
   padding: 4px 8px;
   border-radius: 6px;
@@ -263,16 +263,12 @@ h3 {
   background: var(--sombra-terciaria3);
   outline: none;
   box-shadow: 0 0 0 4px rgba(36,111,179,0.08);
-}
+} 
 
-/* hover / focus accesible */
-.breadcrumb a:hover,
-.breadcrumb a:focus,
-.actual-peg a {
-  background: var(--sombra-terciaria3);
-  color: var(--acento);
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(36,111,179,0.08);
+.breadcrumb a:hover {
+  background: var(--color-primario);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,123,255,0.3);
 }
 
 /* icon inside breadcrumb */
