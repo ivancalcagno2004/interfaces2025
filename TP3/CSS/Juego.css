@@ -169,6 +169,11 @@ h3 {
   border-radius: 5px;
   background-color: var(--sombra-terciaria2);
 }
+.formComentario button{
+  cursor: pointer;
+  align-self: flex-end;
+  margin-top: 20px;
+}
 .descripcion_juego{
   background-color: var(--sombra-terciaria2);
 }
