@@ -82,24 +82,24 @@ btnSigNivel.addEventListener('click', () => {
 canvas.addEventListener('mousedown', function(e) {
     // Solo si estamos en el juego
     if (btnElegir.classList.contains("ocultar") && !perdio) {
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+        const rect = canvas.getBoundingClientRect(); // obtiene la posición del canvas en la pantalla
+        const mouseX = e.clientX - rect.left; // coordenada X del mouse dentro del canvas
+        const mouseY = e.clientY - rect.top; // coordenada Y del mouse dentro del canvas
 
         // Busca sobre qué pieza hizo click
-        for (let i = 0; i < piezasPuzzle.length; i++) {
-            const p = piezasPuzzle[i];
+        for (let i = 0; i < piezasPuzzle.length; i++) { // por cada pieza
+            const p = piezasPuzzle[i]; // pieza actual
             if (
                 mouseX >= p.x && mouseX <= p.x + p.w &&
                 mouseY >= p.y && mouseY <= p.y + p.h
             ) {
                 // Click izquierdo: rota a la izquierda
                 if (e.button === 0) { // e.button === 0 es click izquierdo
-                    rotacionesPiezas[i] -= Math.PI / 2;
+                    rotacionesPiezas[i] -= Math.PI / 2; // a la pieza i le resto 90 grados (en radianes)
                 }
                 // Click derecho: rota a la derecha
                 if (e.button === 2) {
-                    rotacionesPiezas[i] += Math.PI / 2;
+                    rotacionesPiezas[i] += Math.PI / 2; // a la pieza i le sumo 90 grados (en radianes)
                 }
             }
         }
@@ -331,9 +331,9 @@ function partirImagen(imagenOriginal, posX, posY, height, width, filtroActual) {
 
         // Dibuja la pieza filtrada y rotada en el canvas principal
         ctx.save();
-        let centroX = destinos[i].dx + piezaWidth / 2;
+        let centroX = destinos[i].dx + piezaWidth / 2; 
         let centroY = destinos[i].dy + piezaHeight / 2;
-        ctx.translate(centroX, centroY);
+        ctx.translate(centroX, centroY); // Mantiene la pieza en el mismo lugar al rotar
         ctx.rotate(rotacionesPiezas[i]);
         ctx.drawImage(auxCanvas, -piezaWidth / 2, -piezaHeight / 2, piezaWidth, piezaHeight);
         ctx.restore();
@@ -359,7 +359,7 @@ function contador(carga, imagenJuego, rotacionesPiezas, filtroActual) {
                 clearInterval(intervalo);
                 // Muestra mensaje de victoria
                 cargarTextoNivel();
-                setTimeout(() => { // Espera 1 segundo antes de mostrar el mensaje (para que el jugador vea la imagen sin filtro)
+                setTimeout(() => { // Espera 2 segundo antes de mostrar el mensaje (para que el jugador vea la imagen sin filtro)
                     cargarCanvasNivel();
                     ctx.font = "28px Arial";
                     ctx.fillStyle = "#fff";
