@@ -20,7 +20,7 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width;
 const height = canvas.height;
 
-let matrizJuego = [ // 2: espacio invalido, 1: hay ficha, 0: espacio vacio
+let matrizJuego = [ // 2: espacio invalido // 1: hay ficha // 0: espacio vacio
     [2, 2, 1, 1, 1, 2, 2],
     [2, 2, 1, 1, 1, 2, 2],
     [1, 1, 1, 1, 1, 1, 1],
