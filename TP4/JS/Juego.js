@@ -262,6 +262,7 @@ function crearMenuJuego(juegoElegido, nivel) {
         carga = 20; // 20 segundos
         filtroActual = filtroNegativo;
     }
+    
 
     ctx.fillText("0 : " + carga, 770, 120);
     
@@ -288,10 +289,10 @@ function partirImagen(imagenOriginal, posX, posY, height, width, filtroActual) {
     let piezaHeight = height / 2;
 
     const destinos = [
-        { dx: posX, dy: posY },
-        { dx: posX + piezaWidth + gap, dy: posY },
-        { dx: posX, dy: posY + piezaHeight + gap },
-        { dx: posX + piezaWidth + gap, dy: posY + piezaHeight + gap }
+        { dx: posX, dy: posY }, // arriba a izquierda
+        { dx: posX + piezaWidth + gap, dy: posY }, // arriba a derecha
+        { dx: posX, dy: posY + piezaHeight + gap }, // abajo a izquierda
+        { dx: posX + piezaWidth + gap, dy: posY + piezaHeight + gap } // abajo a derecha
     ];
 
     for (let i = 0; i < 4; i++) {
@@ -356,10 +357,10 @@ function contador(carga, imagenJuego, rotacionesPiezas, filtroActual) {
                 gano = rotacionesPiezas.every(angle => angle % (2 * Math.PI) === 0); // For each angle, comprueba si es múltiplo de 2π
                 cargarTextoNivel();
             }else{ // Si ya ganó
-                clearInterval(intervalo);
+                clearInterval(intervalo); // corta el contador
                 // Muestra mensaje de victoria
                 cargarTextoNivel();
-                setTimeout(() => { // Espera 1 segundo antes de mostrar el mensaje (para que el jugador vea la imagen sin filtro)
+                setTimeout(() => { 
                     cargarCanvasNivel();
                     ctx.font = "28px Arial";
                     ctx.fillStyle = "#fff";
@@ -380,7 +381,7 @@ function contador(carga, imagenJuego, rotacionesPiezas, filtroActual) {
                         ctx.fillText("Tu tiempo sobrante: 0 : " + carga, 420, 350);
                         nivel = 1;
                     }
-                }, 2000);
+                }, 2000); // Espera 2 segundos antes de mostrar el mensaje (para que el jugador vea la imagen sin filtro)
             }
         } else { // Se terminó el tiempo
             clearInterval(intervalo);

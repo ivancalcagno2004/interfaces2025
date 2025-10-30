@@ -182,7 +182,7 @@ function cargarNivel(nivel) { // carga el nivel seleccionado (es irrelevante pas
         let elegido = elegirSuperheroeRandom();
         setTimeout(() => {
             crearMenuJuego(imagenes[elegido], nivel); // carga el menú del juego con la imagen elegida (gris)
-        }, 4000); // espera a que se resalte en violeta la imagen elegida
+        }, 4000); //muetra cargando nivel por 4 segundos
     }
     // Lógica para cuando se pierde
 }
@@ -334,7 +334,7 @@ function partirImagen(imagenOriginal, posX, posY, height, width, filtroActual) {
         let centroX = destinos[i].dx + piezaWidth / 2; 
         let centroY = destinos[i].dy + piezaHeight / 2;
         ctx.translate(centroX, centroY); // Mantiene la pieza en el mismo lugar al rotar
-        ctx.rotate(rotacionesPiezas[i]);
+        ctx.rotate(rotacionesPiezas[i]);//rota la imagen
         ctx.drawImage(auxCanvas, -piezaWidth / 2, -piezaHeight / 2, piezaWidth, piezaHeight);
         ctx.restore();
     }
@@ -380,7 +380,7 @@ function contador(carga, imagenJuego, rotacionesPiezas, filtroActual) {
                         ctx.fillText("Tu tiempo sobrante: 0 : " + carga, 420, 350);
                         nivel = 1;
                     }
-                }, 2000);
+                }, 2000);//ganas y te muestra dos segundos la imagen sin filtro
             }
         } else { // Se terminó el tiempo
             clearInterval(intervalo);
@@ -393,7 +393,7 @@ function contador(carga, imagenJuego, rotacionesPiezas, filtroActual) {
             btnVolverMenu.classList.remove("ocultar");
             nivel = 1; // Reinicia el nivel para la próxima vez
         }
-    }, 1000);
+    }, 1000);//ciontador cada un segundo
 }
 
 function cargarCanvasNivel(){

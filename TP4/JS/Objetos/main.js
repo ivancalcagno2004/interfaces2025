@@ -1,6 +1,4 @@
 "use strict"
-
-import { Auto } from "./Auto.js";
 import { Juego } from "./Juego.js";
 import { Tablero } from "./Tablero.js";
 
@@ -22,8 +20,14 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width;
 const height = canvas.height;
 
-const juego = new Juego();
+let matrizJuego = [ // 2: espacio invalido, 1: hay ficha, 0: espacio vacio
+    [2, 2, 1, 1, 1, 2, 2],
+    [2, 2, 1, 1, 1, 2, 2],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [2, 2, 1, 1, 1, 2, 2],
+    [2, 2, 1, 1, 1, 2, 2],
+];
 
-const tablero = new Tablero(ctx, width, height);
-tablero.cargarFondo();
-tablero.dibujar();
+const juego = new Juego(ctx, width, height, matrizJuego);
