@@ -1,9 +1,12 @@
 "use strict"
 import { Juego } from "./Juego.js";
-import { Tablero } from "./Tablero.js";
 
 const perfil = document.querySelector('.bi-person-circle');
 const perfil_box = document.querySelector('.perfil_usuario');
+const btn_jugar = document.querySelector('.btn-jugar');
+btn_jugar.addEventListener('click', () => {
+    btn_jugar.classList.add("ocultar")
+});
 
 perfil.addEventListener('click', () => {
     perfil_box.classList.toggle("ocultar");
