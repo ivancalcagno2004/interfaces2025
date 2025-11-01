@@ -41,25 +41,49 @@ export class Ficha{
             ctx.stroke(); // Dibuja el borde
         }
     }
-    esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino) {
-    // Verificar que la celda de destino esté vacía
-    if (this.fichas[filaDestino][colDestino] !== null) {return false;
-    }
 
-    // Verificar que el movimiento sea horizontal o vertical y de dos celdas
-    const deltaFila = Math.abs(filaDestino - filaOrigen);
-    const deltaCol = Math.abs(colDestino - colOrigen);
-    if (!((deltaFila === 2 && deltaCol === 0) || (deltaFila === 0 && deltaCol === 2))) {
-        return false;
-    }
+    esMovimientoValido(filaOrigen, colOrigen, fichas) {
+    const movimientos = [
+            { df: -2, dc: 0 }, // Arriba
+            { df: 2, dc: 0 },  // Abajo
+            { df: 0, dc: -2 }, // Izquierda
+            { df: 0, dc: 2 }   // Derecha
+        ];
 
-    // Verificar que haya una ficha en la celda intermedia
-    const filaIntermedia = (filaOrigen + filaDestino) / 2;
-    const colIntermedia = (colOrigen + colDestino) / 2;
-    if (this.fichas[filaIntermedia][colIntermedia] === null) {
-        return false;
-    }
+        for (const movimiento of movimientos) {
+            const nuevaFila = filaOrigen + movimiento.df; // fila destino
+            const nuevaColumna = colOrigen + movimiento.dc; // columna destino 
+        
+            console.log({
+                nuevaFila,
+                nuevaColumna,
+                dentroDeLimites: nuevaFila >= 0 && nuevaFila < fichas.length &&
+                                 nuevaColumna >= 0 && nuevaColumna < fichas[0].length,
+                destino: fichas[nuevaFila]?.[nuevaColumna]
+            });
+        
+            // Verificar que la nueva posición esté dentro de los límites
+            if (nuevaFila >= 0 && nuevaFila < fichas.length &&
+                nuevaColumna >= 0 && nuevaColumna < fichas[0].length &&
+                fichas[nuevaFila][nuevaColumna] === null) { // La posición destino debe estar vacía
+        
+                // Verificar que haya una ficha en el medio para saltar
+                const filaIntermedia = filaOrigen + movimiento.df / 2;
+                const columnaIntermedia = colOrigen + movimiento.dc / 2;
+        
+                if (fichas[filaIntermedia][columnaIntermedia] !== null) {
+                    return true; // Movimiento válido
+                }
+        
+                console.log({
+                    filaIntermedia,
+                    columnaIntermedia,
+                    intermedia: fichas[filaIntermedia]?.[columnaIntermedia]
+                });
+            }
+        }
 
-    return true; // Movimiento válido
-}
+    
+        return false; // Movimiento no válido
+    }
 }

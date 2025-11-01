@@ -21,7 +21,9 @@ export class Tablero {
         this.cargarEventos();
         this.inicializarFichas(); // Inicializa las fichas después de cargar el fondo
         this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
+        this.dibujarCuadricula();
     }
+    
     cargarFondo() {
         this.imagenFondo = new Image(); // Guardar la imagen en this.imagenFondo
         this.imagenFondo.src = '../images/peg/fondo-peg.jpg';
@@ -52,12 +54,31 @@ export class Tablero {
         }
     }
 
+    dibujarCuadricula() {
+        for (let i = 0; i < this.filas; i++) { // Recorrer filas
+            for (let j = 0; j < this.columnas; j++) { // Recorrer columnas
+                const x = this.margenX + j * this.espacio; // Esquina superior izquierda en X
+                const y = this.margenY + i * this.espacio; // Esquina superior izquierda en Y
+    
+                // Dibuja un rectángulo para cada celda
+                if (this.fichas[i][j] === null || this.fichas[i][j].esValida) {
+                    this.ctx.beginPath();
+                    this.ctx.rect(x, y, this.espacio, this.espacio);
+                    this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
+                    this.ctx.lineWidth = 1;
+                    this.ctx.stroke();
+                }
+            }
+        }
+    }
+
     dibujarTablero() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         // Dibujar el fondo si está cargado
         if (this.imagenFondo && this.imagenFondo.complete) {
             this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
         }
+        this.dibujarCuadricula();
         for (let fila = 0; fila < this.filas; fila++) {
             for (let col = 0; col < this.columnas; col++) {
                 const ficha = this.fichas[fila][col];
@@ -111,45 +132,49 @@ export class Tablero {
     }
 
     mouseUp(event) {
-    if (!this.fichaSeleccionada) return;
+        if (!this.fichaSeleccionada) return;
 
-    const rect = this.ctx.canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+        const rect = this.ctx.canvas.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
 
-    // Calcular la celda donde se soltó la ficha
-    const colDestino = Math.floor((mouseX - this.margenX) / this.espacio);
-    const filaDestino = Math.floor((mouseY - this.margenY) / this.espacio);
+        // Calcular la celda donde se soltó la ficha
+        const colDestino = Math.floor((mouseX - this.margenX) / this.espacio);
+        const filaDestino = Math.floor((mouseY - this.margenY) / this.espacio);
 
-    // Calcular la celda de origen de la ficha seleccionada
-    const colOrigen = Math.floor((this.fichaSeleccionada.posX - this.margenX) / this.espacio);
-    const filaOrigen = Math.floor((this.fichaSeleccionada.posY - this.margenY) / this.espacio);
+        // Calcular la celda de origen de la ficha seleccionada
+        const colOrigen = Math.floor((this.fichaSeleccionada.posX - this.margenX) / this.espacio);
+        const filaOrigen = Math.floor((this.fichaSeleccionada.posY - this.margenY) / this.espacio);
 
-    // Verificar si el movimiento es válido
-    if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino)) {
-        // Actualizar la posición de la ficha seleccionada
-        this.fichaSeleccionada.posX = this.margenX + colDestino * this.espacio + this.espacio / 2;
-        this.fichaSeleccionada.posY = this.margenY + filaDestino * this.espacio + this.espacio / 2;
+        // Verificar si el movimiento es válido
+        if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino, this.fichas)) {
+            // Ajustar la posición de la ficha activa a la posición perfecta
+            this.fichaSeleccionada.posX = this.margenX + nuevaColumna * this.espacio + this.espacio / 2;
+            this.fichaSeleccionada.posY = this.margenY + nuevaFila * this.espacio + this.espacio / 2;
 
-        // Actualizar la matriz del juego
-        this.fichas[filaDestino][colDestino] = this.fichaSeleccionada; // Mover la ficha a la nueva celda
-        this.fichas[filaOrigen][colOrigen] = null; // Vaciar la celda de origen
+            // Mover la ficha en la matriz
+            this.fichas[filaOrigen][colOrigen] = null; // Liberar la posición inicial
+            this.fichas[filaDestino][colDestino] = this.fichaActiva; // Colocar la ficha en la nueva posición
 
-        // Eliminar la ficha intermedia
-        const filaIntermedia = (filaOrigen + filaDestino) / 2;
-        const colIntermedia = (colOrigen + colDestino) / 2;
-        this.fichas[filaIntermedia][colIntermedia] = null; // Vaciar la celda intermedia
-    } else {
-        // Si el movimiento no es válido, devolver la ficha a su posición original
-        this.fichaSeleccionada.posX = this.fichaSeleccionada.posInicialX;
-        this.fichaSeleccionada.posY = this.fichaSeleccionada.posInicialY;
+            // Actualizar la posición inicial de la ficha
+            this.fichaSeleccionada.posInicialX = this.fichaSeleccionada.x;
+            this.fichaSeleccionada.posInicialY = this.fichaSeleccionada.y;
+
+            // Eliminar la ficha intermedia
+            const filaIntermedia = (filaOrigen + filaDestino) / 2;
+            const colIntermedia = (colOrigen + colDestino) / 2;
+            this.fichas[filaIntermedia][colIntermedia] = null; // Vaciar la celda intermedia
+        } else {
+            // Si el movimiento no es válido, devolver la ficha a su posición original
+            this.fichaSeleccionada.posX = this.fichaSeleccionada.posInicialX;
+            this.fichaSeleccionada.posY = this.fichaSeleccionada.posInicialY;
+        }
+
+        // Finalizar el movimiento
+        this.fichaSeleccionada.enMovimiento = false;
+        this.fichaSeleccionada = null;
+        this.ctx.canvas.style.cursor = "default"; // Restaurar el cursor
+        this.dibujarTablero(); // Redibujar el tablero
     }
-
-    // Finalizar el movimiento
-    this.fichaSeleccionada.enMovimiento = false;
-    this.fichaSeleccionada = null;
-    this.ctx.canvas.style.cursor = "default"; // Restaurar el cursor
-    this.dibujarTablero(); // Redibujar el tablero
-}
 
 }
