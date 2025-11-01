@@ -4,6 +4,5 @@ export class Juego {
         this.matrizJuego = matrizJuego;
         console.log(this.matrizJuego);
         this.tablero = new Tablero(ctx, width, height, matrizJuego);
-        this.tablero.cargarFondo();
     }
 }

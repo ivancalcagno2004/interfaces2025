@@ -12,30 +12,31 @@ export class Tablero {
         const espacioHorizontal = (ctx.canvas.width - 2 * this.margen) / this.columnas;
         const espacioVertical = (ctx.canvas.height - 2 * this.margen) / this.filas;
         this.espacio = Math.min(espacioHorizontal, espacioVertical);
+        this.margenX = (ctx.canvas.width - this.columnas * this.espacio) / 2;
+        this.margenY = (ctx.canvas.height - this.filas * this.espacio) / 2;
         this.fichaSeleccionada = null;
-        this.cargarEventos();
         this.offsetX = 0;
         this.offsetY = 0;
+        this.cargarFondo();
+        this.cargarEventos();
+        this.inicializarFichas(); // Inicializa las fichas después de cargar el fondo
+        this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
     }
-
     cargarFondo() {
-        const imagenFondo = new Image(); //<img>
-        imagenFondo.src = '../images/peg/fondo-peg.jpg';
-        imagenFondo.onload = () => {
-            this.ctx.drawImage(imagenFondo, 0, 0, this.width, this.height);
-            this.inicializarFichas(); // Inicializa las fichas después de cargar el fondo
-            console.log(this.fichas);
-            this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
-        }
-    }
+    this.imagenFondo = new Image(); // Guardar la imagen en this.imagenFondo
+    this.imagenFondo.src = '../images/peg/fondo-peg.jpg';
+    this.imagenFondo.onload = () => {
+        this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
+    };
+}
 
     inicializarFichas() {
         this.fichas = [];
         for (let fila = 0; fila < this.filas; fila++) {
             this.fichas[fila] = [];
             for (let col = 0; col < this.columnas; col++) {
-                const x = this.margen + col * this.espacio + this.espacio / 2; // Calcular posición x centrada
-                const y = this.margen + fila * this.espacio + this.espacio / 2; // Calcular posición y centrada
+                const x = this.margenX + col * this.espacio + this.espacio / 2; // Calcular posición x centrada
+                const y = this.margenY + fila * this.espacio + this.espacio / 2; // Calcular posición y centrada
                 if (this.matrizJuego[fila][col] === 1) { // Si hay ficha en la matriz
                     // Crear una nueva ficha en la posición (fila, col)
                     const ficha = new Ficha(x, y);
@@ -52,7 +53,11 @@ export class Tablero {
     }
 
     dibujarTablero() {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    // Dibujar el fondo si está cargado
+    if (this.imagenFondo && this.imagenFondo.complete) {
+        this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
+    }
         for (let fila = 0; fila < this.filas; fila++) {
             for (let col = 0; col < this.columnas; col++) {
                 const ficha = this.fichas[fila][col];
@@ -61,17 +66,18 @@ export class Tablero {
                 }
             }
         }
+    
     }
 
 
-    cargarEventos(){
+    cargarEventos() {
         let canvas = this.ctx.canvas;
         canvas.addEventListener('mousedown', (event) => this.mouseDown(event));
         canvas.addEventListener('mousemove', (event) => this.mouseMove(event));
         canvas.addEventListener('mouseup', (event) => this.mouseUp(event));
     }
 
-    mouseDown(event){
+    mouseDown(event) {
         const rect = this.ctx.canvas.getBoundingClientRect();
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
@@ -79,12 +85,12 @@ export class Tablero {
             for (let col = 0; col < this.columnas; col++) {
                 let ficha = this.fichas[fila][col];
                 if (ficha !== null && ficha.hizoClickEnFicha(mouseX, mouseY)) {
-                    if(ficha.esValida){
+                    if (ficha.esValida) {
                         this.fichaSeleccionada = ficha;
                         this.fichaSeleccionada.enMovimiento = true;
                         this.offsetX = mouseX - ficha.posX;
                         this.offsetY = mouseY - ficha.posY;
-                        this.ctx.canvas.style.cursor = "grabbing";
+                        this.ctx.canvas.style.cursor = "grabbing"; // Cambiar cursor al agarrar //
                         return;
                     }
                 }
@@ -104,8 +110,8 @@ export class Tablero {
         this.dibujarTablero();
     }
 
-    mouseUp(event){
+    mouseUp(event) {
         console.log("Suelto una ficha en el tablero");
     }
-   
+
 }
