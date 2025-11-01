@@ -41,4 +41,25 @@ export class Ficha{
             ctx.stroke(); // Dibuja el borde
         }
     }
+    esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino) {
+    // Verificar que la celda de destino esté vacía
+    if (this.fichas[filaDestino][colDestino] !== null) {return false;
+    }
+
+    // Verificar que el movimiento sea horizontal o vertical y de dos celdas
+    const deltaFila = Math.abs(filaDestino - filaOrigen);
+    const deltaCol = Math.abs(colDestino - colOrigen);
+    if (!((deltaFila === 2 && deltaCol === 0) || (deltaFila === 0 && deltaCol === 2))) {
+        return false;
+    }
+
+    // Verificar que haya una ficha en la celda intermedia
+    const filaIntermedia = (filaOrigen + filaDestino) / 2;
+    const colIntermedia = (colOrigen + colDestino) / 2;
+    if (this.fichas[filaIntermedia][colIntermedia] === null) {
+        return false;
+    }
+
+    return true; // Movimiento válido
+}
 }
