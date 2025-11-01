@@ -55,21 +55,37 @@ export class Tablero {
     }
 
     dibujarCuadricula() {
+        const tiempoActual = Date.now();
+        const parpadeo = Math.floor(tiempoActual / 500) % 2 === 0; // Alterna cada 500ms
+
         for (let i = 0; i < this.filas; i++) { // Recorrer filas
             for (let j = 0; j < this.columnas; j++) { // Recorrer columnas
                 const x = this.margenX + j * this.espacio; // Esquina superior izquierda en X
                 const y = this.margenY + i * this.espacio; // Esquina superior izquierda en Y
     
                 // Dibuja un rectángulo para cada celda
-                if (this.fichas[i][j] === null || this.fichas[i][j].esValida) {
+                if (this.fichas[i][j] !== null && this.fichas[i][j].esValida) {
                     this.ctx.beginPath();
                     this.ctx.rect(x, y, this.espacio, this.espacio);
                     this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
                     this.ctx.lineWidth = 1;
                     this.ctx.stroke();
+                } else if (this.fichas[i][j] === null) {
+                    this.ctx.beginPath();
+                    this.ctx.rect(x, y, this.espacio, this.espacio);
+
+                    if (parpadeo === true) {
+                        this.ctx.strokeStyle = "red"; // Color del borde de la cuadrícula
+                    }else{
+                        this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
+                    }
+                    
+                    this.ctx.lineWidth = 2;
+                    this.ctx.stroke();
                 }
             }
         }
+        requestAnimationFrame(() => this.dibujarCuadricula());
     }
 
     dibujarTablero() {
