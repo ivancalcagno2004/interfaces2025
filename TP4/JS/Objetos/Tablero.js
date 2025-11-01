@@ -8,11 +8,14 @@ export class Tablero {
         this.fichas = [[]]; // Matriz de fichas
         this.filas = 7;
         this.columnas = 7;
-        this.celda = 80;
         this.margen = 10;
-        this.espacio = (ctx.canvas.width - 2 * this.margen) / this.columnas; // Calcular espacio entre fichas
+        const espacioHorizontal = (ctx.canvas.width - 2 * this.margen) / this.columnas;
+        const espacioVertical = (ctx.canvas.height - 2 * this.margen) / this.filas;
+        this.espacio = Math.min(espacioHorizontal, espacioVertical);
         this.fichaSeleccionada = null;
         this.cargarEventos();
+        this.offsetX = 0;
+        this.offsetY = 0;
     }
 
     cargarFondo() {
@@ -27,17 +30,12 @@ export class Tablero {
     }
 
     inicializarFichas() {
-        const tableroWidth = this.columnas * this.celda;
-        const tableroHeight = this.filas * this.celda;
-
-        // Calcula el desplazamiento para centrar el tablero
-        const offsetX = (this.width - tableroWidth) / 2;
-        const offsetY = (this.height - tableroHeight) / 2;
+        this.fichas = [];
         for (let fila = 0; fila < this.filas; fila++) {
             this.fichas[fila] = [];
             for (let col = 0; col < this.columnas; col++) {
-                const x = offsetX + col * this.celda + this.celda / 2; // Centro de la celda en X
-                const y = offsetY + fila * this.celda + this.celda / 2; // Centro de la celda en Y
+                const x = this.margen + col * this.espacio + this.espacio / 2; // Calcular posición x centrada
+                const y = this.margen + fila * this.espacio + this.espacio / 2; // Calcular posición y centrada
                 if (this.matrizJuego[fila][col] === 1) { // Si hay ficha en la matriz
                     // Crear una nueva ficha en la posición (fila, col)
                     const ficha = new Ficha(x, y);
@@ -54,35 +52,12 @@ export class Tablero {
     }
 
     dibujarTablero() {
-        // Calcula el tamaño total del tablero
-        const tableroWidth = this.columnas * this.celda;
-        const tableroHeight = this.filas * this.celda;
-    
-        // Calcula el desplazamiento para centrar el tablero
-        const offsetX = (this.width - tableroWidth) / 2;
-        const offsetY = (this.height - tableroHeight) / 2;
-        
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         for (let fila = 0; fila < this.filas; fila++) {
             for (let col = 0; col < this.columnas; col++) {
-                let ficha = this.fichas[fila][col];
-                const x = offsetX + col * this.celda; // Ajusta la posición X con el desplazamiento
-                const y = offsetY + fila * this.celda; // Ajusta la posición Y con el desplazamiento
-    
-                if (ficha != null) {
-                    if (ficha.fichaValida()) {
-                        this.ctx.beginPath(); // Empieza una figura desde 0
-                        this.ctx.arc(x + this.celda / 2, y + this.celda / 2, ficha.radio, 0,Math.PI * 2); // Dibuja una ficha redonda
-                        this.ctx.strokeStyle = "blue";
-                        this.ctx.fillStyle = "#E23D14FF"; // Color de la ficha
-                        this.ctx.fill();
-                        this.ctx.stroke(); // Dibuja el borde
-                    }
-                }else{
-                    // Espacio vacío
-                    this.ctx.beginPath(); // Empieza una figura desde 0
-                    this.ctx.arc(x + this.celda / 2, y + this.celda / 2, 22, 0,Math.PI * 2); // Dibuja una ficha redonda
-                    this.ctx.strokeStyle = "blue";
-                    this.ctx.stroke(); // Dibuja el borde
+                const ficha = this.fichas[fila][col];
+                if (ficha !== null) { // Verifica que ficha no sea null
+                    ficha.dibujar(this.ctx);
                 }
             }
         }
@@ -102,26 +77,31 @@ export class Tablero {
         const mouseY = event.clientY - rect.top;
         for (let fila = 0; fila < this.filas; fila++) {
             for (let col = 0; col < this.columnas; col++) {
-                
                 let ficha = this.fichas[fila][col];
                 if (ficha !== null && ficha.hizoClickEnFicha(mouseX, mouseY)) {
-                    if(ficha.fichaValida()){
-                        console.log("HIZO CLICK DENTRO DE LA FICHA")
+                    if(ficha.esValida){
+                        this.fichaSeleccionada = ficha;
+                        this.fichaSeleccionada.enMovimiento = true;
+                        this.offsetX = mouseX - ficha.posX;
+                        this.offsetY = mouseY - ficha.posY;
+                        this.ctx.canvas.style.cursor = "grabbing";
                         return;
                     }
-                    /* ficha.enMovimiento = true;
-                    this.fichaActiva = ficha;
-                    this.offsetX = mouseX - ficha.x;
-                    this.offsetY = mouseY - ficha.y;
-                    this.ctx.canvas.style.cursor = "grabbing";
-                    return; // Salir después de encontrar la ficha */
                 }
             }
         }
     }
 
-    mouseMove(event){
-        
+    mouseMove(event) {
+        if (!this.fichaSeleccionada) return;
+
+        const rect = this.ctx.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        this.fichaSeleccionada.posX = x - this.offsetX;
+        this.fichaSeleccionada.posY = y - this.offsetY;
+        this.dibujarTablero();
     }
 
     mouseUp(event){

@@ -5,13 +5,10 @@ export class Ficha{
         this.posY = posY;
         this.color = '#E28614FF'; // despues tiene que ser una imagen
         this.esValida = true;
+        this.enMovimiento = false;
         this.radio = 22;
         this.posInicialX = posX;
         this.posInicialY = posY;
-    }
-
-    fichaValida() {
-        return this.esValida; // Devuelve si la ficha es válida
     }
 
     hizoClickEnFicha(clickX, clickY) {
@@ -24,5 +21,24 @@ export class Ficha{
     
         // Devuelve true si el clic está dentro del radio de la ficha
         return distanciaAlCentro <= this.radio;
+    }
+
+    dibujar(ctx){
+        if (this != null) {
+            if (this.esValida) {
+                ctx.beginPath(); // Empieza una figura desde 0
+                ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI * 2); // Dibuja una ficha redonda
+                ctx.strokeStyle = "blue";
+                ctx.fillStyle = "#E23D14FF"; // Color de la ficha
+                ctx.fill();
+                ctx.stroke(); // Dibuja el borde
+            }
+        }else{
+            // Espacio vacío
+            ctx.beginPath(); // Empieza una figura desde 0
+            ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI * 2); // Dibuja una ficha redonda
+            ctx.strokeStyle = "blue";
+            ctx.stroke(); // Dibuja el borde
+        }
     }
 }
