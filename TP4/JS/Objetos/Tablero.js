@@ -22,6 +22,7 @@ export class Tablero {
         this.inicializarFichas(); // Inicializa las fichas después de cargar el fondo
         this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
         this.dibujarCuadricula();
+        this.initContador(1, 30); // Inicia el contador con 1 minuto y 30 segundos
     }
 
     cargarFondo() {
@@ -192,20 +193,43 @@ export class Tablero {
         this.ctx.canvas.style.cursor = "default"; // Restaurar el cursor
         this.dibujarTablero(); // Redibujar el tablero
     }
-    carga() {
-        let tiempoRestante = 90; // 1 minuto y 30 segundos (90 segundos)
-        const intervalo = setInterval(() => {
-            const minutos = Math.floor(tiempoRestante / 60);
-            const segundos = tiempoRestante % 60;
+    
+    initContador(minutos, segundos) {
+        let tiempoRestante = minutos * 60 + segundos;
+    
+        this.contador(minutos, segundos, tiempoRestante);
+    }
 
+    contador(minutos, segundos, tiempoRestante) {
+        if (tiempoRestante <= 0) {
+            this.ctx.clearRect(845, 30, 280, 50); // Limpia el área del texto con un margen
             this.ctx.font = "28px Arial";
             this.ctx.fillStyle = "#fff";
-            this.ctx.fillText("Tiempo restante:" + minutos + ":" + segundos);
-            this.mostrarTiempoRestante(minutos, segundos);
-             tiempoRestante--;
-            if (tiempoRestante < 0) {
-                clearInterval(intervalo);
-            }
-        }, 1000); // Ejecutar cada segundo
+            this.ctx.fillText("¡Tiempo agotado!", 870, 60);
+            return; // Detener la recursión si el tiempo se agota
+        }
+
+        let correctoFormato = "";
+        if (segundos < 10){
+            correctoFormato = "0";
+        }
+
+        // Limpia el área exacta del contador
+        const texto = "Tiempo restante: " + minutos + ":" + correctoFormato + segundos;
+        
+        this.ctx.clearRect(845, 30, 280, 50); // Limpia el área del texto con un margen
+
+        // Dibuja el texto actualizado
+        this.ctx.font = "28px Arial";
+        this.ctx.fillStyle = "#fff";
+        this.ctx.fillText(texto, 850, 60);
+
+        // Reducir el tiempo restante
+        tiempoRestante--;
+        minutos = Math.floor(tiempoRestante / 60); // Actualizar minutos
+        segundos = tiempoRestante % 60; // Actualizar segundos
+
+        // Llamada recursiva después de 1 segundo
+        setTimeout(() => this.contador(minutos, segundos, tiempoRestante), 1000);
     }
 }
