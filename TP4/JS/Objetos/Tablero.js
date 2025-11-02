@@ -23,7 +23,7 @@ export class Tablero {
         this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
         this.dibujarCuadricula();
     }
-    
+
     cargarFondo() {
         this.imagenFondo = new Image(); // Guardar la imagen en this.imagenFondo
         this.imagenFondo.src = '../images/peg/fondo-peg.jpg';
@@ -62,7 +62,7 @@ export class Tablero {
             for (let j = 0; j < this.columnas; j++) { // Recorrer columnas
                 const x = this.margenX + j * this.espacio; // Esquina superior izquierda en X
                 const y = this.margenY + i * this.espacio; // Esquina superior izquierda en Y
-    
+
                 // Dibuja un rectángulo para cada celda
                 if (this.fichas[i][j] !== null && this.fichas[i][j].esValida) {
                     this.ctx.beginPath();
@@ -76,10 +76,10 @@ export class Tablero {
 
                     if (parpadeo === true) {
                         this.ctx.strokeStyle = "red"; // Color del borde de la cuadrícula
-                    }else{
+                    } else {
                         this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
                     }
-                    
+
                     this.ctx.lineWidth = 2;
                     this.ctx.stroke();
                 }
@@ -192,5 +192,20 @@ export class Tablero {
         this.ctx.canvas.style.cursor = "default"; // Restaurar el cursor
         this.dibujarTablero(); // Redibujar el tablero
     }
+    carga() {
+        let tiempoRestante = 90; // 1 minuto y 30 segundos (90 segundos)
+        const intervalo = setInterval(() => {
+            const minutos = Math.floor(tiempoRestante / 60);
+            const segundos = tiempoRestante % 60;
 
+            this.ctx.font = "28px Arial";
+            this.ctx.fillStyle = "#fff";
+            this.ctx.fillText("Tiempo restante:" + minutos + ":" + segundos);
+            this.mostrarTiempoRestante(minutos, segundos);
+             tiempoRestante--;
+            if (tiempoRestante < 0) {
+                clearInterval(intervalo);
+            }
+        }, 1000); // Ejecutar cada segundo
+    }
 }
