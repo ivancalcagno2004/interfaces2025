@@ -4,13 +4,18 @@ export class Juego {
         this.matrizJuego = matrizJuego;
         console.log(this.matrizJuego);
         this.tablero = new Tablero(ctx, width, height, matrizJuego);
+        this.gano = false;
+        this.perdio = false;
     }
 
     gano(){
-
+     
     }
 
     perdio(){
-        
+       if(this.tablero.verificarPerdio()){
+            this.perdio = true;
+            this.tablero.mostrarMensajePerdio();
+       }   
     }
 }

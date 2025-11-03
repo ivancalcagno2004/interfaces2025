@@ -48,3 +48,11 @@ btn_comenzar.addEventListener('click', () => {
     juego.tablero.iniciarJuego();
     btn_volver_menu.classList.remove("ocultar");
 });
+
+btn_volver_menu.addEventListener('click', () => {
+    btn_volver_menu.classList.add("ocultar");
+    btn_comenzar.classList.remove("ocultar");
+    juego.tablero.cargarFondo();
+    juego.tablero.cargarMenu();
+
+});
