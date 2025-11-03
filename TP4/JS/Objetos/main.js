@@ -45,7 +45,7 @@ btn_jugar.addEventListener('click', () => {
 
 btn_comenzar.addEventListener('click', () => {
     btn_comenzar.classList.add("ocultar");
-    juego.tablero.iniciarJuego();
+    juego.iniciar();
     btn_volver_menu.classList.remove("ocultar");
 });
 

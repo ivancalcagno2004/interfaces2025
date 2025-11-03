@@ -40,7 +40,7 @@ export class Tablero {
 
     iniciarJuego(){
         this.dibujarTablero();
-        this.initContador(0, 5); // Inicia el contador con 2 minutos y 0 segundos
+        this.initContador(3, 15); // Inicia el contador con 2 minutos y 0 segundos
         this.dibujarCuadricula();
     }
 
@@ -94,7 +94,7 @@ export class Tablero {
                     this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
                     this.ctx.lineWidth = 1;
                     this.ctx.stroke();
-                } else if (this.fichas[i][j] === null && this.MovimientoValido(i, j)) {
+                } else if (this.fichas[i][j] === null && this.movimientoValido(i, j)) {
                     this.ctx.beginPath();
                     this.ctx.rect(x, y, this.espacio, this.espacio);
 
@@ -106,7 +106,14 @@ export class Tablero {
 
                     this.ctx.lineWidth = 2;
                     this.ctx.stroke();
+                } else if (!this.movimientoValido(i, j) && this.fichas[i][j] === null) {
+                    this.ctx.beginPath();
+                    this.ctx.rect(x, y, this.espacio, this.espacio);
+                    this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
+                    this.ctx.lineWidth = 1;
+                    this.ctx.stroke();
                 }
+                
             }
         }
         requestAnimationFrame(() => this.dibujarCuadricula());
@@ -129,37 +136,38 @@ export class Tablero {
             }
         }
     }
-    MovimientoValido(filaDestino, colDestino) {
-    const movimientos = [
-        { df: -2, dc: 0 }, // Arriba
-        { df: 2, dc: 0 },  // Abajo
-        { df: 0, dc: -2 }, // Izquierda
-        { df: 0, dc: 2 }   // Derecha
-    ];
 
-    for (let movimiento of movimientos) {
-        const filaOrigen = filaDestino + movimiento.df;
-        const colOrigen = colDestino + movimiento.dc;
+    movimientoValido(filaDestino, colDestino) {
+        const movimientos = [
+            { df: -2, dc: 0 }, // Arriba
+            { df: 2, dc: 0 },  // Abajo
+            { df: 0, dc: -2 }, // Izquierda
+            { df: 0, dc: 2 }   // Derecha
+        ];
 
-        // Verificar que la celda de origen esté dentro de los límites y tenga una ficha
-        if (filaOrigen >= 0 && filaOrigen < this.filas &&
-            colOrigen >= 0 && colOrigen < this.columnas &&
-            this.fichas[filaOrigen][colOrigen] !== null &&
-            this.fichas[filaOrigen][colOrigen].esValida) {
+        for (let movimiento of movimientos) {
+            const filaOrigen = filaDestino + movimiento.df;
+            const colOrigen = colDestino + movimiento.dc;
 
-            // Verificar que la celda intermedia tenga una ficha
-            const filaIntermedia = filaDestino + movimiento.df / 2;
-            const colIntermedia = colDestino + movimiento.dc / 2;
+            // Verificar que la celda de origen esté dentro de los límites y tenga una ficha
+            if (filaOrigen >= 0 && filaOrigen < this.filas &&
+                colOrigen >= 0 && colOrigen < this.columnas &&
+                this.fichas[filaOrigen][colOrigen] !== null &&
+                this.fichas[filaOrigen][colOrigen].esValida) {
 
-            if (this.fichas[filaIntermedia][colIntermedia] !== null &&
-                this.fichas[filaIntermedia][colIntermedia].esValida) {
-                return true; // Movimiento válido
+                // Verificar que la celda intermedia tenga una ficha
+                const filaIntermedia = filaDestino + movimiento.df / 2;
+                const colIntermedia = colDestino + movimiento.dc / 2;
+
+                if (this.fichas[filaIntermedia][colIntermedia] !== null &&
+                    this.fichas[filaIntermedia][colIntermedia].esValida) {
+                    return true; // Movimiento válido
+                }
             }
         }
-    }
 
-    return false; // No hay movimientos válidos hacia esta celda
-}
+        return false; // No hay movimientos válidos hacia esta celda
+    }
 
 
     cargarEventos() {
@@ -222,7 +230,7 @@ export class Tablero {
         });
 
         // Verificar si el movimiento es válido
-        if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, this.fichas)) {
+        if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, this.fichas) && this.fichas[filaDestino][colDestino] !== this.fichas[filaOrigen][colOrigen]) {
             // Ajustar la posición de la ficha activa a la posición perfecta
             this.fichaSeleccionada.posX = this.margenX + colDestino * this.espacio + this.espacio / 2;
             this.fichaSeleccionada.posY = this.margenY + filaDestino * this.espacio + this.espacio / 2;
@@ -294,62 +302,39 @@ export class Tablero {
         this.ctx.fillStyle = "#fff";
         this.ctx.fillText(texto, 850, 60);
     }
+
     verificarPerdio() {
-    for (let fila = 0; fila < this.filas; fila++) {
-        for (let col = 0; col < this.columnas; col++) {
-            const ficha = this.fichas[fila][col];
-            if (ficha !== null && ficha.esValida && this.tiempoRestante > 0) {
-                if (this.tieneMovimientosValidos(fila, col)) {
-                    return false; 
+        // Si el tiempo se acabó, perdió
+        if (this.tiempoRestante <= 0) return true;
+
+        // Recorre todas las fichas; si alguna tiene un movimiento válido, no perdió
+        for (let fila = 0; fila < this.filas; fila++) {
+            for (let col = 0; col < this.columnas; col++) {
+                const ficha = this.fichas[fila][col];
+                if (ficha !== null && ficha !== undefined && ficha.esValida !== false) {
+                    // ficha.esMovimientoValido(fila, col, this.fichas) debe devolver true si hay algún movimiento desde aquí
+                    if (ficha.esMovimientoValido(fila, col, this.fichas)) {
+                        return false; // Hay al menos un movimiento posible -> no perdió
+                    }
                 }
             }
-            else if(this.tiempoRestante <= 0){
-                return true;
-            }
         }
-    }
-    return true; 
-}
-tieneMovimientosValidos(fila, col) {
-    const movimientos = [
-        { df: -2, dc: 0 }, // Arriba
-        { df: 2, dc: 0 },  // Abajo
-        { df: 0, dc: -2 }, // Izquierda
-        { df: 0, dc: 2 }   // Derecha
-    ];
 
-    for (let movimiento of movimientos) {
-        const filaDestino = fila + movimiento.df;
-        const colDestino = col + movimiento.dc;
-
-        // Verificar que la celda de destino esté dentro de los límites y esté vacía
-        if (filaDestino >= 0 && filaDestino < this.filas &&
-            colDestino >= 0 && colDestino < this.columnas &&
-            this.fichas[filaDestino][colDestino] === null) {
-
-            // Verificar que la celda intermedia tenga una ficha
-            const filaIntermedia = fila + movimiento.df / 2;
-            const colIntermedia = col + movimiento.dc / 2;
-
-            if (this.fichas[filaIntermedia][colIntermedia] !== null &&
-                this.fichas[filaIntermedia][colIntermedia].esValida) {
-                return true; // Movimiento válido encontrado
-            }
-        }
+        // No hay movimientos posibles y el tiempo no se ha acabado -> perdió
+        return true;
     }
 
-    return false; // No hay movimientos válidos para esta ficha
-}
-mostrarMensajePerdio(){
-    this.juegoTerminado = true;
-    this.ctx.clearRect(200, 50, 800, 500); // Limpia el área del mensaje
-    this.ctx.save();
-    this.ctx.beginPath();
-    this.ctx.roundRect(200, 50, 800, 500, 32);
-    this.ctx.fill();
-    this.ctx.restore();
-    this.ctx.font = "48px Arial";
-    this.ctx.fillStyle = "red";
-    this.ctx.fillText("Perdiste! Intentalo de nuevo", 325, 200);
-}
+        
+    mostrarMensajePerdio(){
+        this.juegoTerminado = true;
+        this.ctx.clearRect(200, 50, 800, 500); // Limpia el área del mensaje
+        this.ctx.save();
+        this.ctx.beginPath();
+        this.ctx.roundRect(200, 50, 800, 500, 32);
+        this.ctx.fill();
+        this.ctx.restore();
+        this.ctx.font = "48px Arial";
+        this.ctx.fillStyle = "red";
+        this.ctx.fillText("Perdiste! Intentalo de nuevo", 325, 200);
     }
+}

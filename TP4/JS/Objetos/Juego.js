@@ -5,17 +5,25 @@ export class Juego {
         console.log(this.matrizJuego);
         this.tablero = new Tablero(ctx, width, height, matrizJuego);
         this.gano = false;
-        this.perdio = false;
+        this.jugadorPerdio = false;
     }
 
     gano(){
      
     }
 
+    iniciar(){
+        this.tablero.iniciarJuego();
+        this.perdio();
+    }
+    
     perdio(){
-       if(this.tablero.verificarPerdio()){
-            this.perdio = true;
-            this.tablero.mostrarMensajePerdio();
-       }   
+        setInterval(() => {
+            if(this.tablero.verificarPerdio()){
+                this.jugadorPerdio = true;
+                this.tablero.mostrarMensajePerdio();
+            }   
+
+        }, 1000);
     }
 }
