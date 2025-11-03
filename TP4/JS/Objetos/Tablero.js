@@ -18,6 +18,7 @@ export class Tablero {
         this.fichaSeleccionada = null;
         this.offsetX = 0;
         this.offsetY = 0;
+        this.tiempoRestante = 0;
         this.cargarFondo();
         this.cargarEventos();
         this.inicializarFichas(); // Inicializa las fichas después de cargar el fondo
@@ -160,6 +161,7 @@ export class Tablero {
         this.fichaSeleccionada.posX = x - this.offsetX;
         this.fichaSeleccionada.posY = y - this.offsetY;
         this.dibujarTablero();
+        this.dibujarContador(Math.floor(this.tiempoRestante / 60), this.tiempoRestante % 60); // Redibuja el contador
     }
 
     mouseUp(event) {
@@ -206,16 +208,17 @@ export class Tablero {
         this.fichaSeleccionada = null;
         this.ctx.canvas.style.cursor = "default"; // Restaurar el cursor
         this.dibujarTablero(); // Redibujar el tablero
+        this.dibujarContador(Math.floor(this.tiempoRestante / 60), this.tiempoRestante % 60); // Redibuja el contador
     }
     
     initContador(minutos, segundos) {
-        let tiempoRestante = minutos * 60 + segundos;
+        this.tiempoRestante = minutos * 60 + segundos;
     
-        this.contador(minutos, segundos, tiempoRestante);
+        this.contador(minutos, segundos);
     }
 
-    contador(minutos, segundos, tiempoRestante) {
-        if (tiempoRestante <= 0) {
+    contador(minutos, segundos) {
+        if (this.tiempoRestante <= 0) {
             this.ctx.clearRect(845, 30, 280, 50); // Limpia el área del texto con un margen
             this.ctx.font = "28px Arial";
             this.ctx.fillStyle = "#fff";
@@ -223,6 +226,18 @@ export class Tablero {
             return; // Detener la recursión si el tiempo se agota
         }
 
+        this.dibujarContador(minutos, segundos);
+
+        // Reducir el tiempo restante
+        this.tiempoRestante--;
+        minutos = Math.floor(this.tiempoRestante / 60); // Actualizar minutos
+        segundos = this.tiempoRestante % 60; // Actualizar segundos
+
+        // Llamada recursiva después de 1 segundo
+        setTimeout(() => this.contador(minutos, segundos), 1000);
+    }
+
+    dibujarContador(minutos, segundos) {
         let correctoFormato = "";
         if (segundos < 10){
             correctoFormato = "0";
@@ -237,13 +252,5 @@ export class Tablero {
         this.ctx.font = "28px Arial";
         this.ctx.fillStyle = "#fff";
         this.ctx.fillText(texto, 850, 60);
-
-        // Reducir el tiempo restante
-        tiempoRestante--;
-        minutos = Math.floor(tiempoRestante / 60); // Actualizar minutos
-        segundos = tiempoRestante % 60; // Actualizar segundos
-
-        // Llamada recursiva después de 1 segundo
-        setTimeout(() => this.contador(minutos, segundos, tiempoRestante), 1000);
     }
 }
