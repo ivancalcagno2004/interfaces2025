@@ -81,7 +81,7 @@ export class Tablero {
                 const y = this.margenY + i * this.espacio; // Esquina superior izquierda en Y
 
                 // Dibuja un rectángulo para cada celda
-                if (this.fichas[i][j] !== null && this.fichas[i][j].esValida) {
+                if (this.fichas[i][j] !== null && this.fichas[i][j] !== undefined && this.fichas[i][j].esValida) {
                     this.ctx.beginPath();
                     this.ctx.rect(x, y, this.espacio, this.espacio);
                     this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
@@ -115,7 +115,7 @@ export class Tablero {
         for (let fila = 0; fila < this.filas; fila++) {
             for (let col = 0; col < this.columnas; col++) {
                 const ficha = this.fichas[fila][col];
-                if (ficha !== null) { // Verifica que ficha no sea null
+                if (ficha !== null && ficha !== undefined) { // Verifica que ficha no sea null
                     ficha.dibujar(this.ctx);
                 }
             }
@@ -167,31 +167,34 @@ export class Tablero {
     mouseUp(event) {
         if (!this.fichaSeleccionada) return;
 
-        const rect = this.ctx.canvas.getBoundingClientRect();
-        const mouseX = event.clientX - rect.left;
-        const mouseY = event.clientY - rect.top;
-
         // Calcular la celda donde se soltó la ficha
-        const colDestino = Math.floor((mouseX - this.margenX) / this.espacio);
-        const filaDestino = Math.floor((mouseY - this.margenY) / this.espacio);
+        const colDestino = Math.floor((this.fichaSeleccionada.posX - this.margenX) / this.espacio);
+        const filaDestino = Math.floor((this.fichaSeleccionada.posY - this.margenY) / this.espacio);
 
         // Calcular la celda de origen de la ficha seleccionada
-        const colOrigen = Math.floor((this.fichaSeleccionada.posX - this.margenX) / this.espacio);
-        const filaOrigen = Math.floor((this.fichaSeleccionada.posY - this.margenY) / this.espacio);
+        const colOrigen = Math.floor((this.fichaSeleccionada.posInicialX - this.margenX) / this.espacio);
+        const filaOrigen = Math.floor((this.fichaSeleccionada.posInicialY - this.margenY) / this.espacio);
+
+        console.log({
+            filaOrigen,
+            colOrigen,
+            filaDestino,
+            colDestino
+        });
 
         // Verificar si el movimiento es válido
-        if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino, this.fichas)) {
+        if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, this.fichas)) {
             // Ajustar la posición de la ficha activa a la posición perfecta
-            this.fichaSeleccionada.posX = this.margenX + nuevaColumna * this.espacio + this.espacio / 2;
-            this.fichaSeleccionada.posY = this.margenY + nuevaFila * this.espacio + this.espacio / 2;
+            this.fichaSeleccionada.posX = this.margenX + colDestino * this.espacio + this.espacio / 2;
+            this.fichaSeleccionada.posY = this.margenY + filaDestino * this.espacio + this.espacio / 2;
 
             // Mover la ficha en la matriz
             this.fichas[filaOrigen][colOrigen] = null; // Liberar la posición inicial
-            this.fichas[filaDestino][colDestino] = this.fichaActiva; // Colocar la ficha en la nueva posición
+            this.fichas[filaDestino][colDestino] = this.fichaSeleccionada; // Colocar la ficha en la nueva posición
 
             // Actualizar la posición inicial de la ficha
-            this.fichaSeleccionada.posInicialX = this.fichaSeleccionada.x;
-            this.fichaSeleccionada.posInicialY = this.fichaSeleccionada.y;
+            this.fichaSeleccionada.posInicialX = this.fichaSeleccionada.posX;
+            this.fichaSeleccionada.posInicialY = this.fichaSeleccionada.posY;
 
             // Eliminar la ficha intermedia
             const filaIntermedia = (filaOrigen + filaDestino) / 2;
@@ -203,6 +206,7 @@ export class Tablero {
             this.fichaSeleccionada.posY = this.fichaSeleccionada.posInicialY;
         }
 
+        console.log(this.fichas);
         // Finalizar el movimiento
         this.fichaSeleccionada.enMovimiento = false;
         this.fichaSeleccionada = null;
