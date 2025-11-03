@@ -1,6 +1,7 @@
 import { Ficha } from "./Ficha.js";
 export class Tablero {
     constructor(ctx, width, height, matrizJuego) {
+        this.imagenFondo = null;
         this.ctx = ctx;
         this.width = width;
         this.height = height;
@@ -20,16 +21,30 @@ export class Tablero {
         this.cargarFondo();
         this.cargarEventos();
         this.inicializarFichas(); // Inicializa las fichas después de cargar el fondo
-        this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
+    }
+
+    cargarMenu(){
+        this.ctx.save();
+        this.ctx.fillStyle = '#182632';
+        this.ctx.beginPath();
+        this.ctx.roundRect(200, 50, 800, 500, 32);
+        this.ctx.fill();
+        this.ctx.restore();
+    }
+
+    iniciarJuego(){
+        this.dibujarTablero();
+        this.initContador(2, 0); // Inicia el contador con 2 minutos y 0 segundos
         this.dibujarCuadricula();
-        this.initContador(1, 30); // Inicia el contador con 1 minuto y 30 segundos
     }
 
     cargarFondo() {
         this.imagenFondo = new Image(); // Guardar la imagen en this.imagenFondo
         this.imagenFondo.src = '../images/peg/fondo-peg.jpg';
         this.imagenFondo.onload = () => {
-            this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
+            this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
+            //this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
+            //this.cargarMenu();
         };
     }
 
@@ -104,7 +119,6 @@ export class Tablero {
                 }
             }
         }
-
     }
 
 

@@ -300,20 +300,15 @@ h3 {
   margin-left: 30px;
 }
 
-.btn-elegir{
+.btn-comenzar{
   position: absolute;
-  bottom: 20%;
+  top: 80%;
   left: 600px;
 }
 
 .btn-volver-menu{
   position: absolute;
-  bottom: 20%;
-  left: 500px;
+  top: 80%;
+  left: 200px;
 }
 
-.btn-sig-nivel{
-  position: absolute;
-  bottom: 20%;
-  left: 700px;
-}

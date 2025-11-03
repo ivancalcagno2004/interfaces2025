@@ -5,4 +5,12 @@ export class Juego {
         console.log(this.matrizJuego);
         this.tablero = new Tablero(ctx, width, height, matrizJuego);
     }
+
+    gano(){
+
+    }
+
+    perdio(){
+        
+    }
 }
