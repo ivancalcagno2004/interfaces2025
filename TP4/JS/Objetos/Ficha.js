@@ -54,33 +54,34 @@ export class Ficha {
         // }
     }
 
-    esMovimientoValido(filaOrigen, colOrigen, fichas) {
+    esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino, fichas) {
         const movimientos = [
             { df: -2, dc: 0 }, // Arriba
             { df: 2, dc: 0 },  // Abajo
             { df: 0, dc: -2 }, // Izquierda
             { df: 0, dc: 2 }   // Derecha
         ];
-
+    
         for (const movimiento of movimientos) {
-            const nuevaFila = filaOrigen + movimiento.df; // fila destino
-            const nuevaColumna = colOrigen + movimiento.dc; // columna destino 
-
-            // Verificar que la nueva posición esté dentro de los límites
-            if (nuevaFila >= 0 && nuevaFila < fichas.length &&
-                nuevaColumna >= 0 && nuevaColumna < fichas[0].length &&
-                fichas[nuevaFila][nuevaColumna] === null) { // La posición destino debe estar vacía
-
-                // Verificar que haya una ficha en el medio para saltar
-                const filaIntermedia = filaOrigen + movimiento.df / 2;
-                const columnaIntermedia = colOrigen + movimiento.dc / 2;
-
-                if (fichas[filaIntermedia][columnaIntermedia] !== null) {
-                    return true; // Movimiento válido
+            const nuevaFila = filaOrigen + movimiento.df;
+            const nuevaColumna = colOrigen + movimiento.dc;
+    
+            // Verificar que el destino coincide con un movimiento válido
+            if (nuevaFila === filaDestino && nuevaColumna === colDestino) {
+                // Verificar que la celda destino esté vacía
+                if (fichas[filaDestino][colDestino] === null) {
+                    // Verificar que haya una ficha en la celda intermedia
+                    const filaIntermedia = filaOrigen + movimiento.df / 2;
+                    const colIntermedia = colOrigen + movimiento.dc / 2;
+    
+                    if (fichas[filaIntermedia][colIntermedia] !== null &&
+                        fichas[filaIntermedia][colIntermedia].esValida) {
+                        return true; // Movimiento válido
+                    }
                 }
             }
         }
-
+    
         return false; // Movimiento no válido
     }
 }

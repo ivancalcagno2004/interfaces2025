@@ -233,7 +233,7 @@ export class Tablero {
         });
 
         // Verificar si el movimiento es válido
-        if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, this.fichas) && this.fichas[filaDestino][colDestino] !== this.fichas[filaOrigen][colOrigen]) {
+        if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino, this.fichas) && this.fichas[filaDestino][colDestino] !== this.fichas[filaOrigen][colOrigen]) {
             // Ajustar la posición de la ficha activa a la posición perfecta
             this.fichaSeleccionada.posX = this.margenX + colDestino * this.espacio + this.espacio / 2;
             this.fichaSeleccionada.posY = this.margenY + filaDestino * this.espacio + this.espacio / 2;
@@ -331,15 +331,31 @@ export class Tablero {
             for (let col = 0; col < this.columnas; col++) {
                 const ficha = this.fichas[fila][col];
                 if (ficha !== null && ficha !== undefined && ficha.esValida !== false) {
-                    // ficha.esMovimientoValido(fila, col, this.fichas) debe devolver true si hay algún movimiento desde aquí
-                    if (ficha.esMovimientoValido(fila, col, this.fichas)) {
+                    const movimientos = [
+                    { df: -2, dc: 0 }, // Arriba
+                    { df: 2, dc: 0 },  // Abajo
+                    { df: 0, dc: -2 }, // Izquierda
+                    { df: 0, dc: 2 }   // Derecha
+                ];
+
+                for (const movimiento of movimientos) {
+                    const filaDestino = fila + movimiento.df;
+                    const colDestino = col + movimiento.dc;
+
+                    // Verificar si el movimiento es válido
+                    if (
+                        filaDestino >= 0 && filaDestino < this.filas &&
+                        colDestino >= 0 && colDestino < this.columnas &&
+                        ficha.esMovimientoValido(fila, col, filaDestino, colDestino, this.fichas)
+                    ) {
                         return false; // Hay al menos un movimiento posible -> no perdió
                     }
                 }
             }
         }
+        }
 
-        // No hay movimientos posibles y el tiempo no se ha acabado -> perdió
+        // No hay movimientos posibles -> perdió
         this.juegoTerminado = true;
         return true;
     }
