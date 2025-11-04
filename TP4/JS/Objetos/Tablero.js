@@ -7,6 +7,7 @@ export class Tablero {
         this.height = height;
         this.matrizJuego = matrizJuego;
         this.juegoTerminado = false;
+        this.reset = false;
         this.fichas = [[]]; // Matriz de fichas
         this.filas = 7;
         this.columnas = 7;
@@ -39,8 +40,10 @@ export class Tablero {
     }
 
     iniciarJuego(){
+        this.reset = false;
+        this.juegoTerminado = false;
         this.dibujarTablero();
-        this.initContador(3, 15); // Inicia el contador con 2 minutos y 0 segundos
+        this.initContador(2, 5); // Inicia el contador con 2 minutos y 0 segundos
         this.dibujarCuadricula();
     }
 
@@ -78,7 +81,7 @@ export class Tablero {
     }
 
     dibujarCuadricula() {
-        if (this.juegoTerminado) return;
+        if (this.juegoTerminado || this.reset) return;
         const tiempoActual = Date.now();
         const parpadeo = Math.floor(tiempoActual / 500) % 2 === 0; // Alterna cada 500ms
 
@@ -120,7 +123,7 @@ export class Tablero {
     }
 
     dibujarTablero() {
-        if (this.juegoTerminado) return;
+        if (this.juegoTerminado || this.reset) return;
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         // Dibujar el fondo si está cargado
         if (this.imagenFondo && this.imagenFondo.complete) {
@@ -265,14 +268,27 @@ export class Tablero {
     initContador(minutos, segundos) {
         this.tiempoRestante = minutos * 60 + segundos;
     
-        this.contador(minutos, segundos);
+        if (!this.juegoTerminado) {
+            this.contador(minutos, segundos);
+        }
     }
 
     contador(minutos, segundos) {
+        if (this.reset) {
+            // Si el juego está en estado de reseteo, simplemente detén el contador
+            return;
+        }
+        
+        if (this.juegoTerminado) {
+            // Si el juego ya terminó, no hagas nada más
+            return;
+        }
+        
         if (this.tiempoRestante <= 0) {
+            // Si el tiempo se agotó, muestra el mensaje de "Perdiste"
             this.ctx.clearRect(845, 30, 280, 50); // Limpia el área del texto con un margen
             this.mostrarMensajePerdio();
-            return; // Detener la recursión si el tiempo se agota
+            return;
         }
 
         this.dibujarContador(minutos, segundos);
@@ -305,7 +321,10 @@ export class Tablero {
 
     verificarPerdio() {
         // Si el tiempo se acabó, perdió
-        if (this.tiempoRestante <= 0) return true;
+        if (this.tiempoRestante <= 0){
+            this.juegoTerminado = true;
+            return true;
+        }
 
         // Recorre todas las fichas; si alguna tiene un movimiento válido, no perdió
         for (let fila = 0; fila < this.filas; fila++) {
@@ -321,20 +340,63 @@ export class Tablero {
         }
 
         // No hay movimientos posibles y el tiempo no se ha acabado -> perdió
+        this.juegoTerminado = true;
         return true;
     }
 
         
-    mostrarMensajePerdio(){
+    mostrarMensajePerdio() {
+        if (this.reset) return;
+
         this.juegoTerminado = true;
-        this.ctx.clearRect(200, 50, 800, 500); // Limpia el área del mensaje
+    
+        // Verifica si la imagen de fondo ya está cargada
+        if (this.imagenFondo && this.imagenFondo.complete) {
+            // Si la imagen ya está cargada, dibuja el fondo y luego el mensaje
+            this.ctx.clearRect(0, 0, this.width, this.height); // Limpia el área del canvas
+            this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
+            this.menuPerdio(); // Llama al método para mostrar el mensaje
+        } else {
+            // Si la imagen no está cargada, espera a que se cargue
+            this.imagenFondo.onload = () => {
+                this.ctx.clearRect(0, 0, this.width, this.height); // Limpia el área del canvas
+                this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
+                this.menuPerdio(); // Llama al método para mostrar el mensaje
+            };
+        }
+    }
+
+    menuPerdio(){
         this.ctx.save();
+        this.ctx.fillStyle = '#182632';
         this.ctx.beginPath();
         this.ctx.roundRect(200, 50, 800, 500, 32);
         this.ctx.fill();
         this.ctx.restore();
         this.ctx.font = "48px Arial";
-        this.ctx.fillStyle = "red";
-        this.ctx.fillText("Perdiste! Intentalo de nuevo", 325, 200);
+        this.ctx.fillStyle = "#fff";
+        this.ctx.fillText("Perdiste! Inténtalo de nuevo", 325, 200);
+    }
+
+    resetearJuego() {
+        this.tiempoRestante = 120;
+        this.juegoTerminado = false;
+        this.reset = true;
+        this.inicializarFichas();
+
+        // Verifica si la imagen de fondo ya está cargada
+        if (this.imagenFondo && this.imagenFondo.complete) {
+            // Si la imagen ya está cargada, dibuja el fondo y luego el mensaje
+            this.ctx.clearRect(0, 0, this.width, this.height); // Limpia el área del canvas
+            this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
+            this.cargarMenu(); // Llama al método para mostrar el mensaje
+        } else {
+            // Si la imagen no está cargada, espera a que se cargue
+            this.imagenFondo.onload = () => {
+                this.ctx.clearRect(0, 0, this.width, this.height); // Limpia el área del canvas
+                this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
+                this.cargarMenu(); // Llama al método para mostrar el mensaje
+            };
+        }
     }
 }

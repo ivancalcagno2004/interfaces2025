@@ -4,8 +4,9 @@ export class Juego {
         this.matrizJuego = matrizJuego;
         console.log(this.matrizJuego);
         this.tablero = new Tablero(ctx, width, height, matrizJuego);
-        this.gano = false;
+        this.jugadorGano = false;
         this.jugadorPerdio = false;
+        this.intervalo = null;
     }
 
     gano(){
@@ -16,12 +17,20 @@ export class Juego {
         this.tablero.iniciarJuego();
         this.perdio();
     }
+
+    reset(){
+        this.tablero.resetearJuego();
+        this.jugadorPerdio = false;
+        this.jugadorGano = false;
+        clearInterval(this.intervalo);
+    }
     
     perdio(){
-        setInterval(() => {
+        this.intervalo = setInterval(() => {
             if(this.tablero.verificarPerdio()){
                 this.jugadorPerdio = true;
                 this.tablero.mostrarMensajePerdio();
+                clearInterval(this.intervalo);
             }   
 
         }, 1000);
