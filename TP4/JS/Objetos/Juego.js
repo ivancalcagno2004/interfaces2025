@@ -2,37 +2,41 @@ import { Tablero } from "./Tablero.js";
 export class Juego {
     constructor(ctx, width, height, matrizJuego) {
         this.matrizJuego = matrizJuego;
-        console.log(this.matrizJuego);
         this.tablero = new Tablero(ctx, width, height, matrizJuego);
         this.jugadorGano = false;
         this.jugadorPerdio = false;
-        this.intervalo = null;
+        this.intervaloPerdio = null;
+        this.intervaloGano = null;
     }
 
     gano(){
-     
+        this.intervaloGano = setInterval(() => {
+            if(this.tablero.verificarGano()){
+                this.jugadorGano = true;
+                clearInterval(this.intervaloGano);
+            }
+        }, 1000);
     }
 
     iniciar(){
         this.tablero.iniciarJuego();
         this.perdio();
+        this.gano();
     }
 
     reset(){
         this.tablero.resetearJuego();
         this.jugadorPerdio = false;
         this.jugadorGano = false;
-        clearInterval(this.intervalo);
+        clearInterval(this.intervaloPerdio);
     }
     
     perdio(){
-        this.intervalo = setInterval(() => {
+        this.intervaloPerdio = setInterval(() => {
             if(this.tablero.verificarPerdio()){
                 this.jugadorPerdio = true;
-                this.tablero.mostrarMensajePerdio();
-                clearInterval(this.intervalo);
+                clearInterval(this.intervaloPerdio);
             }   
-
         }, 1000);
     }
 }

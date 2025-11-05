@@ -4,12 +4,6 @@ export class Ficha {
         this.posY = posY;
         this.imagen = new Image(); // Crear una instancia de Image
         this.imagen.src = imagenSrc; // Asignar la ruta de la imagen
-        this.imagen.onload = () => {
-            console.log("Imagen cargada correctamente:", imagenSrc);
-        };
-        this.imagen.onerror = () => {
-            console.error("No se pudo cargar la imagen:", imagenSrc);
-        };
         this.esValida = true;
         this.enMovimiento = false;
         this.radio = 22;
@@ -45,13 +39,6 @@ export class Ficha {
                 );
             }
         } 
-        // else {
-        //     // Dibujar un espacio vacío (ficha inválida)
-        //     ctx.beginPath();
-        //     ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI * 2);
-        //     ctx.strokeStyle = "gray"; // Borde gris para fichas inválidas
-        //     ctx.stroke();
-        // }
     }
 
     esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino, fichas) {

@@ -39,7 +39,7 @@ const juego = new Juego(ctx, width, height, matrizJuego);
 
 btn_jugar.addEventListener('click', () => {
     btn_jugar.classList.add("ocultar")
-    juego.tablero.cargarMenu();
+    juego.tablero.cargarMenu("¡Bienvenido a Peg Solitaire!");
     btn_comenzar.classList.remove("ocultar");
 });
 
@@ -53,6 +53,6 @@ btn_volver_menu.addEventListener('click', () => {
     btn_volver_menu.classList.add("ocultar");
     btn_comenzar.classList.remove("ocultar");
     juego.reset();
-    juego.tablero.cargarMenu();
+    juego.tablero.cargarMenu("¡Bienvenido a Peg Solitaire!");
 
 });

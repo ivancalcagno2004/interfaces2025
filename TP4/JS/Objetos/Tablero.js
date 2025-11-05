@@ -26,7 +26,7 @@ export class Tablero {
         this.inicializarFichas(); // Inicializa las fichas después de cargar el fondo
     }
 
-    cargarMenu(){
+    cargarMenu(mensaje){
         this.ctx.save();
         this.ctx.fillStyle = '#182632';
         this.ctx.beginPath();
@@ -35,7 +35,7 @@ export class Tablero {
         this.ctx.restore();
         this.ctx.font = "48px Arial";
         this.ctx.fillStyle = "#fff";
-        this.ctx.fillText("Bienvenido a Peg Solitaire", 325, 200);
+        this.ctx.fillText(mensaje, 300, 200);
       
     }
 
@@ -43,23 +43,22 @@ export class Tablero {
         this.reset = false;
         this.juegoTerminado = false;
         this.dibujarTablero();
-        this.initContador(2, 5); // Inicia el contador con 2 minutos y 0 segundos
+        this.initContador(2, 0); // Inicia el contador con 2 minutos y 0 segundos
         this.dibujarCuadricula();
     }
 
     cargarFondo() {
         this.imagenFondo = new Image(); // Guardar la imagen en this.imagenFondo
-        this.imagenFondo.src = '../images/peg/fondo-peg.jpg';
+        this.imagenFondo.src = '../images/peg/fondo-peg.avif';
         this.imagenFondo.onload = () => {
             this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
-            //this.dibujarTablero(); // Dibuja el tablero después de cargar el fondo
-            //this.cargarMenu();
         };
     }
 
     inicializarFichas() {
         this.fichas = [];
-        const imagenSrc = "../images/peg/ficha_spiderman.png"; // Ruta de la imagen de las fichas
+        const imagen1 = "../images/peg/ficha-spiderman.png"; // Ruta de la imagen de las fichas
+        const imagen2 = "../images/peg/ficha-venom.png"; // Ruta de la imagen de las fichas
         for (let fila = 0; fila < this.filas; fila++) {
             this.fichas[fila] = [];
             for (let col = 0; col < this.columnas; col++) {
@@ -67,12 +66,17 @@ export class Tablero {
                 const y = this.margenY + fila * this.espacio + this.espacio / 2; // Calcular posición y centrada
                 if (this.matrizJuego[fila][col] === 1) { // Si hay ficha en la matriz
                     // Crear una nueva ficha con la imagen
-                    const ficha = new Ficha(x, y, imagenSrc);
+                    let ficha;
+                    if (fila % 2 === 0) {
+                        ficha = new Ficha(x, y, imagen1);
+                    }else{
+                        ficha = new Ficha(x, y, imagen2);
+                    }
                     this.fichas[fila][col] = ficha;
                 } else if (this.matrizJuego[fila][col] === 0) {
                     this.fichas[fila][col] = null; // No hay ficha
                 } else if (this.matrizJuego[fila][col] === 2) {
-                    const ficha = new Ficha(x, y, imagenSrc);
+                    const ficha = new Ficha(x, y, imagen1);
                     ficha.esValida = false;
                     this.fichas[fila][col] = ficha; // Espacio inválido
                 }
@@ -94,7 +98,7 @@ export class Tablero {
                 if (this.fichas[i][j] !== null && this.fichas[i][j] !== undefined && this.fichas[i][j].esValida) {
                     this.ctx.beginPath();
                     this.ctx.rect(x, y, this.espacio, this.espacio);
-                    this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
+                    this.ctx.strokeStyle = "#fff"; // Color del borde de la cuadrícula
                     this.ctx.lineWidth = 1;
                     this.ctx.stroke();
                 } else if (this.fichas[i][j] === null && this.movimientoValido(i, j)) {
@@ -104,7 +108,7 @@ export class Tablero {
                     if (parpadeo === true) {
                         this.ctx.strokeStyle = "red"; // Color del borde de la cuadrícula
                     } else {
-                        this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
+                        this.ctx.strokeStyle = "#fff"; // Color del borde de la cuadrícula
                     }
 
                     this.ctx.lineWidth = 2;
@@ -112,7 +116,7 @@ export class Tablero {
                 } else if (!this.movimientoValido(i, j) && this.fichas[i][j] === null) {
                     this.ctx.beginPath();
                     this.ctx.rect(x, y, this.espacio, this.espacio);
-                    this.ctx.strokeStyle = "#000"; // Color del borde de la cuadrícula
+                    this.ctx.strokeStyle = "#fff"; // Color del borde de la cuadrícula
                     this.ctx.lineWidth = 1;
                     this.ctx.stroke();
                 }
@@ -225,13 +229,6 @@ export class Tablero {
         const colOrigen = Math.floor((this.fichaSeleccionada.posInicialX - this.margenX) / this.espacio);
         const filaOrigen = Math.floor((this.fichaSeleccionada.posInicialY - this.margenY) / this.espacio);
 
-        console.log({
-            filaOrigen,
-            colOrigen,
-            filaDestino,
-            colDestino
-        });
-
         // Verificar si el movimiento es válido
         if (this.fichaSeleccionada.esMovimientoValido(filaOrigen, colOrigen, filaDestino, colDestino, this.fichas) && this.fichas[filaDestino][colDestino] !== this.fichas[filaOrigen][colOrigen]) {
             // Ajustar la posición de la ficha activa a la posición perfecta
@@ -287,7 +284,6 @@ export class Tablero {
         if (this.tiempoRestante <= 0) {
             // Si el tiempo se agotó, muestra el mensaje de "Perdiste"
             this.ctx.clearRect(845, 30, 280, 50); // Limpia el área del texto con un margen
-            this.mostrarMensajePerdio();
             return;
         }
 
@@ -323,6 +319,7 @@ export class Tablero {
         // Si el tiempo se acabó, perdió
         if (this.tiempoRestante <= 0){
             this.juegoTerminado = true;
+            this.cargarMenu("Perdiste! Se te acabó el tiempo");
             return true;
         }
 
@@ -357,41 +354,28 @@ export class Tablero {
 
         // No hay movimientos posibles -> perdió
         this.juegoTerminado = true;
+        this.cargarMenu("Perdiste! No tenes movimientos");
         return true;
     }
 
-        
-    mostrarMensajePerdio() {
-        if (this.reset) return;
-
-        this.juegoTerminado = true;
-    
-        // Verifica si la imagen de fondo ya está cargada
-        if (this.imagenFondo && this.imagenFondo.complete) {
-            // Si la imagen ya está cargada, dibuja el fondo y luego el mensaje
-            this.ctx.clearRect(0, 0, this.width, this.height); // Limpia el área del canvas
-            this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
-            this.menuPerdio(); // Llama al método para mostrar el mensaje
-        } else {
-            // Si la imagen no está cargada, espera a que se cargue
-            this.imagenFondo.onload = () => {
-                this.ctx.clearRect(0, 0, this.width, this.height); // Limpia el área del canvas
-                this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
-                this.menuPerdio(); // Llama al método para mostrar el mensaje
-            };
+    verificarGano(){
+        // Recorre todas las fichas; si alguna ficha válida está presente, no ganó
+        let contadorFichas = 0;
+        for (let fila = 0; fila < this.filas; fila++) {
+            for (let col = 0; col < this.columnas; col++) {
+                const ficha = this.fichas[fila][col];
+                if (ficha !== null && ficha.esValida) {
+                    contadorFichas++;
+                }
+            }
         }
-    }
-
-    menuPerdio(){
-        this.ctx.save();
-        this.ctx.fillStyle = '#182632';
-        this.ctx.beginPath();
-        this.ctx.roundRect(200, 50, 800, 500, 32);
-        this.ctx.fill();
-        this.ctx.restore();
-        this.ctx.font = "48px Arial";
-        this.ctx.fillStyle = "#fff";
-        this.ctx.fillText("Perdiste! Inténtalo de nuevo", 325, 200);
+        if (contadorFichas === 1) {
+            this.juegoTerminado = true;
+            this.cargarMenu("¡Felicidades! Ganaste el juego.");
+            return true; // Solo queda una ficha válida -> ganó
+        }else{
+            return false; // Quedan más de una ficha válida -> no ganó
+        }
     }
 
     resetearJuego() {
@@ -405,13 +389,13 @@ export class Tablero {
             // Si la imagen ya está cargada, dibuja el fondo y luego el mensaje
             this.ctx.clearRect(0, 0, this.width, this.height); // Limpia el área del canvas
             this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
-            this.cargarMenu(); // Llama al método para mostrar el mensaje
+            this.cargarMenu("¡Bienvenido a Peg Solitaire!"); // Llama al método para mostrar el mensaje
         } else {
             // Si la imagen no está cargada, espera a que se cargue
             this.imagenFondo.onload = () => {
                 this.ctx.clearRect(0, 0, this.width, this.height); // Limpia el área del canvas
                 this.ctx.drawImage(this.imagenFondo, 0, 0, this.width, this.height);
-                this.cargarMenu(); // Llama al método para mostrar el mensaje
+                this.cargarMenu("¡Bienvenido a Peg Solitaire!"); // Llama al método para mostrar el mensaje
             };
         }
     }
