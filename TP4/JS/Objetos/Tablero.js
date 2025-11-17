@@ -11,7 +11,7 @@ export class Tablero {
         this.fichas = [[]]; // Matriz de fichas
         this.filas = 7;
         this.columnas = 7;
-        this.margen = 10;
+        this.margen = 10;  
         const espacioHorizontal = (ctx.canvas.width - 2 * this.margen) / this.columnas;
         const espacioVertical = (ctx.canvas.height - 2 * this.margen) / this.filas;
         this.espacio = Math.min(espacioHorizontal, espacioVertical);
@@ -195,8 +195,8 @@ export class Tablero {
                     if (ficha.esValida) {
                         this.fichaSeleccionada = ficha;
                         this.fichaSeleccionada.enMovimiento = true;
-                        this.offsetX = mouseX - ficha.posX;
-                        this.offsetY = mouseY - ficha.posY;
+                          this.offsetX = mouseX - ficha.posX;
+                          this.offsetY = mouseY - ficha.posY;
                         this.ctx.canvas.style.cursor = "grabbing"; // Cambiar cursor al agarrar //
                         return;
                     }
