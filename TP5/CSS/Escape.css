@@ -9,6 +9,15 @@
 
 }
 
+.contenedor-parallax {
+    position: absolute;
+    top: 50;
+    left: 35px;
+    overflow: hidden;
+    width: 1200px;
+    height: 600px;
+}
+
 .layer {
     position: absolute;
     top: 0;
@@ -19,35 +28,57 @@
     background-repeat: repeat-x;
     background-size: 200% 100%;
 }
+
 .layer1{
     background-image: url('../images/parallax/layer1.png');
-    animation: Scroll 20s linear infinite;
+    animation: Scroll 15s linear infinite;
+    z-index: 1;
 }
+
 .layer2{
     background-image: url('../images/parallax/layer2.png');
-    animation: Scroll 15s linear infinite;
+    animation: Scroll 30s linear infinite;
+    z-index: 2;
 }
+
 .layer3{
     background-image: url('../images/parallax/layer3.png');
-    animation: Scroll 12s linear infinite;
+    animation: Scroll 28s linear infinite;
+    z-index: 3;
 }
+
+.layer4{
+    background-image: url('../images/parallax/layer4.png');
+    animation: Scroll 26s linear infinite;
+    z-index: 4;
+}
+
 .layer5{
     background-image: url('../images/parallax/layer5.png');
-    animation: Scroll 10s linear infinite;
+    animation: Scroll 24s linear infinite;
+    z-index: 5;
 }
+
 .layer6{
     background-image: url('../images/parallax/layer6.png');
-    animation: Scroll 8s linear infinite;
+    animation: Scroll 22s linear infinite;
+    z-index: 6;
 }
+
 .layer7{
     background-image: url('../images/parallax/layer7.png');
-    animation: Scroll 5s linear infinite;
+    animation: Scroll 20s linear infinite;
+    z-index: 7;
 }
+
 .layer8{
     background-image: url('../images/parallax/layer8.png');
-    animation: Scroll 4s linear infinite;
+    animation: Scroll 18s linear infinite;
+    z-index: 8;
 }
+
 .layer9{
     background-image: url('../images/parallax/layer9.png');
-    animation: Scroll 3s linear infinite;
+    animation: Scroll 15s linear infinite;
+    z-index: 9;
 }
