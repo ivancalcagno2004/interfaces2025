@@ -4,9 +4,61 @@
     }
 
     100% {
-        background-position-x: -200%;
+        background-position-x: 200%;
+    }
+}
+
+@keyframes run {
+    0% {
+        background-position-x: 0;
     }
 
+    100% {
+        background-position-x: -1024px;
+    }
+}
+
+@keyframes jump {
+    0% {
+        background-position-x: 0;
+    }
+    100% {
+        background-position-x: -1152px;
+    }
+}
+
+@keyframes dead{
+    0% {
+        background-position-x: 0;
+    }
+    100% {
+        background-position-x: -512px;
+    }
+}
+
+.dead{
+    background-image: url('../images/spritesheet/Dead.png');
+    animation: dead .8s steps(4) forwards;
+}
+
+.jump{
+    background-image: url('../images/spritesheet/Idle_2.png');
+    animation: jump .8s steps(9) infinite;
+}
+
+.afk{
+    background-image: url('../images/spritesheet/Idle.png');
+    animation: run .8s steps(8) infinite;
+}
+
+.fisura{
+    height: 128px;
+    width: 128px;
+    position: relative;
+    top: 200px;
+    left: 100px;
+    scale: 2;
+    z-index: 10;
 }
 
 .contenedor-parallax {
@@ -16,6 +68,7 @@
     overflow: hidden;
     width: 1200px;
     height: 600px;
+    border-radius: 10px;
 }
 
 .layer {
