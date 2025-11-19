@@ -1,5 +1,7 @@
 let botonJugar = document.querySelector('.btn-jugar');
 let fisura = document.querySelector('.fisura');
+let cartelEscape = document.querySelector('.cartelEscape');
+let cartelLost = document.querySelector('.cartelLost');
 
 let gravedad = 2; // Velocidad de caída
 let velocidadSalto = -20; // Velocidad de salto (negativa para subir)
@@ -12,6 +14,7 @@ let murio = false;
 botonJugar.addEventListener('click', () => {
     botonJugar.classList.add('ocultar');
     fisura.classList.add('run');
+    cartelEscape.classList.add('ocultar');
 
     // Inicia el bucle de gravedad
     intervaloCaida = setInterval(() => {
@@ -61,6 +64,9 @@ setInterval(() => {
     if(posicionTop >= 410 || posicionTop <= -80){
         fisura.classList.remove('jump', 'afk');
         fisura.classList.add('dead');
+        cartelLost.classList.remove('ocultar');
+        cartelLost.classList.add('mostrar');
+
         setTimeout(() => {
             fisura.style.animationPlayState = 'paused';
         }, 750); // Pausa la animación antes de que termine y se ponga de pie en el último frame
