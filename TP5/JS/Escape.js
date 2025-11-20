@@ -1,3 +1,5 @@
+import { Obstaculo } from "./ObjetosCarcel/Obstaculo.js";
+
 let botonJugar = document.querySelector('.btn-jugar');
 let fisura = document.querySelector('.fisura');
 let cartelEscape = document.querySelector('.cartelEscape');
@@ -21,6 +23,15 @@ botonJugar.addEventListener('click', () => {
         if (!isJumping && !murio) {
             posicionTop += gravedad; // La gravedad hace que baje
             fisura.style.top = `${posicionTop}px`;
+        }
+        if(murio && posicionTop < 410){ // Si murió, sigue cayendo hasta el suelo
+            posicionTop += gravedad;
+            fisura.style.top = `${posicionTop}px`;
+            fisura.classList.remove('jump', 'afk');
+            fisura.classList.add('dead');
+            setTimeout(() => {
+            fisura.style.animationPlayState = 'paused';
+            }, 800); // Pausa la animación antes de que termine y se ponga de pie en el último frame
         }
     }, 10); // Actualiza cada 10ms
 });
@@ -59,6 +70,13 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+
+let obstaculos = [];
+let obstaculo1 = new Obstaculo(1000, 350);
+setInterval(() => {
+    obstaculo1.setPosX(obstaculo1.posX - 5);
+}, 10); // Aquí podrías agregar lógica para mover los obstáculos o crear más
+
 // Evita que la fisura se salga de la pantalla
 setInterval(() => {
     if(posicionTop >= 410 || posicionTop <= -80){
@@ -73,3 +91,4 @@ setInterval(() => {
         murio = true;
     }
 }, 10); // Revisa cada 10ms que no se salga de los límites
+

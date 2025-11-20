@@ -8,7 +8,7 @@
     }
 }
 
-@keyframes run {
+@keyframes afk {
     0% {
         background-position-x: 0;
     }
@@ -48,7 +48,18 @@
 
 .afk{
     background-image: url('../images/spritesheet/Idle.png');
-    animation: run .8s steps(8) infinite;
+    animation: afk .8s steps(8) infinite;
+}
+
+.obstaculo{
+    height: 564px;
+    width: 464px;
+    position: absolute;
+    top: 350px;
+    left: 800px;
+    background-image: url('../images/obstaculos/obstaculo.png');
+    background-size: cover;
+    z-index: 15;
 }
 
 .fisura{
