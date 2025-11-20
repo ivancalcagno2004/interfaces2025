@@ -18,7 +18,7 @@
     }
 }
 
-@keyframes jump {
+@keyframes drink {
     0% {
         background-position-x: 0;
     }
@@ -36,14 +36,28 @@
     }
 }
 
+@keyframes walk{
+    0% {
+        background-position-x: 0;
+    }
+    100% {
+        background-position-x: -1024px;
+    }
+}
+
+.walk{
+    background-image: url('../images/spritesheet/Walk.png');
+    animation: walk .8s steps(8) infinite;
+}
+
 .dead{
     background-image: url('../images/spritesheet/Dead.png');
     animation: dead .8s steps(4) forwards;
 }
 
-.jump{
+.drink{
     background-image: url('../images/spritesheet/Idle_2.png');
-    animation: jump .8s steps(9) infinite;
+    animation: drink .8s steps(9) infinite;
 }
 
 .afk{
