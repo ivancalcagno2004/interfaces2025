@@ -1,11 +1,12 @@
 import { Obstaculo } from "./ObjetosCarcel/Obstaculo.js";
+import { Vino } from './ObjetosCarcel/Vino.js';
 
 let botonJugar = document.querySelector('.play');
 let botonReset = document.querySelector('.reset');
 let fisura = document.querySelector('.fisura');
 let cartelEscape = document.querySelector('.cartelEscape');
 let cartelLost = document.querySelector('.cartelLost');
-
+let contadorVinos = 0;
 let gravedad = 2; // Velocidad de caída
 let velocidadSalto = -20; // Velocidad de salto (negativa para subir)
 let posicionTop = 400; // Posición inicial en "top"
@@ -15,6 +16,7 @@ let fisuraDead; // Intervalo para revisar si la fisura se sale de la pantalla
 let murio = false;
 let obstaculos = [];
 let obstaculo1 = new Obstaculo(1100, 350);
+
 
 fisura.style.top = `${posicionTop}px`;
 fisura.classList.add('walk');
@@ -30,24 +32,24 @@ botonJugar.addEventListener('click', () => {
         setInterval(() => {
             obstaculo1.setPosX(obstaculo1.posX - 5);
         }, 10); // Aquí podrías agregar lógica para mover los obstáculos o crear más
-    
+
         botonJugar.classList.add('ocultar');
         fisura.classList.add('afk');
         cartelEscape.classList.add('ocultar');
-    
+
         // Inicia el bucle de gravedad
         intervaloCaida = setInterval(() => {
             if (!isJumping && !murio) {
                 posicionTop += gravedad; // La gravedad hace que baje
                 fisura.style.top = `${posicionTop}px`;
             }
-            if(murio && posicionTop < 410){ // Si murió, sigue cayendo hasta el suelo
+            if (murio && posicionTop < 410) { // Si murió, sigue cayendo hasta el suelo
                 posicionTop += gravedad;
                 fisura.style.top = `${posicionTop}px`;
                 fisura.classList.remove('drink', 'afk');
                 fisura.classList.add('dead');
                 setTimeout(() => {
-                fisura.style.animationPlayState = 'paused';
+                    fisura.style.animationPlayState = 'paused';
                 }, 800); // Pausa la animación antes de que termine y se ponga de pie en el último frame
             }
         }, 10); // Actualiza cada 10ms
@@ -55,13 +57,13 @@ botonJugar.addEventListener('click', () => {
 
     // Evita que la fisura se salga de la pantalla
     fisuraDead = setInterval(() => {
-        if(posicionTop >= 410 || posicionTop <= -80){
-            if (!murio) {   
+        if (posicionTop >= 410 || posicionTop <= -80) {
+            if (!murio) {
                 fisura.classList.remove('drink', 'afk');
                 fisura.classList.add('dead');
                 cartelLost.classList.remove('ocultar');
                 cartelLost.classList.add('mostrar');
-                
+
                 setTimeout(() => {
                     fisura.style.animationPlayState = 'paused';
                 }, 750); // Pausa la animación antes de que termine y se ponga de pie en el último frame
@@ -125,4 +127,8 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+const vinosArray = [
+    new Vino(200, 300)
+]
+for (const vino of vinosArray) vino.dibujar();
 
