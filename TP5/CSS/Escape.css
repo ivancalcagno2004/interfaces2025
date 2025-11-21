@@ -45,33 +45,75 @@
     }
 }
 
+@keyframes ratWalk{
+    0% {
+        background-position-x: 0;
+    }
+    100% {
+        background-position-x: -128px;
+    }
+}
+
+@keyframes ratMove{
+    0% {
+        left: -50px;
+    }
+    100% {
+        left: 1250px;
+    }
+}
+
+.rat{
+    height: 32px;
+    width: 32px;
+    position: absolute;
+    top: 525px;
+    left: -50px;
+    scale: 1.5;
+    background-image: url('../images/spritesheet/rata/Walk.png');
+    animation: ratWalk .8s steps(4) infinite, ratMove 10s linear infinite;
+    z-index: 9;
+}
+
 .walk{
-    background-image: url('../images/spritesheet/Walk.png');
+    background-image: url('../images/spritesheet/fisura/Walk.png');
     animation: walk .8s steps(8) infinite;
 }
 
 .dead{
-    background-image: url('../images/spritesheet/Dead.png');
+    background-image: url('../images/spritesheet/fisura/Dead.png');
     animation: dead .8s steps(4) forwards;
 }
 
 .drink{
-    background-image: url('../images/spritesheet/Idle_2.png');
+    background-image: url('../images/spritesheet/fisura/Idle_2.png');
     animation: drink .8s steps(9) infinite;
 }
 
 .afk{
-    background-image: url('../images/spritesheet/Idle.png');
+    background-image: url('../images/spritesheet/fisura/Idle.png');
     animation: afk .8s steps(8) infinite;
 }
 
 .obstaculo{
-    height: 564px;
-    width: 464px;
+    height: 454px;
+    width: 182px;
     position: absolute;
     top: 350px;
     left: 800px;
     background-image: url('../images/obstaculos/obstaculo.png');
+    background-size: cover;
+    z-index: 15;
+    border: 2px solid red;
+}
+
+.vino{
+    height: 64px;
+    width: 64px;
+    top: 350px;
+    left: 800px;
+    position: absolute;
+    background-image: url('../images/powers/Beer.png');
     background-size: cover;
     z-index: 15;
 }
@@ -177,7 +219,7 @@
 }
 .btn-jugar{
     position: absolute;
-cursor: pointer;
+    cursor: pointer;
     font-size: 1.2em;
     margin-top: 20px;
     border-radius: 5px;

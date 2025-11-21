@@ -10,6 +10,7 @@ let contadorVinos = 0;
 let gravedad = 2; // Velocidad de caída
 let velocidadSalto = -20; // Velocidad de salto (negativa para subir)
 let posicionTop = 400; // Posición inicial en "top"
+const radioFisura = 128; // Radio de colisión de la fisura
 let isJumping = false; // Bandera para evitar múltiples saltos
 let intervaloCaida; // Intervalo para la gravedad
 let fisuraDead; // Intervalo para revisar si la fisura se sale de la pantalla
@@ -17,6 +18,10 @@ let murio = false;
 let obstaculos = [];
 let obstaculo1 = new Obstaculo(1100, 350);
 
+const vinosArray = [
+    new Vino(1800, 300)
+]
+for (const vino of vinosArray) vino.dibujar();
 
 fisura.style.top = `${posicionTop}px`;
 fisura.classList.add('walk');
@@ -31,6 +36,7 @@ botonJugar.addEventListener('click', () => {
         // inicia a mover objetos
         setInterval(() => {
             obstaculo1.setPosX(obstaculo1.posX - 5);
+            vinosArray[0].setPosX(vinosArray[0].posX - 5);
         }, 10); // Aquí podrías agregar lógica para mover los obstáculos o crear más
 
         botonJugar.classList.add('ocultar');
@@ -127,8 +133,15 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-const vinosArray = [
-    new Vino(200, 300)
-]
-for (const vino of vinosArray) vino.dibujar();
+const fisuraX = parseInt(fisura.style.left, 10) || 100; // Obtener la posición horizontal de fisura
+const fisuraY = parseInt(fisura.style.top, 10) || posicionTop; // Obtener la posición vertical de fisura
 
+setInterval(() => {
+    if (vinosArray[0].estaColisionando(fisuraX, fisuraY, radioFisura)) {
+        console.log("Colisión con el vino detectada");
+    }
+
+    if (obstaculo1.estaColisionando(fisuraX, fisuraY, radioFisura)) {
+        console.log("Colisión con el obstáculo detectada");
+    }
+}, 10);
