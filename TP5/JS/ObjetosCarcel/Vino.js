@@ -2,7 +2,7 @@ export class Vino {
     constructor(posX,posY) {
         this.posX = posX;
         this.posY = posY;
-        this.radio = 12;
+        this.radio = 32;
         this.collected = false;
         this.especial = false; // especial = false ES BIRRA, especial = true ES WHISKY
         this.vino = document.createElement('div');
@@ -51,10 +51,30 @@ export class Vino {
     }
 
     // colision circular simple: conX, conY centro del jugador y conRadio su radio
-    estaColisionando(conX, conY, conRadio) {
-        if (this.collected) return false;
-        const dx = conX - this.posX;
-        const dy = conY - this.posY;
-        return dx * dx + dy * dy <= (this.radio + conRadio) * (this.radio + conRadio);
-    }
+    // estaColisionando(conX, conY, conRadio) {
+    //     let vinoHitBox = this.vino.getBoundingClientRect();
+    //     if (this.collected) return false;
+    //     const dx = conX - this.posX;
+    //     const dy = conY - this.posY;
+    //     return dx * dx + dy * dy <= (this.radio + conRadio) * (this.radio + conRadio);
+    // }
+
+        estaColisionando(conX, conY, conRadio = 0) {
+            if (this.collected) return false;
+    
+            // obtener medidas real del elemento vino (toma en cuenta CSS 64x64)
+            const vinoRect = this.vino.getBoundingClientRect();
+            const vinoCenterX = vinoRect.left + vinoRect.width / 2;
+            const vinoCenterY = vinoRect.top + vinoRect.height / 2;
+            const vinoRadius = Math.max(vinoRect.width, vinoRect.height) / 2;
+    
+            // distancia entre centros
+            const dx = conX - vinoCenterX;
+            const dy = conY - vinoCenterY;
+            const distSq = dx * dx + dy * dy;
+    
+            const radioTotal = vinoRadius + conRadio;
+            return distSq <= radioTotal * radioTotal;
+        }
+        
 }

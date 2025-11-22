@@ -1,11 +1,12 @@
 import { Obstaculo } from "./ObjetosCarcel/Obstaculo.js";
 import { Vino } from './ObjetosCarcel/Vino.js';
-
 let botonJugar = document.querySelector('.play');
 let botonReset = document.querySelector('.reset');
 let fisura = document.querySelector('.fisura');
 let cartelEscape = document.querySelector('.cartelEscape');
 let cartelLost = document.querySelector('.cartelLost');
+let contador = document.querySelector('.contador');
+let contadorBirras = document.querySelector('.contadorBirras');
 let contadorVinos = 0;
 let gravedad = 2; // Velocidad de caída
 let velocidadSalto = -20; // Velocidad de salto (negativa para subir)
@@ -15,6 +16,9 @@ let isJumping = false; // Bandera para evitar múltiples saltos
 let intervaloCaida; // Intervalo para la gravedad
 let fisuraDead; // Intervalo para revisar si la fisura se sale de la pantalla
 let murio = false;
+let generaObstaculo;
+let generaVinos;
+let moverObjetos;
 const obstaculos = [];
 
 const vinosArray = [];
@@ -65,6 +69,8 @@ fisura.classList.add('walk');
 
 // Inicia el juego al presionar el botón "Jugar"
 botonJugar.addEventListener('click', () => {
+    contador.classList.remove('ocultar');
+    contador.classList.add('mostrar');
     fisura.classList.remove('walk');
     fisura.classList.add('drink');
     posicionTop -= 200; // Pequeño salto inicial al comenzar
@@ -74,17 +80,17 @@ botonJugar.addEventListener('click', () => {
         generarObstaculo();
 
         // Generar obstáculos cada 1.5 segundo
-        setInterval(() => {
+        generaObstaculo = setInterval(() => {
             generarObstaculo();
         }, 1500);
 
         // Generar vinos cada 3 segundos
-        setInterval(() => {
+        generaVinos = setInterval(() => {
             generarVino();
         }, 3000);
 
         // Mover obstáculos existentes
-        setInterval(() => {
+        moverObjetos = setInterval(() => {
             moverObstaculos();
             moverVinos();
         }, 10);
@@ -115,10 +121,12 @@ botonJugar.addEventListener('click', () => {
     fisuraDead = setInterval(() => {
         if (posicionTop >= 410 || posicionTop <= -80) {
             if (!murio) {
-                fisura.classList.remove('drink', 'afk');
-                fisura.classList.add('dead');
                 cartelLost.classList.remove('ocultar');
                 cartelLost.classList.add('mostrar');
+                contadorBirras.textContent = `Agarraste ${contadorVinos} birras 🍻`;
+                perdiste();
+                fisura.classList.remove('drink', 'afk');
+                fisura.classList.add('dead');
 
                 setTimeout(() => {
                     fisura.style.animationPlayState = 'paused';
@@ -144,8 +152,23 @@ botonReset.addEventListener('click', () => {
     botonJugar.classList.add('mostrar');
     murio = false;
     fisura.style.animationPlayState = 'running';
+
     clearInterval(intervaloCaida);
     clearInterval(fisuraDead);
+    clearInterval(moverObjetos);
+    clearInterval(generaObstaculo);
+    clearInterval(generaVinos);
+    contadorVinos = 0;
+    // Elimina todos los obstáculos existentes
+    for (const obstaculo of obstaculos) {
+        obstaculo.destroy();
+    }
+    obstaculos.splice(0, obstaculos.length);
+    // Elimina todos los vinos existentes
+    for (const vino of vinosArray) {
+        vino.destroy();
+    }
+    vinosArray.splice(0, vinosArray.length);
 })
 
 ///se detecta la tecla espacio o flecha arriba para saltar///
@@ -223,3 +246,27 @@ setInterval(() => {
     hitboxFisura.style.left = `${fisuraX - radioFisura}px`; // Centrar el hitbox horizontalmente
     hitboxFisura.style.top = `${fisuraY - radioFisura}px`; // Centrar el hitbox verticalmente
 }, 10);
+
+setInterval(() => {
+    contador.textContent = `Vinos: ${contadorVinos}`;
+}, 10);
+
+function perdiste() {
+    // Elimina todos los obstáculos existentes
+    clearInterval(intervaloCaida);
+    clearInterval(fisuraDead);
+    clearInterval(moverObjetos);
+    clearInterval(generaObstaculo);
+    clearInterval(generaVinos);
+
+    contadorVinos = 0;
+    for (const obstaculo of obstaculos) {
+        obstaculo.destroy();
+    }
+    obstaculos.splice(0, obstaculos.length);
+    // Elimina todos los vinos existentes
+    for (const vino of vinosArray) {
+        vino.destroy();
+    }
+    vinosArray.splice(0, vinosArray.length);
+}
