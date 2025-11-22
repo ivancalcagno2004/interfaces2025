@@ -19,6 +19,10 @@ let murio = false;
 let generaObstaculo;
 let generaVinos;
 let moverObjetos;
+const fisuraRect = fisura.getBoundingClientRect(); // Obtener las coordenadas reales de fisura
+
+const fisuraX = fisuraRect.left + fisuraRect.width / 2; // Centro horizontal de fisura
+
 const obstaculos = [];
 
 const vinosArray = [];
@@ -108,30 +112,22 @@ botonJugar.addEventListener('click', () => {
             if (murio && posicionTop < 410) { // Si murió, sigue cayendo hasta el suelo
                 posicionTop += gravedad;
                 fisura.style.top = `${posicionTop}px`;
-                fisura.classList.remove('drink', 'afk');
-                fisura.classList.add('dead');
-                setTimeout(() => {
-                    fisura.style.animationPlayState = 'paused';
-                }, 800); // Pausa la animación antes de que termine y se ponga de pie en el último frame
             }
         }, 10); // Actualiza cada 10ms
     }, 1000);
 
     // Evita que la fisura se salga de la pantalla
     fisuraDead = setInterval(() => {
-        if (posicionTop >= 410 || posicionTop <= -80) {
-            if (!murio) {
-                cartelLost.classList.remove('ocultar');
-                cartelLost.classList.add('mostrar');
-                contadorBirras.textContent = `Agarraste ${contadorVinos} birras 🍻`;
-                perdiste();
-                fisura.classList.remove('drink', 'afk');
-                fisura.classList.add('dead');
-
-                setTimeout(() => {
-                    fisura.style.animationPlayState = 'paused';
-                }, 750); // Pausa la animación antes de que termine y se ponga de pie en el último frame
-                murio = true;
+        let fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
+        for(const obstaculo of obstaculos) {
+            if (posicionTop >= 410 || posicionTop <= -80 || obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura)) {
+                if (!murio) {
+                    cartelLost.classList.remove('ocultar');
+                    cartelLost.classList.add('mostrar');
+                    contadorBirras.textContent = `Agarraste ${contadorVinos} birras 🍻`;
+                    murio = true;
+                    perdiste();
+                }
             }
         }
     }, 10); // Revisa cada 10ms que no se salga de los límites
@@ -154,7 +150,6 @@ botonReset.addEventListener('click', () => {
     fisura.style.animationPlayState = 'running';
 
     clearInterval(intervaloCaida);
-    clearInterval(fisuraDead);
     clearInterval(moverObjetos);
     clearInterval(generaObstaculo);
     clearInterval(generaVinos);
@@ -206,15 +201,11 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-const fisuraRect = fisura.getBoundingClientRect(); // Obtener las coordenadas reales de fisura
-
-const fisuraX = fisuraRect.left + fisuraRect.width / 2; // Centro horizontal de fisura
-
 //////////check colisiones//////////
 setInterval(() => {
     const fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
     for (const vino of vinosArray) {
-        if (!vino.collected && vino.estaColisionando(fisuraX, fisuraY, radioFisura * 2)) {
+        if (!vino.collected && vino.estaColisionando(fisuraX, fisuraY, radioFisura)) {
             vino.collected = true;
             contadorVinos++;
             console.log(`Vino recogido! Total: ${contadorVinos}`);
@@ -223,12 +214,50 @@ setInterval(() => {
 
     for (const obstaculo of obstaculos) {
         if (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura)) {
-            console.log("Colisión con el obstáculo detectada");
+
         }
     }
 }, 10);
 
-// Crear un elemento para visualizar el hitbox de fisura
+setInterval(() => {
+    contador.textContent = `Vinos: ${contadorVinos}`;
+}, 10);
+
+function perdiste() {
+    // Elimina todos los obstáculos existentes
+    contadorVinos = 0;
+    for (const obstaculo of obstaculos) {
+        obstaculo.destroy();
+    }
+    obstaculos.splice(0, obstaculos.length);
+    // Elimina todos los vinos existentes
+    for (const vino of vinosArray) {
+        vino.destroy();
+    }
+    vinosArray.splice(0, vinosArray.length);
+
+    setTimeout(() => {
+
+        clearInterval(moverObjetos);
+        clearInterval(generaObstaculo);
+        clearInterval(generaVinos);
+    }, 2000);
+
+}
+
+//fix Anim Dead
+setInterval(() => {
+    if (murio) {
+        fisura.classList.remove('drink', 'afk');
+        fisura.classList.add('dead');
+        setTimeout(() => {
+            fisura.style.animationPlayState = 'paused';
+        }, 750); // Pausa la animación antes de que termine y se ponga de pie en el último frame
+    }
+}, 10);
+
+///hitbox fisura
+/* // Crear un elemento para visualizar el hitbox de fisura
 const hitboxFisura = document.createElement('div');
 hitboxFisura.style.position = 'absolute';
 hitboxFisura.style.width = `${radioFisura * 2}px`; // Doble del radio
@@ -245,28 +274,4 @@ setInterval(() => {
     const fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
     hitboxFisura.style.left = `${fisuraX - radioFisura}px`; // Centrar el hitbox horizontalmente
     hitboxFisura.style.top = `${fisuraY - radioFisura}px`; // Centrar el hitbox verticalmente
-}, 10);
-
-setInterval(() => {
-    contador.textContent = `Vinos: ${contadorVinos}`;
-}, 10);
-
-function perdiste() {
-    // Elimina todos los obstáculos existentes
-    clearInterval(intervaloCaida);
-    clearInterval(fisuraDead);
-    clearInterval(moverObjetos);
-    clearInterval(generaObstaculo);
-    clearInterval(generaVinos);
-
-    contadorVinos = 0;
-    for (const obstaculo of obstaculos) {
-        obstaculo.destroy();
-    }
-    obstaculos.splice(0, obstaculos.length);
-    // Elimina todos los vinos existentes
-    for (const vino of vinosArray) {
-        vino.destroy();
-    }
-    vinosArray.splice(0, vinosArray.length);
-}
+}, 10); */
