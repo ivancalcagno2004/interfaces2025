@@ -10,18 +10,55 @@ let contadorVinos = 0;
 let gravedad = 2; // Velocidad de caída
 let velocidadSalto = -20; // Velocidad de salto (negativa para subir)
 let posicionTop = 400; // Posición inicial en "top"
-const radioFisura = 128; // Radio de colisión de la fisura
+const radioFisura = 64; // Radio de colisión de la fisura
 let isJumping = false; // Bandera para evitar múltiples saltos
 let intervaloCaida; // Intervalo para la gravedad
 let fisuraDead; // Intervalo para revisar si la fisura se sale de la pantalla
 let murio = false;
-let obstaculos = [];
-let obstaculo1 = new Obstaculo(1100, 350);
+const obstaculos = [];
 
-const vinosArray = [
-    new Vino(1800, 300)
-]
-for (const vino of vinosArray) vino.dibujar();
+const vinosArray = [];
+
+
+function generarVino() {
+    let posYrandom = Math.floor(Math.random() * 400); // Altura aleatoria entre 300 y 500
+    const nuevoVino = new Vino(1800, posYrandom); // Crear un nuevo vino
+    vinosArray.push(nuevoVino); // Agregar el nuevo vino al arreglo
+    nuevoVino.dibujar();
+}
+
+function moverVinos() {
+    for (let i = 0; i < vinosArray.length; i++) {
+        const vino = vinosArray[i];
+        vino.setPosX(vino.posX - 5); // Mueve el vino hacia la izquierda
+        // Eliminar el vino si sale de la pantalla
+        if (vino.posX < -500 || vino.collected) {
+            console.log('Vino eliminado');
+            vino.destroy();
+            vinosArray.splice(i, 1); // Eliminar del arreglo
+        }
+    }
+}
+
+function generarObstaculo() {
+    const nuevoObstaculo = new Obstaculo(1200, 350); // Altura aleatoria
+    obstaculos.push(nuevoObstaculo); // Agregar el nuevo obstáculo al arreglo
+}
+
+// Función para mover los obstáculos y eliminarlos si salen de la pantalla
+function moverObstaculos() {
+    for (let i = 0; i < obstaculos.length - 1; i++) {
+        const obstaculo = obstaculos[i];
+        obstaculo.setPosX(obstaculo.posX - 5); // Mueve el obstáculo hacia la izquierda
+
+        // Eliminar el obstáculo si sale de la pantalla
+        if (obstaculo.posX < -500) {
+            console.log('Obstáculo eliminado');
+            obstaculo.destroy(); // elimina el objeto de la vista
+            obstaculos.splice(i, 1); // Eliminar del arreglo
+        }
+    }
+}
 
 fisura.style.top = `${posicionTop}px`;
 fisura.classList.add('walk');
@@ -33,11 +70,24 @@ botonJugar.addEventListener('click', () => {
     posicionTop -= 200; // Pequeño salto inicial al comenzar
     fisura.style.animationPlayState = 'running';
     setTimeout(() => {
-        // inicia a mover objetos
+        //genero el primero
+        generarObstaculo();
+
+        // Generar obstáculos cada 1.5 segundo
         setInterval(() => {
-            obstaculo1.setPosX(obstaculo1.posX - 5);
-            vinosArray[0].setPosX(vinosArray[0].posX - 5);
-        }, 10); // Aquí podrías agregar lógica para mover los obstáculos o crear más
+            generarObstaculo();
+        }, 1500);
+
+        // Generar vinos cada 3 segundos
+        setInterval(() => {
+            generarVino();
+        }, 3000);
+
+        // Mover obstáculos existentes
+        setInterval(() => {
+            moverObstaculos();
+            moverVinos();
+        }, 10);
 
         botonJugar.classList.add('ocultar');
         fisura.classList.add('afk');
@@ -79,8 +129,7 @@ botonJugar.addEventListener('click', () => {
     }, 10); // Revisa cada 10ms que no se salga de los límites
 });
 
-
-
+// Reinicia el juego al presionar el botón "Reset"
 botonReset.addEventListener('click', () => {
     // Reinicia la posición y el estado del juego
     posicionTop = 400;
@@ -99,6 +148,7 @@ botonReset.addEventListener('click', () => {
     clearInterval(fisuraDead);
 })
 
+///se detecta la tecla espacio o flecha arriba para saltar///
 document.addEventListener('keydown', (event) => {
     event.preventDefault();
     if (event.code === 'Space' || event.code === 'ArrowUp') {
@@ -133,15 +183,43 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-const fisuraX = parseInt(fisura.style.left, 10) || 100; // Obtener la posición horizontal de fisura
-const fisuraY = parseInt(fisura.style.top, 10) || posicionTop; // Obtener la posición vertical de fisura
+const fisuraRect = fisura.getBoundingClientRect(); // Obtener las coordenadas reales de fisura
 
+const fisuraX = fisuraRect.left + fisuraRect.width / 2; // Centro horizontal de fisura
+
+//////////check colisiones//////////
 setInterval(() => {
-    if (vinosArray[0].estaColisionando(fisuraX, fisuraY, radioFisura)) {
-        console.log("Colisión con el vino detectada");
+    const fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
+    for (const vino of vinosArray) {
+        if (!vino.collected && vino.estaColisionando(fisuraX, fisuraY, radioFisura * 2)) {
+            vino.collected = true;
+            contadorVinos++;
+            console.log(`Vino recogido! Total: ${contadorVinos}`);
+        }
     }
 
-    if (obstaculo1.estaColisionando(fisuraX, fisuraY, radioFisura)) {
-        console.log("Colisión con el obstáculo detectada");
+    for (const obstaculo of obstaculos) {
+        if (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura)) {
+            console.log("Colisión con el obstáculo detectada");
+        }
     }
+}, 10);
+
+// Crear un elemento para visualizar el hitbox de fisura
+const hitboxFisura = document.createElement('div');
+hitboxFisura.style.position = 'absolute';
+hitboxFisura.style.width = `${radioFisura * 2}px`; // Doble del radio
+hitboxFisura.style.height = `${radioFisura * 2}px`; // Doble del radio
+hitboxFisura.style.border = '2px dashed blue'; // Borde azul para visualizar el hitbox
+hitboxFisura.style.borderRadius = '50%'; // Hacerlo circular
+hitboxFisura.style.pointerEvents = 'none'; // Evitar que interfiera con eventos
+hitboxFisura.style.zIndex = '999'; // Asegurarse de que esté encima de otros elementos
+document.body.appendChild(hitboxFisura);
+
+// Actualizar la posición del hitbox en tiempo real
+// Actualizar la posición del hitbox en tiempo real
+setInterval(() => {
+    const fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
+    hitboxFisura.style.left = `${fisuraX - radioFisura}px`; // Centrar el hitbox horizontalmente
+    hitboxFisura.style.top = `${fisuraY - radioFisura}px`; // Centrar el hitbox verticalmente
 }, 10);

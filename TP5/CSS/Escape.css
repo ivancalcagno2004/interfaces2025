@@ -113,7 +113,6 @@
     top: 350px;
     left: 800px;
     position: absolute;
-    background-image: url('../images/powers/Beer.png');
     background-size: cover;
     z-index: 15;
 }

@@ -9,6 +9,16 @@ export class Vino {
         document.querySelector('.contenedor-parallax').appendChild(this.vino);
 
         this.vino.classList.add('vino');
+
+        // Determinar si es especial con una probabilidad del 20%
+        const probabilidad = Math.random();
+
+        if (probabilidad < 0.2) {
+            this.vino.style.backgroundImage = "url('../images/powers/Whiskey.png')";
+            this.especial = true; // 20% de probabilidad de ser especial
+        }else{
+            this.vino.style.backgroundImage = "url('../images/powers/Beer.png')";
+        }
     }
     
     crearElemento(){
@@ -24,6 +34,10 @@ export class Vino {
     setPosX(nuevaPosX){
         this.posX = nuevaPosX;
         this.vino.style.left = this.posX + 'px';
+    }
+
+    destroy(){
+        document.querySelector('.contenedor-parallax').removeChild(this.vino);
     }
 
     // actualizar posición visual (si el juego mueve vinos)
