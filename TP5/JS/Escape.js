@@ -13,7 +13,7 @@ let contadorBirras = 0;
 let contadorWiskey = 0;
 let gravedad = 2; // Velocidad de caída
 let posicionTop = 400; // Posición inicial en "top"
-const radioFisura = 64; // Radio de colisión de la fisura
+const radioFisura = 48; // Radio de colisión de la fisura
 let isJumping = false; // Bandera para evitar múltiples saltos
 let intervaloCaida; // Intervalo para la gravedad
 let fisuraDead; // Intervalo para revisar si la fisura se sale de la pantalla
