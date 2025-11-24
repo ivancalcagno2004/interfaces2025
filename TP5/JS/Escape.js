@@ -5,17 +5,20 @@ let botonReset = document.querySelector('.reset');
 let fisura = document.querySelector('.fisura');
 let cartelEscape = document.querySelector('.cartelEscape');
 let cartelLost = document.querySelector('.cartelLost');
+let cartelGano = document.querySelector('.cartelGano');
 let contador = document.querySelector('.contador');
-let contadorBirras = document.querySelector('.contadorBirras');
-let contadorVinos = 0;
+let contadorBirrasElemento = document.querySelector('.contadorBirras');
+let contadorWiskeyElemento = document.querySelector('.contadorWiskey');
+let contadorBirras = 0;
+let contadorWiskey = 0;
 let gravedad = 2; // Velocidad de caída
-let velocidadSalto = -20; // Velocidad de salto (negativa para subir)
 let posicionTop = 400; // Posición inicial en "top"
 const radioFisura = 64; // Radio de colisión de la fisura
 let isJumping = false; // Bandera para evitar múltiples saltos
 let intervaloCaida; // Intervalo para la gravedad
 let fisuraDead; // Intervalo para revisar si la fisura se sale de la pantalla
 let murio = false;
+let gano = false;
 let generaObstaculo;
 let generaVinos;
 let moverObjetos;
@@ -29,7 +32,7 @@ const vinosArray = [];
 
 
 function generarVino() {
-    let posYrandom = Math.floor(Math.random() * 400); // Altura aleatoria entre 300 y 500
+    let posYrandom = Math.floor(Math.random() * (400 - 100 + 1)) + 100; // Altura aleatoria entre 100 y 400
     const nuevoVino = new Vino(1800, posYrandom); // Crear un nuevo vino
     vinosArray.push(nuevoVino); // Agregar el nuevo vino al arreglo
     nuevoVino.dibujar();
@@ -59,12 +62,18 @@ function moverObstaculos() {
         const obstaculo = obstaculos[i];
         obstaculo.setPosX(obstaculo.posX - 5); // Mueve el obstáculo hacia la izquierda
 
+        let fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
         // Eliminar el obstáculo si sale de la pantalla
-        if (obstaculo.posX < -500) {
+        
+        if (obstaculo.posX < -500 || (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura) && contadorWiskey > 0)) {
             console.log('Obstáculo eliminado');
+            if (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura) && contadorWiskey > 0) {
+                contadorWiskey--; // Usa un whiskey para evitar el obstáculo
+            }
             obstaculo.destroy(); // elimina el objeto de la vista
             obstaculos.splice(i, 1); // Eliminar del arreglo
         }
+        
     }
 }
 
@@ -73,12 +82,14 @@ fisura.classList.add('walk');
 
 // Inicia el juego al presionar el botón "Jugar"
 botonJugar.addEventListener('click', () => {
+    fisura.style.animationPlayState = 'running';
     contador.classList.remove('ocultar');
     contador.classList.add('mostrar');
+    contadorWiskeyElemento.classList.remove('ocultar');
+    contadorWiskeyElemento.classList.add('mostrar');
     fisura.classList.remove('walk');
     fisura.classList.add('drink');
     posicionTop -= 200; // Pequeño salto inicial al comenzar
-    fisura.style.animationPlayState = 'running';
     setTimeout(() => {
         //genero el primero
         generarObstaculo();
@@ -95,8 +106,10 @@ botonJugar.addEventListener('click', () => {
 
         // Mover obstáculos existentes
         moverObjetos = setInterval(() => {
-            moverObstaculos();
-            moverVinos();
+            if (!murio && !gano) {
+                moverObstaculos();
+                moverVinos();
+            }
         }, 10);
 
         botonJugar.classList.add('ocultar');
@@ -105,13 +118,31 @@ botonJugar.addEventListener('click', () => {
 
         // Inicia el bucle de gravedad
         intervaloCaida = setInterval(() => {
-            if (!isJumping && !murio) {
+            if (!isJumping && !murio && !gano) {
                 posicionTop += gravedad; // La gravedad hace que baje
                 fisura.style.top = `${posicionTop}px`;
             }
-            if (murio && posicionTop < 410) { // Si murió, sigue cayendo hasta el suelo
+        
+            if (murio && posicionTop < 410) { // si murio y no llego al suelo
                 posicionTop += gravedad;
                 fisura.style.top = `${posicionTop}px`;
+            } else if (murio && posicionTop >= 410) { // si murio y llego al suelo
+                posicionTop = 410; // Fijar la posición en el límite
+                fisura.style.top = `${posicionTop}px`;
+                fisura.classList.remove('drink', 'afk', 'attack', 'walk');
+                fisura.classList.add('dead');
+                clearInterval(intervaloCaida); // Detener la caída
+            }
+        
+            if (gano && posicionTop < 400) { // si gano y no llego al suelo
+                posicionTop += gravedad;
+                fisura.style.top = `${posicionTop}px`;
+            } else if (gano && posicionTop >= 400) { // si gano y llego al suelo
+                posicionTop = 400; // Fijar la posición en el límite
+                fisura.style.top = `${posicionTop}px`;
+                fisura.classList.remove('drink', 'afk', 'dead', 'attack');
+                fisura.classList.add('walk'); // Mantener la animación de caminar
+                clearInterval(intervaloCaida); // Detener la caída
             }
         }, 10); // Actualiza cada 10ms
     }, 1000);
@@ -120,13 +151,13 @@ botonJugar.addEventListener('click', () => {
     fisuraDead = setInterval(() => {
         let fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
         for(const obstaculo of obstaculos) {
-            if (posicionTop >= 410 || posicionTop <= -80 || obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura)) {
+            if (posicionTop >= 411 || posicionTop <= -80 || (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura) && contadorWiskey === 0)) {
                 if (!murio) {
                     cartelLost.classList.remove('ocultar');
                     cartelLost.classList.add('mostrar');
-                    contadorBirras.textContent = `Agarraste ${contadorVinos} birras 🍻`;
+                    contadorBirrasElemento.textContent = `Agarraste ${contadorBirras} birras 🍻`;
                     murio = true;
-                    perdiste();
+                    reiniciarEscena();
                 }
             }
         }
@@ -136,24 +167,28 @@ botonJugar.addEventListener('click', () => {
 // Reinicia el juego al presionar el botón "Reset"
 botonReset.addEventListener('click', () => {
     // Reinicia la posición y el estado del juego
+    murio = false;
+    gano = false;
     posicionTop = 400;
     fisura.style.top = `${posicionTop}px`;
-    fisura.classList.remove('dead', 'drink', 'afk');
+    fisura.classList.remove('dead', 'drink', 'afk', 'attack');
     fisura.classList.add('walk');
+    setInterval(() => {
+        fisura.style.animationPlayState = 'running';
+    }, 10);
     cartelLost.classList.remove('mostrar');
     cartelLost.classList.add('ocultar');
     cartelEscape.classList.remove('ocultar');
     cartelEscape.classList.add('mostrar');
     botonJugar.classList.remove('ocultar');
     botonJugar.classList.add('mostrar');
-    murio = false;
-    fisura.style.animationPlayState = 'running';
 
     clearInterval(intervaloCaida);
     clearInterval(moverObjetos);
     clearInterval(generaObstaculo);
     clearInterval(generaVinos);
-    contadorVinos = 0;
+    contadorBirras = 0;
+    contadorWiskey = 0;
     // Elimina todos los obstáculos existentes
     for (const obstaculo of obstaculos) {
         obstaculo.destroy();
@@ -164,15 +199,19 @@ botonReset.addEventListener('click', () => {
         vino.destroy();
     }
     vinosArray.splice(0, vinosArray.length);
+
+    setInterval(() => {
+    console.log(`Estado de animación: ${fisura.style.animationPlayState}`);
+}, 20);
 })
 
 ///se detecta la tecla espacio o flecha arriba para saltar///
 document.addEventListener('keydown', (event) => {
     event.preventDefault();
     if (event.code === 'Space' || event.code === 'ArrowUp') {
-        if (!isJumping && !murio) {
+        if (!isJumping && !murio && !gano) {
             isJumping = true; // Evita múltiples saltos
-            fisura.classList.remove('afk');
+            fisura.classList.remove('afk', 'walk', 'attack');
             fisura.classList.add('drink');
 
             let velocidadActual = -gravedad * 10; // Velocidad inicial del salto (negativa para subir)
@@ -205,27 +244,54 @@ document.addEventListener('keydown', (event) => {
 setInterval(() => {
     const fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
     for (const vino of vinosArray) {
-        if (!vino.collected && vino.estaColisionando(fisuraX, fisuraY, radioFisura)) {
+        if (!vino.collected && vino.estaColisionando(fisuraX, fisuraY, radioFisura) && !vino.especial) { // si colisiona con una birra
             vino.collected = true;
-            contadorVinos++;
-            console.log(`Vino recogido! Total: ${contadorVinos}`);
+            contadorBirras++;
+            console.log(`Vino recogido! Total: ${contadorBirras}`);
+        }else if (!vino.collected && vino.estaColisionando(fisuraX, fisuraY, radioFisura) && vino.especial) { // si colisiona con un wiskey
+            vino.collected = true;
+            if (contadorWiskey < 3) {
+                contadorWiskey++;
+            }
+
+            fisura.classList.remove('afk', 'walk', 'drink', 'dead');
+            fisura.classList.add('attack');
         }
     }
 
-    for (const obstaculo of obstaculos) {
-        if (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura)) {
+}, 10);
 
-        }
+setInterval(() => {
+    contador.textContent = `Birras: ${contadorBirras}`;
+    if (contadorWiskey === 1) {
+        contadorWiskeyElemento.textContent = `Whiskeys: 🛡️`;
+    }else if (contadorWiskey === 2) {
+        contadorWiskeyElemento.textContent = `Whiskeys: 🛡️🛡️`;
+    }else if (contadorWiskey === 3) {
+        contadorWiskeyElemento.textContent = `Whiskeys: 🛡️🛡️🛡️`;
+    }else{
+        contadorWiskeyElemento.textContent = `Sin Whiskeys`;
     }
 }, 10);
 
 setInterval(() => {
-    contador.textContent = `Vinos: ${contadorVinos}`;
+    if (contadorBirras === 10) {
+        gano = true;
+        cartelGano.classList.remove('ocultar');
+        cartelGano.classList.add('mostrar');
+
+        if (posicionTop >= 400) {
+            fisura.classList.remove('drink', 'afk', 'dead', 'attack');
+            fisura.classList.add('walk'); // Mantener la animación de caminar
+        }
+        reiniciarEscena();
+    }
 }, 10);
 
-function perdiste() {
+function reiniciarEscena() {
     // Elimina todos los obstáculos existentes
-    contadorVinos = 0;
+    contadorBirras = 0;
+    contadorWiskey = 0;
     for (const obstaculo of obstaculos) {
         obstaculo.destroy();
     }
@@ -248,7 +314,7 @@ function perdiste() {
 //fix Anim Dead
 setInterval(() => {
     if (murio) {
-        fisura.classList.remove('drink', 'afk');
+        fisura.classList.remove('drink', 'afk', 'walk', 'attack');
         fisura.classList.add('dead');
         setTimeout(() => {
             fisura.style.animationPlayState = 'paused';
