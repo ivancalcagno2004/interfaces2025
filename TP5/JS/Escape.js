@@ -157,6 +157,8 @@ botonJugar.addEventListener('click', () => {
                     cartelLost.classList.add('mostrar');
                     contadorBirrasElemento.textContent = `Agarraste ${contadorBirras} birras 🍻`;
                     murio = true;
+                    const audio = new Audio('../sounds/deadSound.mp3'); // Ruta del archivo .mp3
+                    audio.play();
                     reiniciarEscena();
                 }
             }
@@ -232,11 +234,15 @@ setInterval(() => {
         if (!vino.collected && vino.estaColisionando(fisuraX, fisuraY, radioFisura) && !vino.especial) { // si colisiona con una birra
             vino.collected = true;
             contadorBirras++;
+            const audio = new Audio('../sounds/coinCollectSound.mp3'); // Ruta del archivo .mp3
+            audio.play();
             console.log(`Vino recogido! Total: ${contadorBirras}`);
         }else if (!vino.collected && vino.estaColisionando(fisuraX, fisuraY, radioFisura) && vino.especial) { // si colisiona con un wiskey
             vino.collected = true;
             if (contadorWiskey < 3) {
                 contadorWiskey++;
+                const audio = new Audio('../sounds/coinCollectSound.mp3'); // Ruta del archivo .mp3
+                audio.play();
             }
 
             fisura.classList.remove('afk', 'walk', 'drink', 'dead');
@@ -301,7 +307,6 @@ setInterval(() => {
     if (murio) {
         fisura.classList.remove('drink', 'afk', 'walk', 'attack');
         fisura.classList.add('dead'); // Aplicar la animación de muerte
-
         // Detener cualquier lógica adicional después de que la animación termine
         setTimeout(() => {
             fisura.style.animationPlayState = 'paused'; // Pausar la animación para evitar reinicios
