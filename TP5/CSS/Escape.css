@@ -91,7 +91,8 @@
 
 .dead{
     background-image: url('../images/spritesheet/fisura/Dead.png');
-    animation: dead .8s steps(4) forwards;
+    animation: dead .9s steps(4) backwards;
+    animation-fill-mode: backwards;
 }
 
 .drink{

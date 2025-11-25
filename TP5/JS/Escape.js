@@ -1,7 +1,7 @@
 import { Obstaculo } from "./ObjetosCarcel/Obstaculo.js";
 import { Vino } from './ObjetosCarcel/Vino.js';
 let botonJugar = document.querySelector('.play');
-let botonReset = document.querySelector('.reset');
+let botonReset = document.querySelectorAll('.reset');
 let fisura = document.querySelector('.fisura');
 let cartelEscape = document.querySelector('.cartelEscape');
 let cartelLost = document.querySelector('.cartelLost');
@@ -9,7 +9,6 @@ let cartelGano = document.querySelector('.cartelGano');
 let contador = document.querySelector('.contador');
 let contadorBirrasElemento = document.querySelector('.contadorBirras');
 let contadorWiskeyElemento = document.querySelector('.contadorWiskey');
-let contadorBirras = 0;
 let contadorWiskey = 0;
 let gravedad = 2; // Velocidad de caída
 let posicionTop = 400; // Posición inicial en "top"
@@ -87,7 +86,7 @@ botonJugar.addEventListener('click', () => {
     contador.classList.add('mostrar');
     contadorWiskeyElemento.classList.remove('ocultar');
     contadorWiskeyElemento.classList.add('mostrar');
-    fisura.classList.remove('walk');
+    fisura.classList.remove('walk', 'dead', 'afk', 'attack', 'drink');
     fisura.classList.add('drink');
     posicionTop -= 200; // Pequeño salto inicial al comenzar
     setTimeout(() => {
@@ -165,45 +164,30 @@ botonJugar.addEventListener('click', () => {
 });
 
 // Reinicia el juego al presionar el botón "Reset"
-botonReset.addEventListener('click', () => {
-    // Reinicia la posición y el estado del juego
-    murio = false;
-    gano = false;
-    posicionTop = 400;
-    fisura.style.top = `${posicionTop}px`;
-    fisura.classList.remove('dead', 'drink', 'afk', 'attack');
-    fisura.classList.add('walk');
-    setInterval(() => {
-        fisura.style.animationPlayState = 'running';
-    }, 10);
-    cartelLost.classList.remove('mostrar');
-    cartelLost.classList.add('ocultar');
-    cartelEscape.classList.remove('ocultar');
-    cartelEscape.classList.add('mostrar');
-    botonJugar.classList.remove('ocultar');
-    botonJugar.classList.add('mostrar');
-
-    clearInterval(intervaloCaida);
-    clearInterval(moverObjetos);
-    clearInterval(generaObstaculo);
-    clearInterval(generaVinos);
-    contadorBirras = 0;
-    contadorWiskey = 0;
-    // Elimina todos los obstáculos existentes
-    for (const obstaculo of obstaculos) {
-        obstaculo.destroy();
-    }
-    obstaculos.splice(0, obstaculos.length);
-    // Elimina todos los vinos existentes
-    for (const vino of vinosArray) {
-        vino.destroy();
-    }
-    vinosArray.splice(0, vinosArray.length);
-
-    setInterval(() => {
-    console.log(`Estado de animación: ${fisura.style.animationPlayState}`);
-}, 20);
-})
+botonReset.forEach(boton => {
+    boton.addEventListener('click', () => {
+        // Reinicia la posición y el estado del juego
+        murio = false;
+        gano = false;
+        posicionTop = 400;
+        fisura.style.top = `${posicionTop}px`;
+        fisura.classList.remove('dead', 'drink', 'afk', 'attack');
+        fisura.classList.add('walk');
+        setInterval(() => {
+            fisura.style.animationPlayState = 'running';
+        }, 10);
+        cartelLost.classList.remove('mostrar');
+        cartelLost.classList.add('ocultar');
+        cartelEscape.classList.remove('ocultar');
+        cartelEscape.classList.add('mostrar');
+        cartelGano.classList.remove('mostrar');
+        cartelGano.classList.add('ocultar');
+        botonJugar.classList.remove('ocultar');
+        botonJugar.classList.add('mostrar');
+    
+        reiniciarEscena();
+    })
+});
 
 ///se detecta la tecla espacio o flecha arriba para saltar///
 document.addEventListener('keydown', (event) => {
@@ -211,7 +195,7 @@ document.addEventListener('keydown', (event) => {
     if (event.code === 'Space' || event.code === 'ArrowUp') {
         if (!isJumping && !murio && !gano) {
             isJumping = true; // Evita múltiples saltos
-            fisura.classList.remove('afk', 'walk', 'attack');
+            fisura.classList.remove('afk', 'walk', 'attack', 'dead');
             fisura.classList.add('drink');
 
             let velocidadActual = -gravedad * 10; // Velocidad inicial del salto (negativa para subir)
@@ -302,23 +286,26 @@ function reiniciarEscena() {
     }
     vinosArray.splice(0, vinosArray.length);
 
-    setTimeout(() => {
-
-        clearInterval(moverObjetos);
-        clearInterval(generaObstaculo);
-        clearInterval(generaVinos);
-    }, 2000);
-
+    clearInterval(moverObjetos);
+    clearInterval(generaObstaculo);
+    clearInterval(generaVinos);
+    
+    if (posicionTop >= 410) { // si llego al suelo
+        clearInterval(intervaloCaida);
+    }
 }
 
 //fix Anim Dead
 setInterval(() => {
     if (murio) {
         fisura.classList.remove('drink', 'afk', 'walk', 'attack');
-        fisura.classList.add('dead');
+        fisura.classList.add('dead'); // Aplicar la animación de muerte
+
+        // Detener cualquier lógica adicional después de que la animación termine
         setTimeout(() => {
-            fisura.style.animationPlayState = 'paused';
-        }, 750); // Pausa la animación antes de que termine y se ponga de pie en el último frame
+            fisura.style.animationPlayState = 'paused'; // Pausar la animación para evitar reinicios
+        }, 700); // Tiempo de duración de la animación (debe coincidir con el CSS)
+        
     }
 }, 10);
 
