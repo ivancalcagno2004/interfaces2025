@@ -9,6 +9,7 @@ let cartelGano = document.querySelector('.cartelGano');
 let contador = document.querySelector('.contador');
 let contadorBirrasElemento = document.querySelector('.contadorBirras');
 let contadorWiskeyElemento = document.querySelector('.contadorWiskey');
+let contadorBirras = 0;
 let contadorWiskey = 0;
 let gravedad = 2; // Velocidad de caída
 let posicionTop = 400; // Posición inicial en "top"
@@ -64,7 +65,7 @@ function moverObstaculos() {
         let fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
         // Eliminar el obstáculo si sale de la pantalla
         
-        if (obstaculo.posX < -500 || (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura) && contadorWiskey > 0)) {
+        if (obstaculo.posX < -500 || (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura) && contadorWiskey > 0)) { // si el objeto se pasa de la pantalla o coliciona con el fisura y tiene > 1 escudo
             console.log('Obstáculo eliminado');
             if (obstaculo.estaColisionando(fisuraX, fisuraY, radioFisura) && contadorWiskey > 0) {
                 contadorWiskey--; // Usa un whiskey para evitar el obstáculo
@@ -116,7 +117,7 @@ botonJugar.addEventListener('click', () => {
         cartelEscape.classList.add('ocultar');
 
         // Inicia el bucle de gravedad
-        intervaloCaida = setInterval(() => {
+        intervaloCaida = setInterval(() => { // lo hace caer siempre y cuando no este saltando, muerto o gano
             if (!isJumping && !murio && !gano) {
                 posicionTop += gravedad; // La gravedad hace que baje
                 fisura.style.top = `${posicionTop}px`;
@@ -308,23 +309,3 @@ setInterval(() => {
         
     }
 }, 10);
-
-///hitbox fisura
-/* // Crear un elemento para visualizar el hitbox de fisura
-const hitboxFisura = document.createElement('div');
-hitboxFisura.style.position = 'absolute';
-hitboxFisura.style.width = `${radioFisura * 2}px`; // Doble del radio
-hitboxFisura.style.height = `${radioFisura * 2}px`; // Doble del radio
-hitboxFisura.style.border = '2px dashed blue'; // Borde azul para visualizar el hitbox
-hitboxFisura.style.borderRadius = '50%'; // Hacerlo circular
-hitboxFisura.style.pointerEvents = 'none'; // Evitar que interfiera con eventos
-hitboxFisura.style.zIndex = '999'; // Asegurarse de que esté encima de otros elementos
-document.body.appendChild(hitboxFisura);
-
-// Actualizar la posición del hitbox en tiempo real
-// Actualizar la posición del hitbox en tiempo real
-setInterval(() => {
-    const fisuraY = posicionTop + fisuraRect.height - 20; // Centro vertical de fisura
-    hitboxFisura.style.left = `${fisuraX - radioFisura}px`; // Centrar el hitbox horizontalmente
-    hitboxFisura.style.top = `${fisuraY - radioFisura}px`; // Centrar el hitbox verticalmente
-}, 10); */

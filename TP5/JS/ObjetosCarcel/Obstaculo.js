@@ -12,7 +12,7 @@ export class Obstaculo {
         this.elementoAbajo.classList.add('obstaculo');
         this.elementoArriba.classList.add('obstaculo');
         
-        this.configAltura();
+        this.configAltura(); // Configura la altura inicial de los obstáculos
     } 
 
     destroy(){
@@ -29,8 +29,8 @@ export class Obstaculo {
     configAltura() {
         let random = Math.floor(Math.random() * (500 - 300 + 1)) + 300; // Altura aleatoria entre 300 y 500
         this.posY = random;
-        //entre 650 y 800
-        let distanciaY = Math.floor(Math.random() * (900 - 800 + 1)) + 800;
+        
+        let distanciaY = Math.floor(Math.random() * (900 - 800 + 1)) + 800; // Distancia aleatoria entre 800 y 900
         // Establecer las posiciones iniciales
         this.elementoAbajo.style.left = this.posX + 'px';
         this.elementoAbajo.style.top = this.posY + 'px';
@@ -39,17 +39,16 @@ export class Obstaculo {
     
         // Obtener la posición del borde inferior del pincho de arriba
         let bordeInferiorArriba = this.elementoArriba.getBoundingClientRect().bottom;
-        //console.log('Borde inferior del pincho de arriba: ' + bordeInferiorArriba);
+
         // Verificar si el borde inferior del pincho de arriba está fuera de la pantalla
         if (bordeInferiorArriba < 200) {
-            console.log('El pincho de arriba se pasa fuera de la pantalla ' + bordeInferiorArriba);
             // Ajustar la posición del pincho de arriba para que no se pase
             let ajuste = 200 - bordeInferiorArriba; // Cantidad a ajustar
             this.elementoArriba.style.top = (this.posY - distanciaY + ajuste) + 'px';
         }
     }
 
-    estaColisionando(conX, conY, conRadio) {
+    estaColisionando(conX, conY, conRadio) { // verifica si el fisura choca contra el obstáculo
         const rectAbajo = this.elementoAbajo.getBoundingClientRect(); // Rectángulo del obstáculo inferior
         const rectArriba = this.elementoArriba.getBoundingClientRect(); // Rectángulo del obstáculo superior
     
