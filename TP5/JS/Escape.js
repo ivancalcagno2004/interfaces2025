@@ -87,7 +87,7 @@ botonJugar.addEventListener('click', () => {
     contador.classList.add('mostrar');
     contadorWiskeyElemento.classList.remove('ocultar');
     contadorWiskeyElemento.classList.add('mostrar');
-    fisura.classList.remove('walk', 'dead', 'afk', 'attack', 'drink');
+    fisura.classList.remove('walk', 'dead', 'afk', 'attack', 'drink', 'murio');
     fisura.classList.add('drink');
     posicionTop -= 200; // Pequeño salto inicial al comenzar
     setTimeout(() => {
@@ -129,7 +129,7 @@ botonJugar.addEventListener('click', () => {
             } else if (murio && posicionTop >= 410) { // si murio y llego al suelo
                 posicionTop = 410; // Fijar la posición en el límite
                 fisura.style.top = `${posicionTop}px`;
-                fisura.classList.remove('drink', 'afk', 'attack', 'walk');
+                fisura.classList.remove('drink', 'afk', 'attack', 'walk', 'murio');
                 fisura.classList.add('dead');
                 clearInterval(intervaloCaida); // Detener la caída
             }
@@ -174,7 +174,7 @@ botonReset.forEach(boton => {
         gano = false;
         posicionTop = 400;
         fisura.style.top = `${posicionTop}px`;
-        fisura.classList.remove('dead', 'drink', 'afk', 'attack');
+        fisura.classList.remove('dead', 'drink', 'afk', 'attack', 'murio');
         fisura.classList.add('walk');
         setInterval(() => {
             fisura.style.animationPlayState = 'running';
@@ -195,7 +195,7 @@ botonReset.forEach(boton => {
 ///se detecta la tecla espacio o flecha arriba para saltar///
 document.addEventListener('keydown', (event) => {
     event.preventDefault();
-    if (event.code === 'Space' || event.code === 'ArrowUp') {
+    if (event.code === 'Space' || event.code === 'ArrowUp') { // si se presiona espacio o flecha arriba Salta
         if (!isJumping && !murio && !gano) {
             isJumping = true; // Evita múltiples saltos
             fisura.classList.remove('afk', 'walk', 'attack', 'dead');
@@ -301,16 +301,20 @@ function reiniciarEscena() {
         clearInterval(intervaloCaida);
     }
 }
-
-//fix Anim Dead
-setInterval(() => {
+let muertoIntervalo = setInterval(() => {
     if (murio) {
         fisura.classList.remove('drink', 'afk', 'walk', 'attack');
         fisura.classList.add('dead'); // Aplicar la animación de muerte
         // Detener cualquier lógica adicional después de que la animación termine
         setTimeout(() => {
-            fisura.style.animationPlayState = 'paused'; // Pausar la animación para evitar reinicios
-        }, 700); // Tiempo de duración de la animación (debe coincidir con el CSS)
+            fisura.classList.remove('dead');
+            fisura.classList.add('murio'); // Mostrar el último fotograma estático
+        }, 780); // Tiempo de duración de la animación (debe coincidir con el CSS)
         
+        clearInterval(muertoIntervalo);
     }
 }, 10);
+
+const audioFondo = new Audio('../sounds/musicaPrincipal.mp3');
+audioFondo.loop = true;
+audioFondo.play();

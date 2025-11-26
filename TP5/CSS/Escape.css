@@ -72,6 +72,15 @@
     }
 }
 
+@keyframes rotar {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
 .rat{
     height: 32px;
     width: 32px;
@@ -91,10 +100,14 @@
 
 .dead{
     background-image: url('../images/spritesheet/fisura/Dead.png');
-    animation: dead .9s steps(4) backwards;
-    animation-fill-mode: backwards;
+    animation: dead .8s steps(4) forwards;
+    animation-fill-mode: forwards;
 }
 
+.murio{
+    background-image: url('../images/spritesheet/fisura/Dead.png');
+    transform: translateX(600px);
+}
 .drink{
     background-image: url('../images/spritesheet/fisura/Idle_2.png');
     animation: drink .8s steps(9) infinite;
@@ -130,6 +143,7 @@
     position: absolute;
     background-size: cover;
     z-index: 15;
+    animation: rotar 1s linear infinite;
      /* border: 2px solid green; */
 }
 
