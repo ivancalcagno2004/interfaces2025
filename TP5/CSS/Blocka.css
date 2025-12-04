@@ -301,16 +301,17 @@ h3 {
   margin-left: 30px;
 }
 
+
 .btn-sig-nivel{
-  position: absolute;
-  top: 600px;
-  right: 980px;
+    position: absolute;
+    top: 600px;
+    right: 980px;
 }
 
 .btn-elegir{
-  position: absolute;
-  top: 600px;
-  right: 880px;
+    position: absolute;
+    top: 600px;
+    right: 880px;
 }
 
 .btn-comenzar{
@@ -321,7 +322,7 @@ h3 {
 
 .btn-volver-menu{
   position: absolute;
-  top: 220px;
-  right: 600px;
+  top: 600px;
+  right: 800px;
 }
 
